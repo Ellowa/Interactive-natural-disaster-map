@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Чтотото</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+    <div id="map"></div>
+
+    <nav id="filter-group" class="filter-group">
+        <input type="checkbox" id="volcanoes" checked="true">
+        <label for="volcanoes">Volcanoes <img src="images/volcanoes.png" alt="Volcanoes filter"></label>
+
+        <input type="checkbox" id="severeStorms" checked="true">
+        <label for="severeStorms">Severe Storms <img src="images/severeStorms.png" alt="Severe Storms filter"></label>
+
+        <input type="checkbox" id="wildfires" checked="true">
+        <label for="wildfires">Wildfires <img src="images/wildfires.png" alt="Wildfires filter"></label>
+
+        <input type="checkbox" id="drought" checked="true">
+        <label for="drought">Drought <img src="images/drought.png" alt="Drought filter"></label>
+
+        <input type="checkbox" id="earthquakes" checked="true">
+        <label for="earthquakes">Earthquakes <img src="images/earthquakes.png" alt="Earthquakes filter"></label>
+
+        <input type="checkbox" id="floods" checked="true">
+        <label for="floods">Floods <img src="images/floods.png" alt="Floods filter"></label>
+
+        <input type="checkbox" id="landslides" checked="true">
+        <label for="landslides">Landslides <img src="images/landslides.png" alt="Landslides filter"></label>
+
+        <input type="checkbox" id="snow" checked="true">
+        <label for="snow">Snow <img src="images/snow.png" alt="Snow filter"></label>
+
+        <input type="checkbox" id="tempExtremes" checked="true">
+        <label for="tempExtremes">Temperature Extremes <img src="images/tempExtremes.png" alt="Temperature Extremes filter"></label>
+
+        <input type="checkbox" id="other" checked="true">
+        <label for="other">Other <img src="images/volcanoes.png" alt="Volcanoes filter"></label>
+    </nav>
+
+    <div class="input-marker add-button">
+        <input id="addEventButton" type="button" value="Add event">
+    </div>
+
+    <div id="addEventZone" class="input-marker">
+        <input id="closeBtn" type="button" value="x">
+        
+        <div class="input-event-field">
+            <input id="titleInput" type="text" required/>
+            <label class="placeholder">Enter Title*</label>
+        </div>
+
+        <!-- <div class="input-event-field">
+            <input id="categoryInput" type="text" required/>
+            <label class="placeholder">Enter Category*</label>
+        </div> -->
+
+        <div class="input-event-field">
+            <select id="categoryInputCombo" class="combo-box" name="hero[]" required>
+                <option selected disabled></option>
+                <option value="volcanoes">Volcanoes</option>
+                <option value="severeStorms">Severe Storms</option>
+                <option value="wildfires">Wildfires</option>
+                <option value="drought">Drought</option>
+                <option value="earthquakes">Earthquakes</option>
+                <option value="floods">Floods</option>
+                <option value="landslides">Landslides</option>
+                <option value="snow">Snow</option>
+                <option value="tempExtremes">Temperature Extremes</option>
+                <option value="other">Other</option>
+            </select>
+            <label class="placeholder">Select category*</label>
+        </div>
+
+        <div class="input-event-field">
+            <input id="lngInput" type="number" required/>
+            <label class="placeholder">Enter lng*</label>
+        </div>
+
+        <div class="input-event-field">
+            <input id="latInput" type="number" required/>
+            <label class="placeholder">Enter lat*</label>
+        </div>
+
+        <div class="input-event-field date">
+            <input id="startDateInput" id="date-field" type="date"/>
+            <label for="param-field" class="placeholder">Enter Start date*</label>
+        </div>
+
+        <div class="input-event-field date">
+            <input id="closedDateInput" type="date"/>
+            <label class="placeholder">Enter Closed date</label>
+        </div>
+
+        <div class="input-event-field">
+            <input id="mUnitInput" type="text" required/>
+            <label class="placeholder">Enter Megnitude unit</label>
+        </div>
+
+        <div class="input-event-field">
+            <input id="mValueInput" type="text" required/>
+            <label class="placeholder">Enter Megnitude value</label>
+        </div>
+
+        <div class="input-event-field">
+            <input id="sourceInput" type="text" required/>
+            <label class="placeholder">Enter Source</label>
+        </div>
+
+        <div class="input-event-field required-text">
+            <label id="requiredText" class="required-text-field">* required fields</label>
+        </div>
+
+        <div class="input-event-field add-event-data">
+            <input id="addEventDataButton" type="button" value="Add">
+        </div>
+    </div>
+</body>
+<script src="scripts/script.js"></script>
+</html>
