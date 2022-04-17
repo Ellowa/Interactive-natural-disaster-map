@@ -44,22 +44,48 @@
         <label for="other">Other <img src="images/volcanoes.png" alt="Volcanoes filter"></label>
     </nav>
 
-    <div class="input-marker add-button">
+
+    <div class="input-zone login-button">
+        <img src="images/wildfires2.png" alt="Wildfires filter">
+
+        <input id="logInButton" type="button" value="Log in">
+        <input id="logInButton" type="button" value="Register">
+    </div>
+
+    <div id="LogInZone" class="input-zone">
+        <input id="closeBtnLoginZone" class="closeBtn" type="button" value="x">
+        
+        <div class="input-event-field">
+            <input id="loginInput" type="email" required/>
+            <label class="placeholder">Enter login*</label>
+        </div>
+
+        <div class="input-event-field">
+            <input id="passwordInput" type="password" required/>
+            <label class="placeholder">Enter password*</label>
+        </div>
+
+        <div class="input-event-field required-text">
+            <label id="requiredTextLogin" class="required-text-field">* required fields</label>
+        </div>
+
+        <div class="input-event-field add-event-data">
+            <input id="acceptLogInButton" type="submit" value="Log in">
+        </div>
+    </div>
+
+
+    <div class="input-zone add-button">
         <input id="addEventButton" type="button" value="Add event">
     </div>
 
-    <div id="addEventZone" class="input-marker">
-        <input id="closeBtn" type="button" value="x">
+    <div id="addEventZone" class="input-zone">
+        <input id="closeBtn" class="closeBtn" type="button" value="x">
         
         <div class="input-event-field">
             <input id="titleInput" type="text" required/>
             <label class="placeholder">Enter Title*</label>
         </div>
-
-        <!-- <div class="input-event-field">
-            <input id="categoryInput" type="text" required/>
-            <label class="placeholder">Enter Category*</label>
-        </div> -->
 
         <div class="input-event-field">
             <select id="categoryInputCombo" class="combo-box" name="hero[]" required>
@@ -100,12 +126,12 @@
 
         <div class="input-event-field">
             <input id="mUnitInput" type="text" required/>
-            <label class="placeholder">Enter Megnitude unit</label>
+            <label class="placeholder">Enter Magnitude unit</label>
         </div>
 
         <div class="input-event-field">
             <input id="mValueInput" type="text" required/>
-            <label class="placeholder">Enter Megnitude value</label>
+            <label class="placeholder">Enter Magnitude value</label>
         </div>
 
         <div class="input-event-field">
@@ -114,11 +140,11 @@
         </div>
 
         <div class="input-event-field required-text">
-            <label id="requiredText" class="required-text-field">* required fields</label>
+            <label id="requiredTextAddEvent" class="required-text-field">* required fields</label>
         </div>
 
         <div class="input-event-field add-event-data">
-            <input id="addEventDataButton" type="button" value="Add">
+            <input id="addEventDataButton" type="submit" value="Add">
         </div>
     </div>
 </body>

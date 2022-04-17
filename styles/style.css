@@ -22,7 +22,7 @@ body { margin: 0; padding: 0; }
 font: 13px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 font-weight: 600;
 position: absolute;
-top: 30px;
+top: 10px;
 left: 10px;
 z-index: 1;
 /* border-radius: 3px; */
@@ -76,7 +76,7 @@ margin-right: 5px;
     box-sizing: border-box;
   }
 
-.input-marker {
+.input-zone {
     display: none;
     flex-direction: column;
     justify-content: center;
@@ -128,8 +128,8 @@ margin-right: 5px;
 .input-event-field select:focus + .placeholder {
     top: 21px;
     color: #222;
-    font-size: 11px;
-    background: #fff;
+    font-size: 12px;
+    background: #CEEBE8;
 
 }
 
@@ -191,7 +191,7 @@ margin-right: 5px;
     font-size: 19px;
 }
 
-#closeBtn {
+.closeBtn {
     border: none;
     background: #F44336;
     border-radius: 15px;
@@ -213,7 +213,7 @@ margin-right: 5px;
     top: unset;
     left: unset;
     bottom: 30px;
-    right: 10px;
+    right: 50px;
     padding-bottom: 0;
     width: 200px;
     background: #26A69A;
@@ -232,3 +232,36 @@ margin-right: 5px;
     font-size: 19px;
 }
 
+
+/* Стиль поля логина */
+.login-button {
+    top: 10px;
+    left: unset;
+    right: 50px;
+    padding-bottom: 0;
+    width: 200px;
+    background: #26A69A;
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.login-button input {
+    width: auto;
+    border: none;
+    background: none;
+    height: 45px;
+    cursor: pointer;
+    color: #fff;
+    font-weight: 600;
+    font-family: sans-serif;
+    font-size: 19px;
+    text-align: left;
+    padding: 0;
+    border-left: 1px solid #00796B;
+    padding-right: 5px;
+}
+
+.login-button img{
+    width: 20%;
+}

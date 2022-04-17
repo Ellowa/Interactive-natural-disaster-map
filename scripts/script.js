@@ -1,3 +1,59 @@
+// Обработчик событий для кнопки логина
+function logInBtnClick(){
+    const LogInZone = document.getElementById('LogInZone');
+    const logInButton = document.getElementById('logInButton');
+    const closeBtnLoginZone = document.getElementById('closeBtnLoginZone');
+    const acceptLogInButton = document.getElementById('acceptLogInButton');
+
+    logInButton.addEventListener('click', (e) => {
+        LogInZone.style = 'display: flex';
+    });
+
+    closeBtnLoginZone.addEventListener('click', (e) => {
+        LogInZone.style = 'display: none';
+    });
+
+    acceptLogInButton.addEventListener('click', (e) => {
+        const loginInput = document.getElementById('loginInput');
+        const passwordInput = document.getElementById('passwordInput');
+        
+
+        var requiredFields = [loginInput, passwordInput];
+        var allFields = [loginInput, passwordInput];
+        var requiredFieldsIsEmpty = false;
+        for (var inputElement of requiredFields)
+        {
+            if(inputElement.value == "")
+            {
+                inputElement.style = 'border-color: #F44336;';
+                requiredFieldsIsEmpty = true;
+            }
+            else
+            {
+                inputElement.style = null;
+            }
+        }
+
+        if(requiredFieldsIsEmpty)
+        {
+            document.getElementById('requiredTextLogin').style = 'color: #F44336;';
+        }
+        else
+        {
+            document.getElementById('requiredTextLogin').style = null;
+
+            //ПРОЦЕДУРА ЛОГИНА
+
+            for (var inputElement of allFields)
+            {
+                inputElement.value = null;
+            }
+            LogInZone.style = 'display: none';
+        }
+    });
+
+}
+
 // Обработчики событий добавления маркера на карту
 function addEventBtnClick(){
     const addEventZone = document.getElementById('addEventZone');
@@ -15,7 +71,6 @@ function addEventBtnClick(){
 
     addEventDataButton.addEventListener('click', (e) => {
         const titleInput = document.getElementById('titleInput');
-        // const categoryInput = document.getElementById('categoryInput');
         const categoryInput = document.getElementById('categoryInputCombo');
         const lngInput = document.getElementById('lngInput');
         const latInput = document.getElementById('latInput');
@@ -43,11 +98,11 @@ function addEventBtnClick(){
 
         if(requiredFieldsIsEmpty)
         {
-            document.getElementById('requiredText').style = 'color: #F44336;';
+            document.getElementById('requiredTextAddEvent').style = 'color: #F44336;';
         }
         else
         {
-            document.getElementById('requiredText').style = null;
+            document.getElementById('requiredTextAddEvent').style = null;
 
             for (var inputElement of allFields)
             {
@@ -148,7 +203,7 @@ map.on('load', () => {
 
     $( document ).ready(function() { //может от єтого избавиться (Получение json объекта через jquery)
 
-        
+        logInBtnClick();
         addEventBtnClick();
         //Получаем список событий
         $.getJSON( "https://eonet.gsfc.nasa.gov/api/v3/events/geojson?status=all&category=drought,earthquakes,floods,landslides,severeStorms,snow,tempExtremes,volcanoes,wildfires&days=90")
@@ -167,13 +222,13 @@ map.on('load', () => {
 
 
             //ДЛЯ ТЕСТА ЗНАЧКОВ
-            data.features[281].properties.categoriesNEW = "drought";
-            data.features[107].properties.categoriesNEW = "earthquakes";
-            data.features[165].properties.categoriesNEW = "floods";
-            data.features[348].properties.categoriesNEW = "landslides";
-            data.features[100].properties.categoriesNEW = "snow";
-            data.features[200].properties.categoriesNEW = "tempExtremes";
-            console.log(data);
+            // data.features[281].properties.categoriesNEW = "drought";
+            // data.features[107].properties.categoriesNEW = "earthquakes";
+            // data.features[165].properties.categoriesNEW = "floods";
+            // data.features[348].properties.categoriesNEW = "landslides";
+            // data.features[100].properties.categoriesNEW = "snow";
+            // data.features[200].properties.categoriesNEW = "tempExtremes";
+            // console.log(data);
 
 
             for (const feature of data.features) {
@@ -199,8 +254,8 @@ function MarkerOnClick(LayerId){
         <p>Coordinates: ${coordinates}</p>
         <p>Start date: ${e.features[0].properties.date}</p>
         <p>Closed date: ${e.features[0].properties.closed ?? 'Неоконченное событие'}</p>
-        <p>Megnitude unit: ${e.features[0].properties.magnitudeUnit ?? 'Нет данных'}</p>
-        <p>Megnitude value: ${e.features[0].properties.magnitudeValue ?? 'Нет данных'}</p>
+        <p>Magnitude unit: ${e.features[0].properties.magnitudeUnit ?? 'Нет данных'}</p>
+        <p>Magnitude value: ${e.features[0].properties.magnitudeValue ?? 'Нет данных'}</p>
         <p>Sources: <a href="${e.features[0].properties.link}">${(e.features[0].properties.link == 'Нет данных') ? 'Нет данных': 'click'}</a></p></div>`;
 
         // Ensure that if the map is zoomed out such that multiple
