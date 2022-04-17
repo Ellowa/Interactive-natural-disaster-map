@@ -202,12 +202,16 @@ map.on('load', () => {
     });
 
     $( document ).ready(function() { //может от єтого избавиться (Получение json объекта через jquery)
-
+        
         logInBtnClick();
         addEventBtnClick();
         //Получаем список событий
         $.getJSON( "https://eonet.gsfc.nasa.gov/api/v3/events/geojson?status=all&category=drought,earthquakes,floods,landslides,severeStorms,snow,tempExtremes,volcanoes,wildfires&days=90")
         .done(function( data ) {
+            //останавливаем спинер (колесо загрузки) когда данные подгрузились
+            document.getElementById('nasaLogoSpinner').style = 'animation: none;';
+            document.getElementById('nasaDataLink').textContent = 'NASA EONET';
+
             console.log(data);
             //Пока костыль. Нужно поскольку дальше для фильтра событий средствами mapbox я не могу пройти вглубь массива
             var i = geojsonAllDataEvents.features.length;

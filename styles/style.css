@@ -28,6 +28,7 @@ z-index: 1;
 /* border-radius: 3px; */
 width: auto;
 color: #fff;
+width: 207px;
 }
 
 .filter-group input[type='checkbox']:first-child + label {
@@ -45,7 +46,8 @@ display: none;
 
 .filter-group input[type='checkbox'] + label {
 background-color: #26A69A;
-display: block;
+display: flex;
+align-items: center;
 cursor: pointer;
 padding: 5px;
 border-bottom: 1px solid rgba(0, 0, 0, 0.25);
@@ -208,42 +210,17 @@ margin-right: 5px;
 }
 
 
-/* Стиль кнопки добавления событий */
-.add-button {
-    top: unset;
-    left: unset;
-    bottom: 30px;
-    right: 50px;
-    padding-bottom: 0;
-    width: 200px;
-    background: #26A69A;
-    display: flex;
-}
-
-.add-button input {
-    width: 100%;
-    border: none;
-    background: none;
-    height: 45px;
-    cursor: pointer;
-    color: #fff;
-    font-weight: 600;
-    font-family: sans-serif;
-    font-size: 19px;
-}
-
-
 /* Стиль поля логина */
 .login-button {
     top: 10px;
     left: unset;
     right: 50px;
     padding-bottom: 0;
-    width: 200px;
+    width: 207px;
     background: #26A69A;
     display: flex;
     flex-direction: row;
-    
+    justify-content: space-evenly;
 }
 
 .login-button input {
@@ -264,4 +241,50 @@ margin-right: 5px;
 
 .login-button img{
     width: 20%;
+}
+
+
+/* Стиль кнопки добавления событий */
+.add-button {
+    top: unset;
+    bottom: 30px;
+    right: 50px;
+}
+
+.add-button input {
+    border: none;
+    width: 100%;
+    text-align: center;
+}
+
+
+/* Стиль зоны ожидания загрузки всех маркеров */
+.nasa-waiter{
+    top: 530px;
+    right: unset;
+    left: 10px;
+    border: none;
+    justify-content: center;
+    background: linear-gradient(to left, blue, 38%, pink);
+}
+
+.nasa-waiter a{
+    text-decoration: none;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    font-family: sans-serif;
+    font-size: 19px;
+    text-align: center;
+}
+
+.nasa-waiter img{
+    width: 25%;
+    animation: spinner 1.5s linear  infinite;
+}
+
+@keyframes spinner{
+    to {
+        transform: rotate(360deg);
+    }
 }
