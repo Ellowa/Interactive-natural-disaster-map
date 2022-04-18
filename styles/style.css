@@ -167,7 +167,7 @@ margin-right: 5px;
     font-size: 16px;
     font-weight: 550;
     letter-spacing: 0.5px;
-
+    white-space: pre-line;
 }
 
 .add-event-data {
@@ -207,6 +207,7 @@ margin-right: 5px;
     font-weight: 600;
     font-size: 19px;
     cursor: pointer;
+    z-index: 2;
 }
 
 
@@ -239,9 +240,19 @@ margin-right: 5px;
     padding-right: 5px;
 }
 
-.login-button img{
+.login-button img {
     width: 20%;
 }
+
+.login-header {
+    width: 100%;
+    margin: 0;
+}
+
+.login-header label {
+    color: #00695C;
+}
+
 
 
 /* Стиль кнопки добавления событий */

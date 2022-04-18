@@ -51,18 +51,25 @@
     </div>
 
 
-    <div class="input-zone login-button">
+    <div id="logInControllBtnZone" class="input-zone login-button">
         <img src="images/wildfires2.png" alt="Wildfires filter">
 
         <input id="logInButton" type="button" value="Log in">
-        <input id="logInButton" type="button" value="Register">
+        <input id="registerButton" type="button" value="Register">
+
+        <input id="userAccountButton" type="button" value="user" style="display: none;">
+        <input id="logOutButton" type="button" value="Log out" style="display: none;">
     </div>
 
     <div id="LogInZone" class="input-zone">
         <input id="closeBtnLoginZone" class="closeBtn" type="button" value="x">
         
+        <div class="input-event-field login-header">
+            <label class="required-text-field">Log in</label>
+        </div>
+
         <div class="input-event-field">
-            <input id="loginInput" type="email" required/>
+            <input id="loginInput" type="text" required/>
             <label class="placeholder">Enter login*</label>
         </div>
 
@@ -77,6 +84,32 @@
 
         <div class="input-event-field add-event-data">
             <input id="acceptLogInButton" type="submit" value="Log in">
+        </div>
+    </div>
+
+    <div id="registerZone" class="input-zone">
+        <input id="closeBtnRegZone" class="closeBtn" type="button" value="x">
+        
+        <div class="input-event-field login-header">
+            <label class="required-text-field">Register</label>
+        </div>
+
+        <div class="input-event-field">
+            <input id="loginRegInput" type="text" required/>
+            <label class="placeholder">Enter login*</label>
+        </div>
+
+        <div class="input-event-field">
+            <input id="passworRegInput" type="password" required/>
+            <label class="placeholder">Enter password*</label>
+        </div>
+
+        <div class="input-event-field required-text">
+            <label id="requiredTextRegister" class="required-text-field">* required fields</label>
+        </div>
+
+        <div class="input-event-field add-event-data">
+            <input id="acceptRegButton" type="submit" value="Log in">
         </div>
     </div>
 
