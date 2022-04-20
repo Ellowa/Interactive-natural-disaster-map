@@ -270,7 +270,7 @@ margin-right: 5px;
 
 
 /* Стиль зоны ожидания загрузки всех маркеров */
-.nasa-waiter{
+.nasa-waiter {
     top: 530px;
     right: unset;
     left: 10px;
@@ -279,7 +279,7 @@ margin-right: 5px;
     background: linear-gradient(to left, blue, 38%, pink);
 }
 
-.nasa-waiter a{
+.nasa-waiter a {
     text-decoration: none;
     border: none;
     color: #fff;
@@ -287,6 +287,15 @@ margin-right: 5px;
     font-family: sans-serif;
     font-size: 19px;
     text-align: center;
+    white-space: pre-line;
+}
+
+.nasa-waiter a p {
+    margin: 0;
+}
+
+#nasaSecondTitle {
+    font-size: 13px;
 }
 
 .nasa-waiter img{

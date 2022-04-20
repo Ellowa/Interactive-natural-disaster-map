@@ -254,13 +254,14 @@ function addEventBtnClick(){
 function addPoints(events){
     for (const feature of events.features) {
         const layerID = feature.properties.categoriesNEW;
-        // Add a layer for this symbol type if it hasn't been added already.
+        // Длбовляем новый слой для каждого типа событий
         if (!map.getLayer(layerID)) {
+            // добовляем картинки (метки событий) к карте
             map.loadImage(`images/${layerID}.png`, (error, image) => {
             if (error) throw error;
-            // Add the image to the map style.
             map.addImage(`${layerID}ICON`, image, { 'sdf': true });//НАДО разобраться с sdf, он нужен чтобы менять цвет фона.
             });
+
             map.addLayer({
                 'id': layerID,
                 'type': 'symbol',
@@ -275,7 +276,7 @@ function addPoints(events){
                 'filter': ['==', 'categoriesNEW', layerID]
                 });
 
-            // When the checkbox changes, update the visibility of the layer.
+            // Обработчик событий для фильтра (смена категорий) событий
             const input = document.getElementById(layerID);
             input.addEventListener('change', (e) => {
                 map.setLayoutProperty(
@@ -295,14 +296,31 @@ var geojsonAllDataEvents = {
     "type": "FeatureCollection",
     "features": []
   };
-mapboxgl.accessToken = 'pk.eyJ1IjoiZWxsb3dhIiwiYSI6ImNrdzIzcjJ3ejBjYWIycHBhODNpOHFpaGMifQ.ujVprrtaSgn3X0TE4T5cPw';
+mapboxgl.accessToken = 'pk.eyJ1IjoiZWxsb3dhIiwiYSI6ImNsMjdlamkzeDA3cmQzZXFseGl0bmFtdXUifQ.aslVME0d_CppwF6I_VZS9Q';
 const map = new mapboxgl.Map({
     container: 'map', // container ID
     style: 'mapbox://styles/mapbox/light-v10', // style URL
     zoom: 5, // starting zoom
     center: [31.125149, 49.557266] // starting center
 });
+
+// Добавление кнопок управления к карте
+// zoom контроль
 map.addControl(new mapboxgl.NavigationControl());
+// геолокация пользователя
+map.addControl(
+    new mapboxgl.GeolocateControl({
+    positionOptions: {
+    enableHighAccuracy: true
+    },
+    // отслеживать в реальном времени
+    trackUserLocation: true,
+    // стрелка направления движения
+    showUserHeading: true
+    })
+);
+
+
 map.on('load', () => {
     map.addSource('events', {
         type: 'geojson',
@@ -321,7 +339,7 @@ map.on('load', () => {
         .done(function( data ) {
             //останавливаем спинер (колесо загрузки) когда данные подгрузились
             document.getElementById('nasaLogoSpinner').style = 'animation: none;';
-            document.getElementById('nasaDataLink').textContent = 'NASA EONET';
+            document.getElementById('nasaSecondTitle').textContent = 'data for the last 90 days';
 
             console.log(data);
             //Пока костыль. Нужно поскольку дальше для фильтра событий средствами mapbox я не могу пройти вглубь массива
