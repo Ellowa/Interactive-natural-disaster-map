@@ -240,6 +240,7 @@ function addEventBtnClick(){
             geojsonAllDataEvents.features.push(data);
             map.getSource('events').setData(geojsonAllDataEvents);
             addPoints(geojsonAllDataEvents);
+            setDateFilterRange();
 
             for (var inputElement of allFields)
             {
@@ -352,7 +353,7 @@ map.on('load', () => {
                 feature.properties.Newid = i;
                 i++;
             }
-
+           
 
             //ДЛЯ ТЕСТА ЗНАЧКОВ
             // data.features[281].properties.categoriesNEW = "drought";
@@ -369,6 +370,7 @@ map.on('load', () => {
             }
             map.getSource('events').setData(geojsonAllDataEvents);
             addPoints(geojsonAllDataEvents);
+            setDateFilterRange();
         });
     });
 });

@@ -308,3 +308,44 @@ margin-right: 5px;
         transform: rotate(360deg);
     }
 }
+
+
+/* Стиль тайм слайдера */
+.map-overlay {
+    color: #fff;
+    font-weight: 600;
+    font-family: sans-serif;
+    font-size: 12px;
+    position: absolute;
+    width: 300px;
+    bottom: 30px;
+    left: 10px;
+}
+     
+.map-overlay .map-overlay-inner {
+    background: #4DB6AC;
+    border-radius: 14px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+     
+.map-overlay h2 {
+    line-height: 24px;
+    display: block;
+    margin: 0 0 10px;
+}
+     
+.map-overlay .legend .bar {
+    height: 10px;
+    width: 100%;
+    background: linear-gradient(to right, #fca107, #7f3121);
+}
+     
+.map-overlay input {
+    background-color: transparent;
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    margin: 0;
+    cursor: ew-resize;
+}
