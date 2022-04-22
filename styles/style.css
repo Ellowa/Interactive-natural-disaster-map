@@ -145,13 +145,13 @@ margin-right: 5px;
     left: 8px;
 } */
 
-/* Особый стиль для полей с датой (как будто они всегда в фокусе)
-.date input + .placeholder {
-    top: 20px;
+/* Особый стиль для полей с координатами кокда они заданы через карту (как будто они всегда в фокусе) */
+.coordinatesByMap input + .placeholder {
+    top: 21px;
     color: #222;
-    font-size: 10px;
-    background: #fff;
-} */
+    font-size: 12px;
+    background: #CEEBE8;
+}
 
 .required-text {
     width: 100%;
@@ -208,6 +208,16 @@ margin-right: 5px;
     font-size: 19px;
     cursor: pointer;
     z-index: 2;
+}
+
+.coordinate-button input {
+    border-radius: 13px;
+    background: #26A69A;
+    cursor: pointer;
+    color: #fff;
+    font-weight: 600;
+    font-family: sans-serif;
+    font-size: 16px;
 }
 
 

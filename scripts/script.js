@@ -1,3 +1,27 @@
+//Обработчик события для кнопки получения координат с карты
+function getCoordinatesByMapButtonClk(){
+    const getCoordinatesByMapButton = document.getElementById('getCoordinatesByMapButton');
+
+    getCoordinatesByMapButton.addEventListener('click', (e) => {
+        document.getElementById('addEventZone').style = 'display: none;';
+        map.getCanvas().style.cursor = 'pointer';
+        //Получаем координаты следующего клика по карте
+        map.once('click', (e) => {
+            document.getElementById('lngInput').value = e.lngLat.toArray()[0];
+            
+            document.getElementById('latInput').value = e.lngLat.toArray()[1];
+            document.getElementById('addEventZone').style = 'display: flex;';
+            map.getCanvas().style.cursor = '';
+
+            //Костыль на то чтобы надписи описания поля уезжали наверх
+            document.getElementById('lngDiv').classList.add('coordinatesByMap');
+            document.getElementById('latDiv').classList.add('coordinatesByMap');
+        });
+        
+
+    });
+}
+
 //Обработчик событий для кнопки выхода
 function logOutBtnClk(){
     const logOutButton = document.getElementById('logOutButton');
@@ -247,6 +271,8 @@ function addEventBtnClick(){
                 inputElement.value = null;
             }
             addEventZone.style = 'display: none';
+            document.getElementById('lngDiv').classList.remove('coordinatesByMap');
+            document.getElementById('latDiv').classList.remove('coordinatesByMap');
         }
     });
 }
@@ -331,6 +357,7 @@ map.on('load', () => {
 
     $( document ).ready(function() { //может от єтого избавиться (Получение json объекта через jquery)
         
+        getCoordinatesByMapButtonClk();
         logOutBtnClk();
         registerBtnClick();
         logInBtnClick();
