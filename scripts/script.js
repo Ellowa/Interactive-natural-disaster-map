@@ -211,10 +211,11 @@ function addEventBtnClick(){
         const closedDateInput = document.getElementById('closedDateInput');
         const mUnitInput = document.getElementById('mUnitInput');
         const mValueInput = document.getElementById('mValueInput');
+        const dangerLevelInputCombo = document.getElementById('dangerLevelInputCombo');
         const sourceInput = document.getElementById('sourceInput');
 
         var requiredFields = [titleInput, categoryInput, lngInput, latInput, startDateInput];
-        var allFields = [titleInput, categoryInput, lngInput, latInput, startDateInput, closedDateInput, mUnitInput, mValueInput, sourceInput];
+        var allFields = [titleInput, categoryInput, lngInput, latInput, startDateInput, closedDateInput, mUnitInput, mValueInput, dangerLevelInputCombo, sourceInput];
         var requiredFieldsIsEmpty = false;
         for (var inputElement of requiredFields)
         {
@@ -244,17 +245,17 @@ function addEventBtnClick(){
                     inputElement.value = "Нет данных";
                 }
             }
-
             var data = {
                 "type": "Feature",
                 "properties": {"title": titleInput.value,
                             "Newid": geojsonAllDataEvents.features.length,
                             "categoriesNEW": categoryInput.value,
-                            "categoriesTitle": categoryInput.value,
+                            "categoriesTitle": categoryInput.options[categoryInput.selectedIndex].textContent,
                             "date": startDateInput.value,
                             "closed": closedDateInput.value,
                             "magnitudeUnit": mUnitInput.value,
                             "magnitudeValue": mValueInput.value,
+                            "dangerLevel": dangerLevelInputCombo.options[dangerLevelInputCombo.selectedIndex].textContent,
                             "link": sourceInput.value},
                 "geometry": {
                 "type": "Point",
@@ -280,7 +281,10 @@ function addEventBtnClick(){
 
 function addPoints(events){
     for (const feature of events.features) {
-        const layerID = feature.properties.categoriesNEW;
+        var layerID = feature.properties.categoriesNEW;
+        var fCollor = getEventIconColorByDangerLevel(feature.properties.dangerLevel);
+
+
         // Длбовляем новый слой для каждого типа событий
         if (!map.getLayer(layerID)) {
             // добовляем картинки (метки событий) к карте
@@ -298,7 +302,7 @@ function addPoints(events){
                     'icon-size': 1
                 },
                 'paint': {
-                    'icon-color': 'black'
+                    'icon-color': fCollor
                 },
                 'filter': ['==', 'categoriesNEW', layerID]
                 });
@@ -377,6 +381,7 @@ map.on('load', () => {
                 feature.properties.categoriesNEW = feature.properties.categories[0].id;
                 feature.properties.categoriesTitle = feature.properties.categories[0].title;
                 feature.properties.link = feature.properties.sources[0].url;
+                feature.properties.dangerLevel = 'No data';
                 feature.properties.Newid = i;
                 i++;
             }
@@ -418,6 +423,7 @@ function MarkerOnClick(LayerId){
         <p>Closed date: ${e.features[0].properties.closed ?? 'Неоконченное событие'}</p>
         <p>Magnitude unit: ${e.features[0].properties.magnitudeUnit ?? 'Нет данных'}</p>
         <p>Magnitude value: ${e.features[0].properties.magnitudeValue ?? 'Нет данных'}</p>
+        <p>Danger level: ${e.features[0].properties.dangerLevel ?? 'Нет данных'}</p>
         <p>Sources: <a href="${e.features[0].properties.link}">${(e.features[0].properties.link == 'Нет данных') ? 'Нет данных': 'click'}</a></p></div>`;
 
         // Ensure that if the map is zoomed out such that multiple

@@ -1,3 +1,16 @@
+/* Переменные с цветами */
+:root {
+    --light-teal: #4DB6AC;
+    --dark-teal: #26A69A;
+    --light-teal-input-zone: #80CBC4;
+
+    --very-high-danger-level: #800000;
+    --high-danger-level: #ff0000;
+    --considerable-danger-level: #ff9900;
+    --moderate-danger-level: #ffff00;
+    --minor-danger-level: #ccff66;
+}
+
 /* Стиль информации о событии */
 .mapboxgl-popup {
     max-width: 400px !important;
@@ -45,7 +58,7 @@ display: none;
 }
 
 .filter-group input[type='checkbox'] + label {
-background-color: #26A69A;
+background-color: var(--dark-teal);
 display: flex;
 align-items: center;
 cursor: pointer;
@@ -60,7 +73,7 @@ text-transform: capitalize;
 
 .filter-group input[type='checkbox'] + label:hover,
 .filter-group input[type='checkbox']:checked + label {
-background-color: #4DB6AC;
+background-color: var(--light-teal);
 }
 
 .filter-group input[type='checkbox']:checked + label:before {
@@ -86,7 +99,7 @@ margin-right: 5px;
     font-family: sans-serif;
     font-size: 14px;
     position: absolute;
-    background-color: #80CBC4;
+    background-color: var(--light-teal-input-zone);
     z-index: 1;
     top: 30px;
     left: calc(50% - 160px);
@@ -171,7 +184,7 @@ margin-right: 5px;
 }
 
 .add-event-data {
-    background: #26A69A;
+    background: var(--dark-teal);
     width: 135px;
     padding-top: 0;
     border-radius: 14px;
@@ -212,13 +225,35 @@ margin-right: 5px;
 
 .coordinate-button input {
     border-radius: 13px;
-    background: #26A69A;
+    background: var(--dark-teal);
     cursor: pointer;
     color: #fff;
     font-weight: 600;
     font-family: sans-serif;
     font-size: 16px;
 }
+
+/* Стили опций выбора уровня опасности */
+.veryHighDanger {
+    background: var(--very-high-danger-level);
+}
+
+.highDanger {
+    background: var(--high-danger-level);
+}
+
+.considerableDanger {
+    background: var(--considerable-danger-level);
+}
+
+.moderateDanger {
+    background: var(--moderate-danger-level);
+}
+
+.minorDanger {
+    background: var(--minor-danger-level);
+}
+
 
 
 /* Стиль поля логина */
@@ -228,7 +263,7 @@ margin-right: 5px;
     right: 50px;
     padding-bottom: 0;
     width: 207px;
-    background: #26A69A;
+    background: var(--dark-teal);
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;

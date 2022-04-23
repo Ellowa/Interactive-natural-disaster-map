@@ -127,7 +127,7 @@
         </div>
 
         <div class="input-event-field">
-            <select id="categoryInputCombo" class="combo-box" name="hero[]" required>
+            <select id="categoryInputCombo" class="combo-box" required>
                 <option selected disabled></option>
                 <option value="volcanoes">Volcanoes</option>
                 <option value="severeStorms">Severe Storms</option>
@@ -143,6 +143,10 @@
             <label class="placeholder">Select category*</label>
         </div>
 
+        <div class="input-event-field coordinate-button">
+            <input id="getCoordinatesByMapButton" type="button" value="Get coordinates by map"/>
+        </div>
+
         <div class="input-event-field" id="lngDiv">
             <input id="lngInput" type="number" required/>
             <label class="placeholder">Enter lng*</label>
@@ -151,11 +155,6 @@
         <div class="input-event-field" id="latDiv">
             <input id="latInput" type="number" required/>
             <label class="placeholder">Enter lat*</label>
-        </div>
-
-        <div class="input-event-field coordinate-button">
-            <input id="getCoordinatesByMapButton" type="button" value="Get coordinates by map"/>
-            <!-- <label class="placeholder">Get coordinates by map</label> -->
         </div>
 
         <div class="input-event-field date">
@@ -176,6 +175,18 @@
         <div class="input-event-field">
             <input id="mValueInput" type="text" required/>
             <label class="placeholder">Enter Magnitude value</label>
+        </div>
+
+        <div class="input-event-field">
+            <select id="dangerLevelInputCombo" class="combo-box" required>
+                <option class="veryHighDanger" value="veryHighDanger">Very high danger</option>
+                <option class="highDanger" value="highDanger">High danger</option>
+                <option class="considerableDanger" value="considerableDanger">Considerable danger</option>
+                <option class="moderateDanger" value="moderateDanger">Moderate danger</option>
+                <option class="minorDanger" value="minorDanger">Minor danger</option>
+                <option selected value="noData">No data</option>
+            </select>
+            <label class="placeholder">Select danger level</label>
         </div>
 
         <div class="input-event-field">
@@ -207,6 +218,7 @@
         </div> -->
     </div>
 </body>
+<script src="scripts/eventDangerLevel.js"></script>
 <script src="scripts/script.js"></script>
 <script src="scripts/timeSlider.js"></script>
 </html>
