@@ -215,7 +215,7 @@ function addEventBtnClick(){
         const sourceInput = document.getElementById('sourceInput');
 
         var requiredFields = [titleInput, categoryInput, lngInput, latInput, startDateInput];
-        var allFields = [titleInput, categoryInput, lngInput, latInput, startDateInput, closedDateInput, mUnitInput, mValueInput, dangerLevelInputCombo, sourceInput];
+        var allFields = [titleInput, categoryInput, lngInput, latInput, startDateInput, closedDateInput, mUnitInput, mValueInput, sourceInput];
         var requiredFieldsIsEmpty = false;
         for (var inputElement of requiredFields)
         {
@@ -279,22 +279,43 @@ function addEventBtnClick(){
 }
 
 
+function addIconSync(layerID){
+    map.loadImage(`images/${layerID}.png`, (error, image) => {
+        if (error){
+            throw error;
+        } 
+        if (!map.hasImage(`${layerID}ICON`)) 
+        {
+            map.addImage(`${layerID}ICON`, image, { 'sdf': true });//НАДО разобраться с sdf, он нужен чтобы менять цвет фона.
+        }
+    });
+}
+
+function addEventListenerToEventFilterSync(layerID, fullLayerID){
+    // Обработчик событий для фильтра (смена категорий) событий
+    const input = document.getElementById(layerID);
+    input.addEventListener('change', (e) => {
+        map.setLayoutProperty(
+            fullLayerID,
+            'visibility',
+            e.target.checked ? 'visible' : 'none'
+        );
+        console.log(fullLayerID);
+    }); 
+}
+
 function addPoints(events){
     for (const feature of events.features) {
         var layerID = feature.properties.categoriesNEW;
-        var fCollor = getEventIconColorByDangerLevel(feature.properties.dangerLevel);
+        var fCollor = feature.properties.dangerLevel;
 
-
+        var fullLayerID = layerID + fCollor;
         // Длбовляем новый слой для каждого типа событий
-        if (!map.getLayer(layerID)) {
+        if (!map.getLayer(fullLayerID)) {
             // добовляем картинки (метки событий) к карте
-            map.loadImage(`images/${layerID}.png`, (error, image) => {
-            if (error) throw error;
-            map.addImage(`${layerID}ICON`, image, { 'sdf': true });//НАДО разобраться с sdf, он нужен чтобы менять цвет фона.
-            });
-
+            addIconSync(layerID);
             map.addLayer({
-                'id': layerID,
+                'id': fullLayerID,
                 'type': 'symbol',
                 'source': 'events',
                 'layout': {
@@ -302,22 +323,17 @@ function addPoints(events){
                     'icon-size': 1
                 },
                 'paint': {
-                    'icon-color': fCollor
+                    'icon-color': getEventIconColorByDangerLevel(fCollor)
                 },
-                'filter': ['==', 'categoriesNEW', layerID]
-                });
-
-            // Обработчик событий для фильтра (смена категорий) событий
-            const input = document.getElementById(layerID);
-            input.addEventListener('change', (e) => {
-                map.setLayoutProperty(
-                    layerID,
-                    'visibility',
-                    e.target.checked ? 'visible' : 'none'
-                );
-                console.log(layerID);
+                'filter': [
+                    'all',
+                    ['==', 'categoriesNEW', layerID],
+                    ['==', 'dangerLevel', fCollor]
+                ]
             });
-            MarkerOnClick(layerID);
+            addEventListenerToEventFilterSync(layerID, fullLayerID);
+            
+            MarkerOnClick(fullLayerID);
         }
     }
 }
@@ -373,7 +389,7 @@ map.on('load', () => {
             document.getElementById('nasaLogoSpinner').style = 'animation: none;';
             document.getElementById('nasaSecondTitle').textContent = 'data for the last 90 days';
 
-            console.log(data);
+            
             //Пока костыль. Нужно поскольку дальше для фильтра событий средствами mapbox я не могу пройти вглубь массива
             var i = geojsonAllDataEvents.features.length;
             console.log(i);
@@ -384,6 +400,7 @@ map.on('load', () => {
                 feature.properties.dangerLevel = 'No data';
                 feature.properties.Newid = i;
                 i++;
+                geojsonAllDataEvents.features.push(feature);
             }
            
 
@@ -395,11 +412,6 @@ map.on('load', () => {
             // data.features[100].properties.categoriesNEW = "snow";
             // data.features[200].properties.categoriesNEW = "tempExtremes";
             // console.log(data);
-
-
-            for (const feature of data.features) {
-                geojsonAllDataEvents.features.push(feature);
-            }
             map.getSource('events').setData(geojsonAllDataEvents);
             addPoints(geojsonAllDataEvents);
             setDateFilterRange();
