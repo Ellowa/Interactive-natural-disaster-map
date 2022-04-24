@@ -262,6 +262,11 @@ function addEventBtnClick(){
                 "coordinates": [ lngInput.value, latInput.value ]
                 }
             };
+
+            //Определение уровня угрозы события;
+            if(data.properties.categoriesNEW == 'severeStorms' && data.properties.magnitudeUnit == 'kts')
+                data.properties.dangerLevel = getSevereStormDangerLevelByKTS(data.properties.magnitudeValue);
+
             geojsonAllDataEvents.features.push(data);
             map.getSource('events').setData(geojsonAllDataEvents);
             addPoints(geojsonAllDataEvents);
@@ -382,42 +387,81 @@ map.on('load', () => {
         registerBtnClick();
         logInBtnClick();
         addEventBtnClick();
-        //Получаем список событий
+
+        //Получаем список событий от NASA EONET API
         $.getJSON( "https://eonet.gsfc.nasa.gov/api/v3/events/geojson?status=all&category=drought,earthquakes,floods,landslides,severeStorms,snow,tempExtremes,volcanoes,wildfires&days=90")
-        .done(function( data ) {
-            //останавливаем спинер (колесо загрузки) когда данные подгрузились
-            document.getElementById('nasaLogoSpinner').style = 'animation: none;';
-            document.getElementById('nasaSecondTitle').textContent = 'data for the last 90 days';
-
-            
-            //Пока костыль. Нужно поскольку дальше для фильтра событий средствами mapbox я не могу пройти вглубь массива
-            var i = geojsonAllDataEvents.features.length;
-            console.log(i);
-            for (const feature of data.features) {
-                feature.properties.categoriesNEW = feature.properties.categories[0].id;
-                feature.properties.categoriesTitle = feature.properties.categories[0].title;
-                feature.properties.link = feature.properties.sources[0].url;
-                feature.properties.dangerLevel = 'No data';
-                feature.properties.Newid = i;
-                i++;
-                geojsonAllDataEvents.features.push(feature);
-            }
-           
-
-            //ДЛЯ ТЕСТА ЗНАЧКОВ
-            // data.features[281].properties.categoriesNEW = "drought";
-            // data.features[107].properties.categoriesNEW = "earthquakes";
-            // data.features[165].properties.categoriesNEW = "floods";
-            // data.features[348].properties.categoriesNEW = "landslides";
-            // data.features[100].properties.categoriesNEW = "snow";
-            // data.features[200].properties.categoriesNEW = "tempExtremes";
-            // console.log(data);
-            map.getSource('events').setData(geojsonAllDataEvents);
-            addPoints(geojsonAllDataEvents);
-            setDateFilterRange();
+        .done(function(data){
+            addNasaEonetEventsToMap(data);
+        });
+        //Получаем список землетрясений от USGS
+        $.getJSON( "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson")
+        .done(function(data){
+            addUsgsEarthquakeToMap(data);
         });
     });
 });
+
+function addNasaEonetEventsToMap(data){
+    //останавливаем спинер (колесо загрузки) когда данные подгрузились
+    document.getElementById('nasaLogoSpinner').style = 'animation: none;';
+    document.getElementById('nasaSecondTitle').textContent = 'data for the last 90 days';
+
+    
+    // Редактирование полей события
+    var i = geojsonAllDataEvents.features.length;
+    console.log(i);
+    for (const feature of data.features) {
+        feature.properties.categoriesNEW = feature.properties.categories[0].id;
+        feature.properties.categoriesTitle = feature.properties.categories[0].title;
+        feature.properties.link = feature.properties.sources[0].url;
+        //Определение уровня угрозы события
+        feature.properties.dangerLevel = 'No data';
+        if(feature.properties.categoriesNEW == 'severeStorms' && feature.properties.magnitudeUnit == 'kts')
+            feature.properties.dangerLevel = getSevereStormDangerLevelByKTS(feature.properties.magnitudeValue);
+        
+        feature.properties.Newid = i;
+        i++;
+        geojsonAllDataEvents.features.push(feature);
+    }
+   
+
+    //ДЛЯ ТЕСТА ЗНАЧКОВ
+    // data.features[281].properties.categoriesNEW = "drought";
+    // data.features[107].properties.categoriesNEW = "earthquakes";
+    // data.features[165].properties.categoriesNEW = "floods";
+    // data.features[348].properties.categoriesNEW = "landslides";
+    // data.features[100].properties.categoriesNEW = "snow";
+    // data.features[200].properties.categoriesNEW = "tempExtremes";
+
+    map.getSource('events').setData(geojsonAllDataEvents);
+    addPoints(geojsonAllDataEvents);
+    setDateFilterRange();
+}
+
+function addUsgsEarthquakeToMap(data){
+    // Редактирование полей события
+    var i = geojsonAllDataEvents.features.length;
+    console.log(i);
+    for (const feature of data.features) {
+        feature.properties.categoriesNEW = 'earthquakes';
+        feature.properties.categoriesTitle = 'Earthquakes';
+        feature.properties.link = feature.properties.url;
+        feature.properties.magnitudeUnit = feature.properties.magType;
+        feature.properties.magnitudeValue = feature.properties.mag;
+        feature.properties.date = new Date(feature.properties.time);
+        feature.properties.closed = new Date(feature.properties.updated);
+        //Определение уровня угрозы события
+        feature.properties.dangerLevel = getEarthquakesDangerLevelByMAG(feature.properties.magnitudeValue);
+        
+        feature.properties.Newid = i;
+        i++;
+        geojsonAllDataEvents.features.push(feature);
+    }
+
+    map.getSource('events').setData(geojsonAllDataEvents);
+    addPoints(geojsonAllDataEvents);
+    setDateFilterRange();
+}
 
 function MarkerOnClick(LayerId){
     // When a click event occurs on a feature in the places layer, open a popup at the
@@ -432,7 +476,7 @@ function MarkerOnClick(LayerId){
         <p>Categories: ${e.features[0].properties.categoriesTitle}</p>
         <p>Coordinates: ${coordinates}</p>
         <p>Start date: ${e.features[0].properties.date}</p>
-        <p>Closed date: ${e.features[0].properties.closed ?? 'Неоконченное событие'}</p>
+        <p>Closed/update date: ${e.features[0].properties.closed ?? 'Неоконченное событие'}</p>
         <p>Magnitude unit: ${e.features[0].properties.magnitudeUnit ?? 'Нет данных'}</p>
         <p>Magnitude value: ${e.features[0].properties.magnitudeValue ?? 'Нет данных'}</p>
         <p>Danger level: ${e.features[0].properties.dangerLevel ?? 'Нет данных'}</p>
