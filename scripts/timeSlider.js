@@ -22,11 +22,12 @@ function setDateFilterRange(){
     //document.getElementById('dateSlider').value = daysRange;
 }
 
-function createFilterByLayerId(toDate, layerID){
+function createFilterByLayerId(toDate, layerID, fCollor){
     var filters = [
         'all',
         ['>=', 'date', toDate],
-        ['==', 'categoriesNEW', layerID]
+        ['==', 'categoriesNEW', layerID],
+        ['==', 'dangerLevel', fCollor]
     ];
     return filters;
 }
@@ -34,22 +35,12 @@ function createFilterByLayerId(toDate, layerID){
 function filterByDate(toDate){
 
     // Применяем фильтр ко всем слоям карты
-    if (map.getLayer('drought'))
-        map.setFilter('drought', createFilterByLayerId(toDate, 'drought'));
-    if (map.getLayer('earthquakes'))
-        map.setFilter('earthquakes', createFilterByLayerId(toDate, 'earthquakes'));
-    if (map.getLayer('floods'))
-        map.setFilter('floods', createFilterByLayerId(toDate, 'floods'));
-    if (map.getLayer('landslides'))
-        map.setFilter('landslides', createFilterByLayerId(toDate, 'landslides'));
-    if (map.getLayer('severeStorms'))
-        map.setFilter('severeStorms', createFilterByLayerId(toDate, 'severeStorms'));
-    if (map.getLayer('snow'))
-        map.setFilter('snow', createFilterByLayerId(toDate, 'snow'));
-    if (map.getLayer('volcanoes'))
-        map.setFilter('volcanoes', createFilterByLayerId(toDate, 'volcanoes'));
-    if (map.getLayer('wildfires'))
-        map.setFilter('wildfires', createFilterByLayerId(toDate, 'wildfires'));
+    for (layerID in allLayersID)
+    {
+        var categoriesFromLayerID = allLayersID[layerID].split(' ')[0];
+        var dangerLevelFromLayerID = allLayersID[layerID].slice(categoriesFromLayerID.length+1);
+        map.setFilter(allLayersID[layerID], createFilterByLayerId(toDate, categoriesFromLayerID, dangerLevelFromLayerID));
+    }
     // Меняеем подпись диапазона дат 
     document.getElementById('selectedDateLabel').textContent = `Date range: ${geojsonAllDataEvents.features[0].properties.date.substring(0,10)} - ${toDate}`;
 }
@@ -58,6 +49,6 @@ function filterByDate(toDate){
 document.getElementById('dateSlider').addEventListener('input', (e) => {
     var selectedDateRange = e.target.value;
     var toDate = new Date();
-    toDate.setDate((new Date(geojsonAllDataEvents.features[0].properties.date)).getDate() - selectedDateRange);
+    toDate.setDate((new Date(geojsonAllDataEvents.features[0].properties.date)).getDate() - selectedDateRange -1);
     filterByDate(toDate.toISOString().substring(0,10));
 });

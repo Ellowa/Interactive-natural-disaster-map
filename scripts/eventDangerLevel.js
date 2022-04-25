@@ -33,7 +33,6 @@ function getSevereStormDangerLevelByKTS(kts){
 
 //Функция определения уровня опасности Earthquakes из magnitude
 function getEarthquakesDangerLevelByMAG(mag){
-    //Данные из системы GDACS
     if(mag < 4.0)
         return "Minor danger";
     if(mag < 5.5)
@@ -42,6 +41,7 @@ function getEarthquakesDangerLevelByMAG(mag){
         return "Considerable danger";
     if(mag < 7.0)
         return "High danger";
-    if(mag > 8.0)
+    if(mag >= 7.0)
         return "Very high danger";
+    return "No data";
 }

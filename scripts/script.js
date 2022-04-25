@@ -266,6 +266,8 @@ function addEventBtnClick(){
             //Определение уровня угрозы события;
             if(data.properties.categoriesNEW == 'severeStorms' && data.properties.magnitudeUnit == 'kts')
                 data.properties.dangerLevel = getSevereStormDangerLevelByKTS(data.properties.magnitudeValue);
+            if(data.properties.categoriesNEW == 'earthquakes')
+                data.properties.dangerLevel = getEarthquakesDangerLevelByMAG(data.properties.magnitudeValue);
 
             geojsonAllDataEvents.features.push(data);
             map.getSource('events').setData(geojsonAllDataEvents);
@@ -314,11 +316,12 @@ function addPoints(events){
         var layerID = feature.properties.categoriesNEW;
         var fCollor = feature.properties.dangerLevel;
 
-        var fullLayerID = layerID + fCollor;
+        var fullLayerID = layerID + " " + fCollor;
         // Длбовляем новый слой для каждого типа событий
         if (!map.getLayer(fullLayerID)) {
             // добовляем картинки (метки событий) к карте
             addIconSync(layerID);
+            allLayersID.push(fullLayerID);
             map.addLayer({
                 'id': fullLayerID,
                 'type': 'symbol',
@@ -347,7 +350,8 @@ function addPoints(events){
 var geojsonAllDataEvents = {
     "type": "FeatureCollection",
     "features": []
-  };
+};
+var allLayersID = [];
 mapboxgl.accessToken = 'pk.eyJ1IjoiZWxsb3dhIiwiYSI6ImNsMjdlamkzeDA3cmQzZXFseGl0bmFtdXUifQ.aslVME0d_CppwF6I_VZS9Q';
 const map = new mapboxgl.Map({
     container: 'map', // container ID
@@ -395,6 +399,10 @@ map.on('load', () => {
         });
         //Получаем список землетрясений от USGS
         $.getJSON( "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson")
+        .done(function(data){
+            addUsgsEarthquakeToMap(data);
+        });
+        $.getJSON( "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson")
         .done(function(data){
             addUsgsEarthquakeToMap(data);
         });
@@ -448,8 +456,8 @@ function addUsgsEarthquakeToMap(data){
         feature.properties.link = feature.properties.url;
         feature.properties.magnitudeUnit = feature.properties.magType;
         feature.properties.magnitudeValue = feature.properties.mag;
-        feature.properties.date = new Date(feature.properties.time);
-        feature.properties.closed = new Date(feature.properties.updated);
+        feature.properties.date = new Date(feature.properties.time).toISOString();
+        feature.properties.closed = new Date(feature.properties.updated).toISOString();
         //Определение уровня угрозы события
         feature.properties.dangerLevel = getEarthquakesDangerLevelByMAG(feature.properties.magnitudeValue);
         
