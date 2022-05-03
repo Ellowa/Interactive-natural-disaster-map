@@ -180,11 +180,8 @@ function logInBtnClick(){
             {// неуспешный логин
                 requiredTextLogin.textContent = 'Not found login \n or password';
             }
-
-            
         }
     });
-
 }
 
 // Обработчики событий добавления маркера на карту
@@ -245,6 +242,7 @@ function addEventBtnClick(){
                     inputElement.value = "Нет данных";
                 }
             }
+            // формируем новое событие
             var data = {
                 "type": "Feature",
                 "properties": {"title": titleInput.value,
@@ -269,9 +267,11 @@ function addEventBtnClick(){
             if(data.properties.categoriesNEW == 'earthquakes')
                 data.properties.dangerLevel = getEarthquakesDangerLevelByMAG(data.properties.magnitudeValue);
 
+            //добавляем события к списку всех событий и отображаем их на карте
             geojsonAllDataEvents.features.push(data);
             map.getSource('events').setData(geojsonAllDataEvents);
-            addPoints(geojsonAllDataEvents);
+            addPoints(geojsonAllDataEvents); // костыль (ибо мы запихиваем не 1 новую точку на карту а перересовываем все точки), может негативно сказываться на производительности (но нужно если вдруг поменяется информация об уже отрисованной точки)
+            // при добавлении новых событий мы обновляем временной слайдер (фильтр событий по времени)
             setDateFilterRange();
 
             for (var inputElement of allFields)
@@ -285,7 +285,7 @@ function addEventBtnClick(){
     });
 }
 
-
+//Функция добавления(подгрузки для карты) новой иконки
 function addIconSync(layerID){
     map.loadImage(`images/${layerID}.png`, (error, image) => {
         if (error){
@@ -293,11 +293,12 @@ function addIconSync(layerID){
         } 
         if (!map.hasImage(`${layerID}ICON`)) 
         {
-            map.addImage(`${layerID}ICON`, image, { 'sdf': true });//НАДО разобраться с sdf, он нужен чтобы менять цвет фона.
+            map.addImage(`${layerID}ICON`, image, { 'sdf': true });//sdf изображения используем чтобы ему динамически(от уровня угрозы) менять цвет
         }
     });
 }
 
+//Обработчик событий установки фильтров категорий событий
 function addEventListenerToEventFilterSync(layerID, fullLayerID){
     // Обработчик событий для фильтра (смена категорий) событий
     const input = document.getElementById(layerID);
@@ -311,6 +312,7 @@ function addEventListenerToEventFilterSync(layerID, fullLayerID){
     }); 
 }
 
+// функция отрисовки событий на карте 
 function addPoints(events){
     for (const feature of events.features) {
         var layerID = feature.properties.categoriesNEW;
@@ -322,6 +324,7 @@ function addPoints(events){
             // добовляем картинки (метки событий) к карте
             addIconSync(layerID);
             allLayersID.push(fullLayerID);
+            // добавление нового слоя к карте (с уникальным id и уникальным набором событий)
             map.addLayer({
                 'id': fullLayerID,
                 'type': 'symbol',
@@ -339,25 +342,27 @@ function addPoints(events){
                     ['==', 'dangerLevel', fCollor]
                 ]
             });
+            // установка события фильтра событий для этого слоя карты
             addEventListenerToEventFilterSync(layerID, fullLayerID);
             
+            // добавляем к событиям слоя описания (по клику на маркер)
             MarkerOnClick(fullLayerID);
         }
     }
 }
 
 
-var geojsonAllDataEvents = {
+var geojsonAllDataEvents = { // список всех событий
     "type": "FeatureCollection",
     "features": []
 };
-var allLayersID = [];
+var allLayersID = []; // нужно для удобного извличения всех слаёв карты
 mapboxgl.accessToken = 'pk.eyJ1IjoiZWxsb3dhIiwiYSI6ImNsMjdlamkzeDA3cmQzZXFseGl0bmFtdXUifQ.aslVME0d_CppwF6I_VZS9Q';
 const map = new mapboxgl.Map({
-    container: 'map', // container ID
-    style: 'mapbox://styles/mapbox/light-v10', // style URL
-    zoom: 5, // starting zoom
-    center: [31.125149, 49.557266] // starting center
+    container: 'map', // html id карты
+    style: 'mapbox://styles/mapbox/light-v10', // стиль карты
+    zoom: 5, // начальное приближение
+    center: [31.125149, 49.557266] // начальные координаты
 });
 
 // Добавление кнопок управления к карте
@@ -378,14 +383,15 @@ map.addControl(
 
 
 map.on('load', () => {
+    // добавление источника данных к карте
     map.addSource('events', {
         type: 'geojson',
-        // Use a URL for the value for the `data` property.
         data: geojsonAllDataEvents
     });
 
-    $( document ).ready(function() { //может от єтого избавиться (Получение json объекта через jquery)
+    $( document ).ready(function() { // страничка прогружена
         
+        // установка слушателей событий 
         getCoordinatesByMapButtonClk();
         logOutBtnClk();
         registerBtnClick();
@@ -415,7 +421,7 @@ function addNasaEonetEventsToMap(data){
     document.getElementById('nasaSecondTitle').textContent = 'data for the last 90 days';
 
     
-    // Редактирование полей события
+    // Редактирование (подгонка под наш вариант хранения события) полей события
     var i = geojsonAllDataEvents.features.length;
     console.log(i);
     for (const feature of data.features) {
@@ -441,13 +447,16 @@ function addNasaEonetEventsToMap(data){
     // data.features[100].properties.categoriesNEW = "snow";
     // data.features[200].properties.categoriesNEW = "tempExtremes";
 
+    // обновление источника данных для карты
     map.getSource('events').setData(geojsonAllDataEvents);
+    // прорисовка событий на карте
     addPoints(geojsonAllDataEvents);
+    // при добавлении новых событий мы обновляем временной слайдер (фильтр событий по времени)
     setDateFilterRange();
 }
 
 function addUsgsEarthquakeToMap(data){
-    // Редактирование полей события
+    // Редактирование (подгонка под наш вариант хранения события) полей события
     var i = geojsonAllDataEvents.features.length;
     console.log(i);
     for (const feature of data.features) {
@@ -466,19 +475,23 @@ function addUsgsEarthquakeToMap(data){
         geojsonAllDataEvents.features.push(feature);
     }
 
+    // обновление источника данных для карты
     map.getSource('events').setData(geojsonAllDataEvents);
+    // прорисовка событий на карте
     addPoints(geojsonAllDataEvents);
+    // при добавлении новых событий мы обновляем временной слайдер (фильтр событий по времени)
     setDateFilterRange();
 }
 
+
+// фукция добавления описания для каждого события 
 function MarkerOnClick(LayerId){
-    // When a click event occurs on a feature in the places layer, open a popup at the
-    // location of the feature, with description HTML from its properties.
+    // обработчик события, когда клик происходит по событию из слоя карты
     map.on('click', LayerId, (e) => {
         // Получаем координаты для отрисовки на этом месте описания.
         const coordinates = e.features[0].geometry.coordinates;
         
-        // Формируем описание события
+        // Формируем html описание события
         let description = `<div class='popupDiscription'><p>Title: ${e.features[0].properties.title}</p>
         <p>Id: ${e.features[0].properties.Newid}</p>
         <p>Categories: ${e.features[0].properties.categoriesTitle}</p>
