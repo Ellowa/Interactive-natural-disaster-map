@@ -345,7 +345,7 @@ text-transform: capitalize;
     justify-content: center;
     background: linear-gradient(to left, blue, 38%, pink);
     position: unset;
-    border-radius: 0 0 7px 7px;
+    /* border-radius: 0 0 7px 7px; */
     width: unset;
     display: flex;
     flex-direction: row;
@@ -381,6 +381,79 @@ text-transform: capitalize;
     to {
         transform: rotate(360deg);
     }
+}
+
+
+/* Стиль кнопки about*/
+.aboutButtonZone {
+    /* top: 600px;
+    right: unset;
+    left: 10px;
+    border: none; */
+    justify-content: center;
+    background: linear-gradient(to left, black, 40%, rgb(194, 189, 189));
+    position: unset;
+    border-radius: 0 0 7px 7px;
+    width: unset;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 50px;
+}
+
+.aboutButtonZone input {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: help;
+    color: #fff;
+    font-weight: 600;
+    font-family: sans-serif;
+    font-size: 25px;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+/* Стиль зоны about */
+.about-zone {
+    min-height: 400px;
+    width: 700px;
+    left: calc(50% - 350px);
+    top: 80px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-left: 15px;
+}
+
+.about-navigation{
+    height: 30px;
+}
+
+.about-header{
+    height: 15%;
+    font-size: 48px;
+    line-height: 49px;
+    font-weight: 400;
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    color: #fff;
+    margin: 0 0 23px;
+}
+
+.about-header p{
+    margin: 0;
+}
+
+.about-main{
+    Font-Family: 'Quattrocento', Serif;
+    Font-Size: 18px;
+    letter-spacing: 0.8px;
+}
+
+.about-main p{
+    margin: 0;
 }
 
 

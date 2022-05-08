@@ -6,6 +6,7 @@
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css">
     <link rel="stylesheet" href="styles/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Oswald|Quattrocento" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -55,9 +56,38 @@
             <img id="nasaLogoSpinner" src="images/nasa_logo.png" alt="nasa logo">
             <a id="nasaDataLink" href="https://eonet.gsfc.nasa.gov/"> <p>NASA EONET</p> <p id="nasaSecondTitle">data is loading</p></a>
         </div>
+
+        <div class="aboutButtonZone">
+            <input type="button" id="aboutButton" value="?   About   ?">
+        </div>
     </nav>
 
+    <div id="aboutZone" class="input-zone about-zone">
+        <input id="closeBtnAboutZone" class="closeBtn" type="button" value="x">
+        
+        <div class="about-navigation">
 
+        </div>
+
+        <div class="about-header">
+            <p>INDM its?...</p>
+        </div>
+
+        <div class="about-main">
+            <p>Interactive natural disaster map - система буде слугувати для інформування громадян про природні катастрофи, 
+                їх причини та наслідки. Функціонал даного веб-додатку буде включати: відображення інформації у зручному графічному форматі, 
+                накопичення та зберігання інформації про природні катастрофи та аномалії, обробку накопиченої інформації, сповіщення про природні явища.
+                <br>
+                <br>
+                Даний веб-додаток буде мати доступну усім користувачам, безкоштовну частину, яка має дозволяти користувачам вільно, 
+                та оперативно отримувати інформацію про природні аномальні явища, що в свою чергу дозволить вирішити важливе питання безпеки громадян, 
+                при таких природних катастрофах, та підсилить інтерес громадян до питань аномальної зміни клімату. 
+                Також у веб-додатку будуть доступні платні – аналітичні частини додатку.
+                
+            </p>
+        </div>
+
+    </div>
     
 
 
@@ -228,6 +258,8 @@
         </div> -->
     </div>
 </body>
+
+<script src="scripts/aboutPage.js"></script>
 <script src="scripts/eventRenderingOnMap.js"></script>
 <script src="scripts/addEvents.js"></script>
 <script src="scripts/signInSystem.js"></script>
