@@ -78,11 +78,11 @@ function MarkerOnClick(LayerId){
         <p>Categories: ${e.features[0].properties.categoriesTitle}</p>
         <p>Coordinates: ${coordinates}</p>
         <p>Start date: ${e.features[0].properties.date}</p>
-        <p>Closed/update date: ${e.features[0].properties.closed ?? 'Неоконченное событие'}</p>
-        <p>Magnitude unit: ${e.features[0].properties.magnitudeUnit ?? 'Нет данных'}</p>
-        <p>Magnitude value: ${e.features[0].properties.magnitudeValue ?? 'Нет данных'}</p>
-        <p>Danger level: ${e.features[0].properties.dangerLevel ?? 'Нет данных'}</p>
-        <p>Sources: <a href="${e.features[0].properties.link}">${(e.features[0].properties.link == 'Нет данных') ? 'Нет данных': 'click'}</a></p></div>`;
+        <p>Closed/update date: ${e.features[0].properties.closed ?? 'Not closed'}</p>
+        <p>Magnitude unit: ${e.features[0].properties.magnitudeUnit ?? 'No data'}</p>
+        <p>Magnitude value: ${e.features[0].properties.magnitudeValue ?? 'No data'}</p>
+        <p>Danger level: ${e.features[0].properties.dangerLevel ?? 'No data'}</p>
+        <p>Sources: <a href="${e.features[0].properties.link}">${(e.features[0].properties.link == 'No data') ? 'No data': 'click'}</a></p></div>`;
 
         // Ensure that if the map is zoomed out such that multiple
         // copies of the feature are visible, the popup appears

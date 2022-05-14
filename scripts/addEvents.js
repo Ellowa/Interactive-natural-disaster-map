@@ -80,7 +80,7 @@ function addEventBtnClick(){
             {
                 if(inputElement.value == "")
                 {
-                    inputElement.value = "Нет данных";
+                    inputElement.value = "No data";
                 }
             }
             // формируем новое событие
