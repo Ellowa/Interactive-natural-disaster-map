@@ -648,5 +648,23 @@ text-transform: capitalize;
     .aboutButtonZone{
         height: 35px;
     }
-   
+
+    .popupDiscription{
+        width: 260px;
+    }
+    .popupDiscription p{
+        margin: 0;
+        font-size: 11px;
+    }
+
+    .about-zone{
+        left: calc(50% - 140px);
+    }
+    .about-header{
+        font-size: 24px;
+        margin: 0;
+    }
+    .about-main{
+        font-size: 14px;
+    }
 }
