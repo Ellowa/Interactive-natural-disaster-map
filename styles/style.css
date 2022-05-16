@@ -122,7 +122,7 @@ text-transform: capitalize;
     font-size: 14px;
     position: absolute;
     background-color: var(--light-teal-input-zone);
-    z-index: 1;
+    z-index: 4;
     top: 30px;
     left: calc(50% - 160px);
     width: 320px;
@@ -289,6 +289,8 @@ text-transform: capitalize;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+    position: absolute;
+    border-radius: 14px;
 }
 
 .login-button input {
@@ -509,6 +511,8 @@ text-transform: capitalize;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+    position: absolute;
+    align-items: center;
 }
 
 #logoButton {
@@ -531,4 +535,118 @@ text-transform: capitalize;
 
 .logo img {
     width: 40%;
+}
+
+
+/* При разрешении 1280x720 (ноутбук) */
+@media (max-width: 1300px) {
+    .logo{
+        height: 45px;
+    }
+    .logo img {
+        width: 30%;
+    }
+    #filterGroupCloseButton{
+        top: 65px;
+    }
+    .filter-group{
+        top: 70px;
+        
+    }
+    .filter-group input[type='checkbox'] + label{
+        height: 43px;
+    }
+
+    .input-event-field {
+        padding-top: 7px;
+    }
+    .input-event-field input, .input-event-field select{
+        height: 43px;
+    }
+    .add-event-data {
+        height: 40px;
+    }
+    .add-event-data input{
+        padding-top: 0;
+    }
+    .input-event-field input:valid + .placeholder, .input-event-field input:focus + .placeholder, .input-event-field select:valid + .placeholder, .input-event-field select:focus + .placeholder{
+        top: 9px;
+    }
+    .coordinatesByMap input + .placeholder {
+        top: 9px;
+    }
+    .input-event-field .placeholder{
+        top: calc(50% + 4px);
+    }
+    .first-input{
+        margin-top: 15px;
+    }
+}
+
+/* При разрешении 380x700 (телефон) */
+@media (max-width: 420px) {
+    .logo{
+        width: 125px;
+    }
+    #logoButton{
+        font-size: 26px;
+    }
+
+    .login-button {
+        width: 105px;
+    }
+    .login-button input{
+        font-size: 12px;
+    }
+    .login-button img{
+        display: none;
+    }
+    #logInButton{
+        border: none;
+    }
+
+    .filter-group{
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    }
+
+    .add-button{
+        right: 25px;
+    }
+
+    .map-overlay {
+        width: 200px;
+        font-size: 10px;
+        font-weight: normal;
+    }
+    .map-overlay .map-overlay-inner{
+        height: 60px;
+        margin-bottom: 0;
+    }
+    .map-overlay h2 {
+        line-height: 17px;
+        margin: 0 0 5px;
+    }
+
+    .input-zone{
+        width: 285px;
+    }
+
+    .required-text-field {
+        left: 20px;
+        font-size: 14px;
+    }
+
+    .filter-group {
+        top: 65px;
+    }
+    #filterGroupCloseButton{
+        top: 55px;
+    }
+    .nasa-waiter{
+        height: 45px;
+    }
+    .aboutButtonZone{
+        height: 35px;
+    }
+   
 }
