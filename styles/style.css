@@ -156,6 +156,7 @@ text-transform: capitalize;
     transform: translateY(-50%);
     color: #aaa;
     transition: top 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+    cursor: text;
 }
 
 /* Стиль при фокусе (надписи) */

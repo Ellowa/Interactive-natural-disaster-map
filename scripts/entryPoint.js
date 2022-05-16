@@ -40,6 +40,7 @@ map.on('load', () => {
         addEventBtnClick();
         filterGroupActive();
         aboutBtnClick();
+        placeholderClk();
 
         //Получаем список событий от NASA EONET API
         $.getJSON( "https://eonet.gsfc.nasa.gov/api/v3/events/geojson?status=all&category=drought,earthquakes,floods,landslides,severeStorms,snow,tempExtremes,volcanoes,wildfires&days=90")
@@ -78,5 +79,22 @@ function filterGroupActive(){
             }, 10);
             filterGroupCloseButton.style= 'cursor: zoom-out;';
         }
+    });
+}
+
+//Обработчик событий, при клик на надпись в поле ввода, оно получает фокус
+function placeholderClk(){
+    const placeholders = document.getElementsByClassName('placeholder');
+    for(var placeholder of placeholders)
+    {
+        addPlaceholderEventListenerSync(placeholder);
+    }
+}
+
+function addPlaceholderEventListenerSync(placeholder){
+    placeholder.addEventListener('click', (e) => {
+        console.log(placeholder);
+        console.log(placeholder.parentElement.children[0]);
+        placeholder.parentElement.children[0].focus();
     });
 }
