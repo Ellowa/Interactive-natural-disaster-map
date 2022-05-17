@@ -548,10 +548,10 @@ text-transform: capitalize;
         width: 30%;
     }
     #filterGroupCloseButton{
-        top: 65px;
+        top: 57px;
     }
     .filter-group{
-        top: 70px;
+        top: 65px;
         
     }
     .filter-group input[type='checkbox'] + label{
