@@ -93,8 +93,6 @@ function placeholderClk(){
 
 function addPlaceholderEventListenerSync(placeholder){
     placeholder.addEventListener('click', (e) => {
-        console.log(placeholder);
-        console.log(placeholder.parentElement.children[0]);
         placeholder.parentElement.children[0].focus();
     });
 }

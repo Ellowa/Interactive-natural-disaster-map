@@ -540,7 +540,7 @@ text-transform: capitalize;
 
 
 /* При разрешении 1280x720 (ноутбук) */
-@media (max-width: 1300px) {
+@media (max-height: 800px) {
     .logo{
         height: 45px;
     }
