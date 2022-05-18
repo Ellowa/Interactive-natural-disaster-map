@@ -3,6 +3,10 @@ var account = new Map([
     ['login', ''],
     ['password', '']
 ]);
+var tmpAccount = new Map([
+    ['login', ''],
+    ['password', '']
+]);
 
 //Обработчик событий для кнопки выхода
 function logOutBtnClk(){
@@ -18,6 +22,9 @@ function logOutBtnClk(){
 
         registerButton.style = null;
         logInButton.style = null;
+
+        account.set('login', '');
+        account.set('password', '');
     });
 }
 
@@ -67,6 +74,9 @@ function registerBtnClick(){
             //ПРОЦЕДУРА РЕГИСТРАЦИИ 
             account.set('login', loginRegInput.value);
             account.set('password', passworRegInput.value);
+
+            tmpAccount.set('login', loginRegInput.value);
+            tmpAccount.set('password', passworRegInput.value);
 
             for (var inputElement of allFields)
             {
@@ -126,8 +136,10 @@ function logInBtnClick(){
             requiredTextLogin.style = null;
 
             //ПРОЦЕДУРА ЛОГИНА
-            if(loginInput.value == account.get('login') && passwordInput.value == account.get('password'))
+            if(loginInput.value == tmpAccount.get('login') && passwordInput.value == tmpAccount.get('password'))
             {//Успешный логин
+                account.set('login', loginInput.value);
+                account.set('password', passwordInput.value);
 
                 for (var inputElement of allFields)
                 {

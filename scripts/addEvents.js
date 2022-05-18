@@ -32,10 +32,18 @@ function addEventBtnClick(){
     const closeBtn = document.getElementById('closeBtn');
     const addEventDataButton = document.getElementById('addEventDataButton');
 
+    
     addEventButton.addEventListener('click', (e) => {
+        //Проверка авторизации пользователя
+        if(account.get('login') == ''){
+            window.alert('Only authorized users can add events');
+            document.getElementById('LogInZone').style = 'display: flex';
+            return 0;
+        }
+
         addEventZone.style = 'display: flex';
     });
-
+    
     closeBtn.addEventListener('click', (e) => {
         addEventZone.style = 'display: none';
     });
