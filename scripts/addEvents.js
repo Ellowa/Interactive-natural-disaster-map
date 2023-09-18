@@ -35,7 +35,7 @@ function addEventBtnClick(){
     
     addEventButton.addEventListener('click', (e) => {
         //Проверка авторизации пользователя
-        if(account.get('login') == ''){
+        if(localStorage.getItem('login') == null){
             window.alert('Only authorized users can add events');
             document.getElementById('LogInZone').style = 'display: flex';
             return 0;

@@ -1,13 +1,3 @@
-//временный аккаунт пользователя (ЗАГЛУШКА)
-var account = new Map([
-    ['login', ''],
-    ['password', '']
-]);
-var tmpAccount = new Map([
-    ['login', ''],
-    ['password', '']
-]);
-
 //Обработчик событий для кнопки выхода
 function logOutBtnClk(){
     const logOutButton = document.getElementById('logOutButton');
@@ -23,8 +13,8 @@ function logOutBtnClk(){
         registerButton.style = null;
         logInButton.style = null;
 
-        account.set('login', '');
-        account.set('password', '');
+        localStorage.removeItem('login');
+        localStorage.removeItem('jwt');
     });
 }
 
@@ -151,22 +141,37 @@ function logInBtnClick(){
             requiredTextLogin.style = null;
 
             //ПРОЦЕДУРА ЛОГИНА
-            if(loginInput.value == tmpAccount.get('login') && passwordInput.value == tmpAccount.get('password'))
-            {//Успешный логин
-                account.set('login', loginInput.value);
-                account.set('password', passwordInput.value);
+            var loginData = 
+            {
+                "login": loginInput.value,
+                "password": passwordInput.value
+            };
+            loginData = JSON.stringify(loginData);
+            $.ajax({
+                url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/Authentication/login',
+                method: 'POST',
+                dataType: 'text',
+                contentType: "application/json; charset=utf-8",
+                data: loginData,
+                success: function(data){
+                    localStorage.setItem('login', loginInput.value);
+                    localStorage.setItem('jwt', data);
+                    console.log(localStorage.getItem('jwt'));
 
-                for (var inputElement of allFields)
-                {
-                    inputElement.value = null;
+                    for (var inputElement of allFields)
+                    {
+                        inputElement.value = null;
+                    }
+                    LogInZone.style = 'display: none';
+                    logInSuccess();
+                },
+                error: function(jqXHR, textStatus, error) {
+                    var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
+                            + jqXHR.responseText.toString();
+                    exceptionHandler(err);
+                    requiredTextLogin.textContent = 'Wrong login \n or password';
                 }
-                LogInZone.style = 'display: none';
-                logInSuccess();
-            }
-            else
-            {// неуспешный логин
-                requiredTextLogin.textContent = 'Wrong login \n or password';
-            }
+            });
         }
     });
 }
@@ -181,7 +186,7 @@ function logInSuccess(){
 
     var userAccountButton = document.getElementById('userAccountButton');
     var logOutButton = document.getElementById('logOutButton');
-    userAccountButton.value = account.get('login');
+    userAccountButton.value = localStorage.getItem('login');
     userAccountButton.style = null;
     logOutButton.style = null;
     
