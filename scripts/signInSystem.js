@@ -15,6 +15,7 @@ function logOutBtnClk(){
 
         localStorage.removeItem('login');
         localStorage.removeItem('jwt');
+        location.reload();//Todo временный костыль чтобы очистить события прошлого пользователя
     });
 }
 
