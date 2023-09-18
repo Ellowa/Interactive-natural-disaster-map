@@ -56,6 +56,11 @@ map.on('load', () => {
         .done(function(data){
             addUsgsEarthquakeToMap(data);
         });
+        //Получаем список событий от INDM API
+        $.getJSON( "https://interactivenaturaldisastermapapi.azurewebsites.net/api/NaturalDisasterEvent")
+        .done(function(data){
+            addIndmEventsToMap(data);
+        });
     });
 });
 

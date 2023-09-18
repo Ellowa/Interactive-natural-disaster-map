@@ -95,7 +95,7 @@ function addEventBtnClick(){
             var data = {
                 "type": "Feature",
                 "properties": {"title": titleInput.value,
-                            "Newid": geojsonAllDataEvents.features.length,
+                            "Newid": geojsonAllDataEvents.features.length, //Todo изменить на получение из API
                             "categoriesNEW": categoryInput.value,
                             "categoriesTitle": categoryInput.options[categoryInput.selectedIndex].textContent,
                             "date": startDateInput.value,
@@ -142,8 +142,6 @@ function addNasaEonetEventsToMap(data){
 
     
     // Редактирование (подгонка под наш вариант хранения события) полей события
-    var i = geojsonAllDataEvents.features.length;
-    console.log(i);
     for (const feature of data.features) {
         feature.properties.categoriesNEW = feature.properties.categories[0].id;
         feature.properties.categoriesTitle = feature.properties.categories[0].title;
@@ -153,19 +151,9 @@ function addNasaEonetEventsToMap(data){
         if(feature.properties.categoriesNEW == 'severeStorms' && feature.properties.magnitudeUnit == 'kts')
             feature.properties.dangerLevel = getSevereStormDangerLevelByKTS(feature.properties.magnitudeValue);
         
-        feature.properties.Newid = i;
-        i++;
+        feature.properties.Newid = feature.properties.id;
         geojsonAllDataEvents.features.push(feature);
     }
-   
-
-    //ДЛЯ ТЕСТА ЗНАЧКОВ
-    // data.features[281].properties.categoriesNEW = "drought";
-    // data.features[107].properties.categoriesNEW = "earthquakes";
-    // data.features[165].properties.categoriesNEW = "floods";
-    // data.features[348].properties.categoriesNEW = "landslides";
-    // data.features[100].properties.categoriesNEW = "snow";
-    // data.features[200].properties.categoriesNEW = "tempExtremes";
 
     // обновление источника данных для карты
     map.getSource('events').setData(geojsonAllDataEvents);
@@ -178,8 +166,6 @@ function addNasaEonetEventsToMap(data){
 // Функция получения и обработки событий(землетрясений) от USGS API
 function addUsgsEarthquakeToMap(data){
     // Редактирование (подгонка под наш вариант хранения события) полей события
-    var i = geojsonAllDataEvents.features.length;
-    console.log(i);
     for (const feature of data.features) {
         feature.properties.categoriesNEW = 'earthquakes';
         feature.properties.categoriesTitle = 'Earthquakes';
@@ -191,9 +177,56 @@ function addUsgsEarthquakeToMap(data){
         //Определение уровня угрозы события
         feature.properties.dangerLevel = getEarthquakesDangerLevelByMAG(feature.properties.magnitudeValue);
         
-        feature.properties.Newid = i;
-        i++;
+        feature.properties.Newid = feature.properties.ids;
         geojsonAllDataEvents.features.push(feature);
+    }
+
+    // обновление источника данных для карты
+    map.getSource('events').setData(geojsonAllDataEvents);
+    // прорисовка событий на карте
+    addPoints(geojsonAllDataEvents);
+    // при добавлении новых событий мы обновляем временной слайдер (фильтр событий по времени)
+    setDateFilterRange();
+}
+
+// Функция получения и обработки событий от нашего INDM API
+function addIndmEventsToMap(data){
+    // Редактирование (подгонка под наш вариант хранения события) полей события
+    for (const feature of data) {
+        var categoryTitle = feature.category.split(/(?=[A-Z])/).join(" ");
+        var dangerLevel = feature.eventHazardUnit.split(/(?=[A-Z])/).join(" ");
+
+        // формируем новое событие
+        var event = {
+            "type": "Feature",
+            "properties": 
+            {
+                "title": feature.title,
+                "Newid": feature.id,
+                "categoriesNEW": feature.category,
+                "categoriesTitle": categoryTitle[0].toUpperCase() + categoryTitle.slice(1),
+                "date": feature.startDate,
+                "closed": feature.endDate,
+                "magnitudeUnit": feature.magnitudeUnit.split(/(?=[A-Z])/).join(" "),
+                "magnitudeValue": feature.magnitudeValue,
+                "dangerLevel": dangerLevel[0].toUpperCase() + dangerLevel.slice(1),
+                "link": feature.link,
+                "source": feature.source,
+                "isClosed": feature.closed
+            },
+            "geometry": {
+            "type": "Point",
+            "coordinates": [ feature.longitude, feature.latitude ]
+            }
+        };
+
+        //Todo костыль - правильно надо брать эти данные из БД
+        if(event.properties.categoriesNEW == 'severeStorms' && event.properties.magnitudeUnit == 'kts')
+            event.properties.dangerLevel = getSevereStormDangerLevelByKTS(event.properties.magnitudeValue);
+        if(event.properties.categoriesNEW == 'earthquakes')
+            event.properties.dangerLevel = getEarthquakesDangerLevelByMAG(event.properties.magnitudeValue);
+        //добавляем события к списку всех событий
+        geojsonAllDataEvents.features.push(event);
     }
 
     // обновление источника данных для карты
