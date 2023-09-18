@@ -12,6 +12,7 @@ function adminPanelBtnClick(){
 
     closeBtnAdminPanelZone.addEventListener('click', (e) => {
         adminPanelZone.style = 'display: none';
+        location.reload();//Todo временный костыль чтобы добавить новые подтвержденные события на карту
     });
 }
 
@@ -42,7 +43,7 @@ function addUnconfirmedEvents(){
                 createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.eventDto.category);
                 createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.userDto.login);
                 createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.userDto.roleName);
-                addConfirmAndRejectShortDescriptionDiv(newEventItemDiv);
+                addConfirmAndRejectShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.eventDto.id, adminPanelMain);
 
                 rootElement.append(newEventItemDiv);
             }
@@ -62,7 +63,7 @@ function createEventShortDescriptionDiv(root, divText){
     root.append(shortDescriptionDiv);
 }
 
-function addConfirmAndRejectShortDescriptionDiv(root){
+function addConfirmAndRejectShortDescriptionDiv(root, eventId, adminPanelMain){
     var confirmDiv = document.createElement("div");
     confirmDiv.className = "event-short-description event-confirm";
     confirmDiv.innerHTML = "Confirm";
@@ -72,4 +73,52 @@ function addConfirmAndRejectShortDescriptionDiv(root){
     rejectDiv.className = "event-short-description event-reject";
     rejectDiv.innerHTML = "Reject";
     root.append(rejectDiv);
+
+    var confirmOrRejectData = 
+    {
+        "eventId": eventId
+    };
+    confirmOrRejectData = JSON.stringify(confirmOrRejectData);
+
+    confirmDiv.addEventListener('click', (e) => {
+        
+        $.ajax({
+            url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/UnconfirmedEvent/confirm/${eventId}`,
+            method: 'PATCH',
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Authorization':`bearer ${localStorage.getItem('jwt')}`
+            },
+            data: confirmOrRejectData,
+            success: function(data){
+                adminPanelMain.removeChild(root);
+            },
+            error: function(jqXHR, textStatus, error) {
+                var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
+                        + jqXHR.responseText.toString();
+                exceptionHandler(err);
+            }
+        });
+    });
+
+    rejectDiv.addEventListener('click', (e) => {
+        
+        $.ajax({
+            url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/UnconfirmedEvent/reject/${eventId}`,
+            method: 'PATCH',
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Authorization':`bearer ${localStorage.getItem('jwt')}`
+            },
+            data: confirmOrRejectData,
+            success: function(data){
+                adminPanelMain.removeChild(root);
+            },
+            error: function(jqXHR, textStatus, error) {
+                var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
+                        + jqXHR.responseText.toString();
+                exceptionHandler(err);
+            }
+        });
+    });
 }
