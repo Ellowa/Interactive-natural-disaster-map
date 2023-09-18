@@ -488,7 +488,54 @@ text-transform: capitalize;
     font-size: 26px;
     line-height: 20px;
     letter-spacing: 0px;
-    margin: 0 0 15px;
+    margin: 0 0 5px;
+    color: #0e650dc7;
+}
+
+.admin-panel-main {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    width: 100%;
+}
+  
+.event-items {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    text-align: center;
+    
+}
+
+.event-items:first-child {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.event-short-description {
+    width: 100%;
+    display: block;
+    margin: 10px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.event-confirm:hover {
+    color:#53ea93;
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+
+.event-reject:hover {
+    color:#ea5d53;
+    transition: all 0.5s ease;
+    cursor: pointer;
 }
 
 
