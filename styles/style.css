@@ -474,7 +474,7 @@ text-transform: capitalize;
 /* Стиль зоны admin Panel */
 #adminPanelZone {
     min-height: 460px;
-    width: 760px;
+    width: 860px;
     left: calc(50% - 350px);
     top: 130px;
     flex-direction: column;
@@ -524,6 +524,18 @@ text-transform: capitalize;
     color: #fff;
     font-size: 16px;
     font-weight: bold;
+    max-width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.event-short-description:first-child {
+    width: 5%;
+}
+
+.event-short-description:nth-child(3) {
+    max-width: 110px;
 }
 
 .event-confirm:hover {
