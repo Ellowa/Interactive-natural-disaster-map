@@ -82,13 +82,29 @@ map.on('load', () => {
         .done(function(data){
             addUsgsEarthquakeToMap(data);
         });
-        //Получаем список событий от INDM API
-        $.getJSON( "https://interactivenaturaldisastermapapi.azurewebsites.net/api/NaturalDisasterEvent")
-        .done(function(data){
-            addIndmEventsToMap(data);
-        });
+        getEventsFromIndmAPI();
     });
 });
+
+function getEventsFromIndmAPI()
+{
+    $.ajax({
+        url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/NaturalDisasterEvent',
+        method: 'GET',
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            'Authorization':`bearer ${localStorage.getItem('jwt')}`
+        },
+        success: function(data){
+            addIndmEventsToMap(data);
+        },
+        error: function(jqXHR, textStatus, error) {
+            var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
+                    + jqXHR.responseText.toString();
+            exceptionHandler(err);
+        }
+    });
+}
 
 // функция сворачивания и разворачивания окна с фильтрами событий
 function filterGroupActive(){

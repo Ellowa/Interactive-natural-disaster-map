@@ -226,9 +226,11 @@ function addIndmEventsToMap(data){
         if(event.properties.categoriesNEW == 'earthquakes')
             event.properties.dangerLevel = getEarthquakesDangerLevelByMAG(event.properties.magnitudeValue);
         //добавляем события к списку всех событий
-        geojsonAllDataEvents.features.push(event);
+        if(!geojsonAllDataEvents.features.includes(event))
+        {
+            geojsonAllDataEvents.features.push(event);
+        }
     }
-
     // обновление источника данных для карты
     map.getSource('events').setData(geojsonAllDataEvents);
     // прорисовка событий на карте

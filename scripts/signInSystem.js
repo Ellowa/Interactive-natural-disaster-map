@@ -156,7 +156,6 @@ function logInBtnClick(){
                 success: function(data){
                     localStorage.setItem('login', loginInput.value);
                     localStorage.setItem('jwt', data);
-                    console.log(localStorage.getItem('jwt'));
 
                     for (var inputElement of allFields)
                     {
@@ -189,5 +188,6 @@ function logInSuccess(){
     userAccountButton.value = localStorage.getItem('login');
     userAccountButton.style = null;
     logOutButton.style = null;
-    
+
+    getEventsFromIndmAPI();
 }
