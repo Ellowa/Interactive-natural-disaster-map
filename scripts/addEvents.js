@@ -92,44 +92,80 @@ function addEventBtnClick(){
                 }
             }
             // формируем новое событие
-            var data = {
+            var event = {
                 "type": "Feature",
-                "properties": {"title": titleInput.value,
-                            "Newid": geojsonAllDataEvents.features.length, //Todo изменить на получение из API
-                            "categoriesNEW": categoryInput.value,
-                            "categoriesTitle": categoryInput.options[categoryInput.selectedIndex].textContent,
-                            "date": startDateInput.value,
-                            "closed": closedDateInput.value,
-                            "magnitudeUnit": mUnitInput.value,
-                            "magnitudeValue": mValueInput.value,
-                            "dangerLevel": dangerLevelInputCombo.options[dangerLevelInputCombo.selectedIndex].textContent,
-                            "link": sourceInput.value},
+                "properties": 
+                {
+                    "title": titleInput.value,
+                    "categoriesNEW": categoryInput.value,
+                    "categoriesTitle": categoryInput.options[categoryInput.selectedIndex].textContent,
+                    "date": startDateInput.value,
+                    "closed": closedDateInput.value,
+                    "magnitudeUnit": mUnitInput.value,
+                    "magnitudeValue": mValueInput.value,
+                    "dangerLevel": dangerLevelInputCombo.options[dangerLevelInputCombo.selectedIndex].textContent,
+                    "link": sourceInput.value
+                },
                 "geometry": {
                 "type": "Point",
                 "coordinates": [ lngInput.value, latInput.value ]
                 }
             };
 
-            //Определение уровня угрозы события;
-            if(data.properties.categoriesNEW == 'severeStorms' && data.properties.magnitudeUnit == 'kts')
-                data.properties.dangerLevel = getSevereStormDangerLevelByKTS(data.properties.magnitudeValue);
-            if(data.properties.categoriesNEW == 'earthquakes')
-                data.properties.dangerLevel = getEarthquakesDangerLevelByMAG(data.properties.magnitudeValue);
+            //Определение уровня угрозы события; //Todo переделать на получение из API
+            if(event.properties.categoriesNEW == 'severeStorms' && event.properties.magnitudeUnit == 'kts')
+                event.properties.dangerLevel = getSevereStormDangerLevelByKTS(event.properties.magnitudeValue);
+            if(event.properties.categoriesNEW == 'earthquakes')
+                event.properties.dangerLevel = getEarthquakesDangerLevelByMAG(event.properties.magnitudeValue);
 
-            //добавляем события к списку всех событий и отображаем их на карте
-            geojsonAllDataEvents.features.push(data);
-            map.getSource('events').setData(geojsonAllDataEvents);
-            addPoints(geojsonAllDataEvents); // костыль (ибо мы запихиваем не 1 новую точку на карту а перересовываем все точки), может негативно сказываться на производительности (но нужно если вдруг поменяется информация об уже отрисованной точки)
-            // при добавлении новых событий мы обновляем временной слайдер (фильтр событий по времени)
-            setDateFilterRange();
-
-            for (var inputElement of allFields)
+            var eventJSON =
             {
-                inputElement.value = null;
-            }
-            addEventZone.style = 'display: none';
-            document.getElementById('lngDiv').classList.remove('coordinatesByMap');
-            document.getElementById('latDiv').classList.remove('coordinatesByMap');
+                "title": titleInput.value,
+                "eventCategoryName": categoryInput.value,
+                "startDate": startDateInput.value,
+                "endDate": closedDateInput.value,
+                "magnitudeUnitName": mUnitInput.value,
+                "magnitudeValue": mValueInput.value,
+                "link": sourceInput.value,
+                "latitude": latInput.value,
+                "longitude": lngInput.value
+            };
+            eventJSON = JSON.stringify(eventJSON);
+            
+            //ОТПРАВКА СОБЫТИЯ В API
+            $.ajax({
+                url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/NaturalDisasterEvent',
+                method: 'POST',
+                dataType: 'text',
+                contentType: "application/json; charset=utf-8",
+                data: eventJSON,
+                headers: {
+                    'Authorization':`bearer ${localStorage.getItem('jwt')}`
+                },
+                success: function(data){
+                    event.properties.Newid = data;
+
+                    //добавляем события к списку всех событий и отображаем их на карте
+                    geojsonAllDataEvents.features.push(event);
+                    map.getSource('events').setData(geojsonAllDataEvents);
+                    addPoints(geojsonAllDataEvents); // костыль (ибо мы запихиваем не 1 новую точку на карту а перересовываем все точки), может негативно сказываться на производительности (но нужно если вдруг поменяется информация об уже отрисованной точки)
+                    // при добавлении новых событий мы обновляем временной слайдер (фильтр событий по времени)
+                    setDateFilterRange();
+
+                    for (var inputElement of allFields)
+                    {
+                        inputElement.value = null;
+                    }
+                    addEventZone.style = 'display: none';
+                    document.getElementById('lngDiv').classList.remove('coordinatesByMap');
+                    document.getElementById('latDiv').classList.remove('coordinatesByMap');
+                },
+                error: function(jqXHR, textStatus, error) {
+                    var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
+                            + jqXHR.responseText.toString();
+                    exceptionHandler(err);
+                }
+            });
         }
     });
 }
