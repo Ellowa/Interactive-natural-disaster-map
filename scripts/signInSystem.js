@@ -72,18 +72,33 @@ function registerBtnClick(){
             document.getElementById('requiredTextRegister').style = null;
 
             //ПРОЦЕДУРА РЕГИСТРАЦИИ 
-            account.set('login', loginRegInput.value);
-            account.set('password', passworRegInput.value);
-
-            tmpAccount.set('login', loginRegInput.value);
-            tmpAccount.set('password', passworRegInput.value);
-
-            for (var inputElement of allFields)
+            var user = 
             {
-                inputElement.value = null;
-            }
-            registerZone.style = 'display: none';
-            logInSuccess();
+                "login": loginRegInput.value,
+                "password": passworRegInput.value,
+                "refreshToken": ""
+            };
+            user = JSON.stringify(user);
+            $.ajax({
+                url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/User',
+                method: 'POST',
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                data: user,
+                success: function(data){
+                    for (var inputElement of allFields)
+                    {
+                        inputElement.value = null;
+                    }
+                    registerZone.style = 'display: none';
+                    window.alert('Registration is successful, now you can log in to your account');
+                },
+                error: function(jqXHR, textStatus, error) {
+                    var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
+                            + jqXHR.responseText.toString();
+                    exceptionHandler(err);
+                }
+            });
         }
     });
 
