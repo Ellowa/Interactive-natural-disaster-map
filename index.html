@@ -100,6 +100,29 @@
         <input id="logOutButton" type="button" value="Log out" style="display: none;">
     </div>
 
+
+    <div id="adminPanelOpenButton" class="login-button">
+        <input id="adminPanelOpenButton" type="button" value="Admin Panel">
+    </div>
+
+    <div id="adminPanelZone" class="input-zone">
+        <input id="closeBtnAdminPanelZone" class="closeBtn" type="button" value="x">
+        
+        <div class="about-navigation">
+
+        </div>
+
+        <div class="admin-panel-header about-header">
+            <p>Confirm/Reject Events</p>
+        </div>
+
+        <div class="admin-panel-main">
+            
+        </div>
+
+    </div>
+
+
     <div id="LogInZone" class="input-zone">
         <input id="closeBtnLoginZone" class="closeBtn" type="button" value="x">
         
@@ -153,7 +176,7 @@
     </div>
 
 
-    <div class="login-button add-button">
+    <div id="addButton" class="login-button add-button">
         <input id="addEventButton" type="button" value="Add event">
     </div>
 
@@ -258,6 +281,7 @@
     </div>
 </body>
 
+<script src="scripts/adminPanel.js"></script>
 <script src="scripts/queryExceptionHandler.js"></script>
 <script src="scripts/aboutPage.js"></script>
 <script src="scripts/eventRenderingOnMap.js"></script>

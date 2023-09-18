@@ -323,7 +323,6 @@ text-transform: capitalize;
 }
 
 
-
 /* Стиль кнопки добавления событий */
 .add-button {
     top: unset;
@@ -421,11 +420,12 @@ text-transform: capitalize;
     min-height: 400px;
     width: 700px;
     left: calc(50% - 350px);
-    top: 80px;
+    top: 130px;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
     padding-left: 15px;
+    padding-right: 15px;
 }
 
 .about-navigation{
@@ -456,6 +456,39 @@ text-transform: capitalize;
 
 .about-main p{
     margin: 0;
+}
+
+
+/* Стиль кнопки открытия admin Panel */
+#adminPanelOpenButton {
+    top: 65px;
+    right: 50px;
+}
+
+#adminPanelOpenButton input {
+    border: none;
+    width: 100%;
+    text-align: center;
+}
+
+/* Стиль зоны admin Panel */
+#adminPanelZone {
+    min-height: 460px;
+    width: 760px;
+    left: calc(50% - 350px);
+    top: 130px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.admin-panel-header {
+    font-size: 26px;
+    line-height: 20px;
+    letter-spacing: 0px;
+    margin: 0 0 15px;
 }
 
 
