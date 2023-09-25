@@ -2,26 +2,18 @@
 if(localStorage.getItem('login') != null && localStorage.getItem('jwt') != null)
 {
     //Check if token has expired
-    $.ajax({
-        url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/NaturalDisasterEvent/-10',
-        method: 'DELETE',
-        headers: {
-            'Authorization':`bearer ${localStorage.getItem('jwt')}`
-        },
-        success: function(data){
-        },
-        error: function(jqXHR, textStatus, error) {
-            if(jqXHR.status == 401) //token expired
-            {
-                localStorage.removeItem('login');
-                localStorage.removeItem('jwt');
-            }
-            if(jqXHR.status == 404) //token has not expired
-            {
-                logInSuccess();
-            }
-        }
-    });
+    if(localStorage.getItem('jwtExpire') <= Date.now()) //token expired
+    {
+        localStorage.removeItem('login');
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('jwtExpire');
+    }
+    else //token has not expired
+    {
+        logInSuccess();
+    }
 }
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZWxsb3dhIiwiYSI6ImNsMjdlamkzeDA3cmQzZXFseGl0bmFtdXUifQ.aslVME0d_CppwF6I_VZS9Q';

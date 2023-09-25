@@ -15,6 +15,10 @@ function logOutBtnClk(){
 
         localStorage.removeItem('login');
         localStorage.removeItem('jwt');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('jwtExpire');
+
         location.reload();//Todo временный костыль чтобы очистить события прошлого пользователя
     });
 }
@@ -158,6 +162,11 @@ function logInBtnClick(){
                     localStorage.setItem('login', loginInput.value);
                     localStorage.setItem('jwt', data);
 
+                    var jwtPayload = decodeJwt(data);
+                    localStorage.setItem('userRole', jwtPayload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]);
+                    localStorage.setItem('userId', jwtPayload.sub);
+                    localStorage.setItem('jwtExpire', jwtPayload.exp*1000);
+
                     for (var inputElement of allFields)
                     {
                         inputElement.value = null;
@@ -192,3 +201,16 @@ function logInSuccess(){
 
     getEventsFromIndmAPI();
 }
+
+function decodeJwt(token) {
+    var base64Payload = token.split(".")[1];
+    var payload = decodeURIComponent(
+      atob(base64Payload)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+    return JSON.parse(payload);
+  }
