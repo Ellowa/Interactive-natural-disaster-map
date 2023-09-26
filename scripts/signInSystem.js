@@ -199,6 +199,17 @@ function logInSuccess(){
     userAccountButton.style = null;
     logOutButton.style = null;
 
+    const adminPanelOpenButton = document.getElementById('adminPanelOpenButton');
+    const adminPanelZone = document.getElementById('adminPanelZone');
+    if(localStorage.getItem('userRole') != null && localStorage.getItem('userRole') == "moderator"){
+        adminPanelOpenButton.style = null;
+        adminPanelZone.style = null;
+    }
+    else{
+        adminPanelOpenButton.style = 'display: none';
+        adminPanelZone.style = 'display: none';
+    }
+
     getEventsFromIndmAPI();
 }
 
