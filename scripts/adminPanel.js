@@ -17,12 +17,14 @@ function adminPanelBtnClick(){
 }
 
 function addUnconfirmedEvents(){
-    var rootElement = document.getElementById("adminPanelMain");
+    var rootElement = document.getElementById("confirmRejectEvents");
     var firstEventItems = ($(rootElement).find(".event-items"))[0];
+    var header = ($(rootElement).find(".admin-panel-header"))[0];
 
     //deleted existing event-items
     if ($(rootElement).find(".event-items").length > 1){
         rootElement.replaceChildren();
+        rootElement.append(header);
         rootElement.append(firstEventItems);
     }
 
@@ -43,7 +45,7 @@ function addUnconfirmedEvents(){
                 createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.eventDto.category);
                 createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.userDto.login);
                 createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.userDto.roleName);
-                addConfirmAndRejectShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.eventDto.id, adminPanelMain);
+                addConfirmAndRejectShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.eventDto.id, rootElement);
 
                 rootElement.append(newEventItemDiv);
             }
@@ -121,4 +123,66 @@ function addConfirmAndRejectShortDescriptionDiv(root, eventId, adminPanelMain){
             }
         });
     });
+}
+
+// Обработчик событий для кнопок навигации админ панели
+function adminPanelNavClick(){
+    //Подсветка выбранного элеиента навигации
+    var adminPanelNavItems = ($(document.getElementById("adminPanelNav")).find(".nav-item"));
+    for(var i = 0; i < adminPanelNavItems.length; i++){
+        adminPanelNavItems[i].addEventListener('click', (e) =>{
+            for(var j = 0; j < adminPanelNavItems.length; j++){
+                adminPanelNavItems[j].style = '';
+            }
+            e.target.style = 
+            'background-color: var(--dark-teal);' +
+            'margin-top: 0;' +
+            'padding-bottom: 2px;' +
+            'border-top-right-radius: 8px;' +
+            'border-top-left-radius: 8px;' +
+            'border-right: 0 solid #00695C;' +
+            'padding-top: 3px;';
+        });
+    }
+    adminPanelNavItems[0].click();
+
+    
+    //клик конкретного навигационного элемента
+    var confirmRejectNavItem = document.getElementById("confirmRejectNavItem");
+    confirmRejectNavItem.addEventListener('click', (e) =>{
+        var currentAdminPage = document.getElementById("confirmRejectEvents");
+        showAdminPanelPage(currentAdminPage);
+    });
+
+    var eventCategoryNavItem = document.getElementById("eventCategoryNavItem");
+    eventCategoryNavItem.addEventListener('click', (e) =>{
+        var currentAdminPage = document.getElementById("eventCategory");
+        showAdminPanelPage(currentAdminPage);
+    });
+
+    var eventHazardNavItem = document.getElementById("eventHazardNavItem");
+    eventHazardNavItem.addEventListener('click', (e) =>{
+        var currentAdminPage = document.getElementById("eventHazard");
+        showAdminPanelPage(currentAdminPage);
+    });
+
+    var eventSourceNavItem = document.getElementById("eventSourceNavItem");
+    eventSourceNavItem.addEventListener('click', (e) =>{
+        var currentAdminPage = document.getElementById("eventSource");
+        showAdminPanelPage(currentAdminPage);
+    });
+
+    var magnitudeUnitNavItem = document.getElementById("magnitudeUnitNavItem");
+    magnitudeUnitNavItem.addEventListener('click', (e) =>{
+        var currentAdminPage = document.getElementById("magnitudeUnit");
+        showAdminPanelPage(currentAdminPage);
+    });
+}
+
+function showAdminPanelPage(page){
+    var adminPanelAllPages = ($(document.getElementById("adminPanelZone")).find(".admin-panel-main"));
+    for(var i = 0; i < adminPanelAllPages.length; i++){
+        adminPanelAllPages[i].style = 'display: none;';
+    }
+    page.style = '';
 }

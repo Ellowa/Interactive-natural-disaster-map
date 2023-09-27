@@ -1,7 +1,7 @@
 /* Переменные с цветами */
 :root {
-    --light-teal: #4DB6AC;
-    --dark-teal: #26A69A;
+    --light-teal: #3eada2;
+    --dark-teal: #259186;
     --light-teal-input-zone: #80CBC4;
 
     --very-high-danger-level: #800000;
@@ -243,7 +243,7 @@ text-transform: capitalize;
     font-weight: 600;
     font-size: 19px;
     cursor: pointer;
-    z-index: 2;
+    z-index: 3;
 }
 
 .coordinate-button input {
@@ -429,7 +429,50 @@ text-transform: capitalize;
 }
 
 .about-navigation{
-    height: 30px;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: stretch;
+    width: 100%;
+    margin-bottom: 7px;
+    height: 20px;
+    z-index: 2;
+}
+
+.nav-item{
+    display: flex;
+    width: 15%;
+    color: #fff;
+    font-size: 16px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid var(--dark-teal);
+    cursor: pointer;
+    justify-content: center;
+    margin-top: 5px;
+    margin-left: -3px;
+}
+.nav-item:first-child{
+    justify-content: center;
+    margin-left: -14px;
+}
+.nav-item:hover{
+    transition:
+     all 0.3s ease,
+     border 0s;
+    margin-top: 0;
+    padding-top: 3px;
+    padding-bottom: 2px;
+    background-color: #02978693;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    border-right: 0 solid;
+}
+.nav-item:has(+ .nav-item:hover){
+    border-right: 0 solid;
 }
 
 .about-header{
@@ -482,6 +525,7 @@ text-transform: capitalize;
     justify-content: flex-start;
     padding-left: 15px;
     padding-right: 15px;
+    background-color: var(--light-teal);
 }
 
 .admin-panel-header {
@@ -506,11 +550,10 @@ text-transform: capitalize;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     align-content: center;
     text-align: center;
-    
 }
 
 .event-items:first-child {
@@ -524,14 +567,14 @@ text-transform: capitalize;
     color: #fff;
     font-size: 16px;
     font-weight: bold;
-    max-width: 100px;
+    max-width: 125px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 }
 
 .event-short-description:first-child {
-    width: 5%;
+    width: 140px;
 }
 
 .event-short-description:nth-child(3) {

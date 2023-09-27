@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <title>Interactive natural disaster map</title>
@@ -108,15 +108,19 @@
     <div id="adminPanelZone" class="input-zone" style="display: none;">
         <input id="closeBtnAdminPanelZone" class="closeBtn" type="button" value="x">
         
-        <div class="about-navigation">
-
+        <div class="about-navigation" id="adminPanelNav">
+            <div id="confirmRejectNavItem" class="nav-item">Confirm/Reject</div>
+            <div id="eventCategoryNavItem" class="nav-item">Event Category</div>
+            <div id="eventHazardNavItem" class="nav-item">Event Hazard</div>
+            <div id="eventSourceNavItem" class="nav-item">Event Source</div>
+            <div id="magnitudeUnitNavItem" class="nav-item">Magnitude Unit</div>
         </div>
 
-        <div class="admin-panel-header about-header">
-            <p>Confirm/Reject Events</p>
-        </div>
-
-        <div id ="adminPanelMain" class="admin-panel-main">
+        
+        <div id="confirmRejectEvents" class="admin-panel-main">
+            <div class="admin-panel-header about-header">
+                <p>Confirm/Reject Events</p>
+            </div>
             <div class="event-items">
                 <div class="event-short-description">Id</div>
                 <div class="event-short-description">Title</div>
@@ -126,14 +130,69 @@
                 <div class="event-short-description">Confirm</div>
                 <div class="event-short-description">Reject</div>
             </div>
+        </div>
+
+        <div id="eventCategory" class="admin-panel-main" style="display: none;">
+            <div class="admin-panel-header about-header">
+                <p>Event Categories</p>
+            </div>
+            <div class="event-items">
+                <div class="event-short-description">Id</div>
+                <div class="event-short-description">Category Name</div>
+            </div>
             <div class="event-items">
                 <div class="event-short-description">113</div>
-                <div class="event-short-description">Event1</div>
-                <div class="event-short-description">Volcanoes</div>
-                <div class="event-short-description">admin</div>
-                <div class="event-short-description">moderator</div>
-                <div class="event-short-description event-confirm">Confirm</div>
-                <div class="event-short-description event-reject">Reject</div>
+                <div class="event-short-description">Cat</div>
+            </div>
+        </div>
+
+        <div id="eventHazard" class="admin-panel-main" style="display: none;">
+            <div class="admin-panel-header about-header">
+                <p>Event Hazard Units</p>
+            </div>
+            <div class="event-items">
+                <div class="event-short-description">Id</div>
+                <div class="event-short-description">Hazard Name</div>
+                <div class="event-short-description">Magnitude Unit Name</div>
+                <div class="event-short-description">Threshold Value</div>
+            </div>
+            <div class="event-items">
+                <div class="event-short-description">113</div>
+                <div class="event-short-description">Hazard</div>
+                <div class="event-short-description">Mag</div>
+                <div class="event-short-description">43</div>
+            </div>
+        </div>
+
+        <div id="eventSource" class="admin-panel-main" style="display: none;">
+            <div class="admin-panel-header about-header">
+                <p>Event Sources</p>
+            </div>
+            <div class="event-items">
+                <div class="event-short-description">Id</div>
+                <div class="event-short-description">Source Type</div>
+            </div>
+            <div class="event-items">
+                <div class="event-short-description">113</div>
+                <div class="event-short-description">user</div>
+            </div>
+        </div>
+
+        <div id="magnitudeUnit" class="admin-panel-main" style="display: none;">
+            <div class="admin-panel-header about-header">
+                <p>Magnitude Units</p>
+            </div>
+            <div class="event-items">
+                <div class="event-short-description">Id</div>
+                <div class="event-short-description">Magnitude Unit Name</div>
+                <div class="event-short-description">Hazard Name</div>
+                <div class="event-short-description">Threshold Value</div>
+            </div>
+            <div class="event-items">
+                <div class="event-short-description">113</div>
+                <div class="event-short-description">kts</div>
+                <div class="event-short-description">minorDanger</div>
+                <div class="event-short-description">67</div>
             </div>
         </div>
 
