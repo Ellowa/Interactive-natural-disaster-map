@@ -18,15 +18,7 @@ function adminPanelBtnClick(){
 
 function addUnconfirmedEvents(){
     var rootElement = document.getElementById("confirmRejectEvents");
-    var firstEventItems = ($(rootElement).find(".event-items"))[0];
-    var header = ($(rootElement).find(".admin-panel-header"))[0];
-
-    //deleted existing event-items
-    if ($(rootElement).find(".event-items").length > 1){
-        rootElement.replaceChildren();
-        rootElement.append(header);
-        rootElement.append(firstEventItems);
-    }
+    clearAdminPanMainZone(rootElement);
 
     $.ajax({
         url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/UnconfirmedEvent',
@@ -56,6 +48,18 @@ function addUnconfirmedEvents(){
             exceptionHandler(err);
         }
     });
+}
+
+function clearAdminPanMainZone(adminPanMain){
+    var EventItemHeader = ($(adminPanMain).find(".event-items"))[0];
+    var header = ($(adminPanMain).find(".admin-panel-header"))[0];
+
+    //deleted existing event-items
+    if ($(adminPanMain).find(".event-items").length > 1){
+        adminPanMain.replaceChildren();
+        adminPanMain.append(header);
+        adminPanMain.append(EventItemHeader);
+    }
 }
 
 function createEventShortDescriptionDiv(root, divText){
@@ -152,12 +156,14 @@ function adminPanelNavClick(){
     confirmRejectNavItem.addEventListener('click', (e) =>{
         var currentAdminPage = document.getElementById("confirmRejectEvents");
         showAdminPanelPage(currentAdminPage);
+        addUnconfirmedEvents();
     });
 
     var eventCategoryNavItem = document.getElementById("eventCategoryNavItem");
     eventCategoryNavItem.addEventListener('click', (e) =>{
         var currentAdminPage = document.getElementById("eventCategory");
         showAdminPanelPage(currentAdminPage);
+        addEventCategories();
     });
 
     var eventHazardNavItem = document.getElementById("eventHazardNavItem");
@@ -185,4 +191,34 @@ function showAdminPanelPage(page){
         adminPanelAllPages[i].style = 'display: none;';
     }
     page.style = '';
+}
+
+function addEventCategories(){
+    var rootElement = document.getElementById("eventCategory");
+    clearAdminPanMainZone(rootElement);
+
+    $.ajax({
+        url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventCategory',
+        method: 'GET',
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            'Authorization':`bearer ${localStorage.getItem('jwt')}`
+        },
+        success: function(data){
+            for (const unconfirmedEvent of data) {
+                var newEventItemDiv = document.createElement("div");
+                newEventItemDiv.className = "event-items";
+
+                createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.id);
+                createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.categoryName);;
+
+                rootElement.append(newEventItemDiv);
+            }
+        },
+        error: function(jqXHR, textStatus, error) {
+            var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
+                    + jqXHR.responseText.toString();
+            exceptionHandler(err);
+        }
+    });
 }
