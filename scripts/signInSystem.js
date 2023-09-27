@@ -77,7 +77,7 @@ function registerBtnClick(){
             $.ajax({
                 url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/User',
                 method: 'POST',
-                dataType: 'json',
+                dataType: 'text',
                 contentType: "application/json; charset=utf-8",
                 data: user,
                 success: function(data){
@@ -86,7 +86,16 @@ function registerBtnClick(){
                         inputElement.value = null;
                     }
                     registerZone.style = 'display: none';
-                    window.alert('Registration is successful, now you can log in to your account');
+
+                    
+                    localStorage.setItem('jwt', data);
+
+                    var jwtPayload = decodeJwt(data);
+                    localStorage.setItem('login', jwtPayload.name);
+                    localStorage.setItem('userRole', jwtPayload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]);
+                    localStorage.setItem('userId', jwtPayload.sub);
+                    localStorage.setItem('jwtExpire', jwtPayload.exp*1000);
+                    logInSuccess();
                 },
                 error: function(jqXHR, textStatus, error) {
                     var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
@@ -159,10 +168,10 @@ function logInBtnClick(){
                 contentType: "application/json; charset=utf-8",
                 data: loginData,
                 success: function(data){
-                    localStorage.setItem('login', loginInput.value);
                     localStorage.setItem('jwt', data);
 
                     var jwtPayload = decodeJwt(data);
+                    localStorage.setItem('login', jwtPayload.name);
                     localStorage.setItem('userRole', jwtPayload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]);
                     localStorage.setItem('userId', jwtPayload.sub);
                     localStorage.setItem('jwtExpire', jwtPayload.exp*1000);
