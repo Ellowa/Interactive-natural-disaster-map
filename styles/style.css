@@ -640,10 +640,9 @@ text-transform: capitalize;
     font-size: 20px;
     line-height: 20px;
     letter-spacing: 0px;
-    margin-bottom: 15px;
     color: #5af6ffc7;
     width: auto;
-    margin-left: 10px;
+    margin: 10px;
 }
 .add-new-item-button:hover{
     color:#53ea93;
@@ -652,12 +651,8 @@ text-transform: capitalize;
 }
 
 .event-items-additional-input{
-    width: 140px;
-    margin-bottom: 15px;
-    margin-left: 5px;
-}
-.event-items-additional-input:first-child{
-    margin-left: 60px;
+    color: black;
+    font-size: 12px;
 }
 
 /* Стиль тайм слайдера */

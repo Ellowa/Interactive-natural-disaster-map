@@ -358,6 +358,7 @@ function addEventCategories(){
 function addNewEventItemForm(rootElement, additionRoute, navItem, ...textInputs){
     var addItemDiv = document.createElement("div");
     addItemDiv.className = "event-items";
+    createEventShortDescriptionDiv(addItemDiv, "new");
     
     textInputs.forEach(textInput => {
         addItemDiv.append(textInput);
@@ -397,7 +398,7 @@ function addNewEventItemForm(rootElement, additionRoute, navItem, ...textInputs)
 
 function createTextInputForAddNewEventItem(id, placeholder){
     var textInput = document.createElement("input");
-    textInput.className = "event-items-additional-input";
+    textInput.className = "event-items-additional-input event-short-description";
     textInput.type = "text";
     textInput.id = id;
     textInput.placeholder = placeholder;
