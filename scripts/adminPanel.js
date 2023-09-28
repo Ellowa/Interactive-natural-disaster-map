@@ -139,7 +139,7 @@ function adminPanelNavClick(){
                 adminPanelNavItems[j].style = '';
             }
             e.target.style = 
-            'background-color: var(--dark-teal);' +
+            'background-color: #1f776e;' +
             'margin-top: 0;' +
             'padding-bottom: 2px;' +
             'border-top-right-radius: 8px;' +

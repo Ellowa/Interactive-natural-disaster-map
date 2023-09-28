@@ -1,7 +1,7 @@
 /* Переменные с цветами */
 :root {
-    --light-teal: #3eada2;
-    --dark-teal: #259186;
+    --light-teal: #299d91;
+    --dark-teal: #208d82;
     --light-teal-input-zone: #80CBC4;
 
     --very-high-danger-level: #800000;
@@ -466,7 +466,7 @@ text-transform: capitalize;
     margin-top: 0;
     padding-top: 3px;
     padding-bottom: 2px;
-    background-color: #02978693;
+    background-color: var(--dark-teal);
     border-top-right-radius: 8px;
     border-top-left-radius: 8px;
     border-right: 0 solid;
