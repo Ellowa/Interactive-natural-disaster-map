@@ -635,6 +635,12 @@ text-transform: capitalize;
     cursor: pointer;
 }
 
+.item-update:hover {
+    color:#a653ea;
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+
 .add-new-item-button{
     text-align: center;
     font-size: 20px;

@@ -339,13 +339,16 @@ function addEventCategories(){
                 newEventItemDiv.className = "event-items";
 
                 createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.id);
-                createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.categoryName);;
+                createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.categoryName);
+                var eventCategoryNavItem = document.getElementById('eventCategoryNavItem');
+                createUpdateDeleteShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.id, "EventCategory", eventCategoryNavItem, "categoryName")
 
                 rootElement.append(newEventItemDiv);
             }
             var categoryNameInput = createTextInputForAddNewEventItem("categoryName", "new category name");
             var eventCategoryNavItem = document.getElementById('eventCategoryNavItem');
             addNewEventItemForm(rootElement, "EventCategory", eventCategoryNavItem, categoryNameInput);
+            
         },
         error: function(jqXHR, textStatus, error) {
             var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
@@ -403,4 +406,93 @@ function createTextInputForAddNewEventItem(id, placeholder){
     textInput.id = id;
     textInput.placeholder = placeholder;
     return textInput;
+}
+
+function createUpdateDeleteShortDescriptionDiv(root, itemId, requestRoute, navItem, ...updateRequestParams){
+    var updateDiv = document.createElement("div");
+    updateDiv.className = "event-short-description item-update";
+    updateDiv.innerHTML = "Update";
+    root.append(updateDiv);
+
+    var deleteDiv = document.createElement("div");
+    deleteDiv.className = "event-short-description event-reject";
+    deleteDiv.innerHTML = "Delete";
+    root.append(deleteDiv);
+
+    updateDiv.addEventListener('click', (e) => {
+        const adminPaneDetails = document.getElementById('adminPaneDetails');
+        adminPaneDetails.style = '';
+
+        const closeBtnAdminPaneDetails = document.getElementById('closeBtnAdminPaneDetails');
+        adminPaneDetails.replaceChildren();
+        adminPaneDetails.append(closeBtnAdminPaneDetails);
+
+        var updateInfoItem = document.createElement("div");
+        updateInfoItem.className = "details-item";
+        var div = document.createElement("div");
+        div.innerHTML = "Update Item info";
+        updateInfoItem.append(div);
+
+        updateRequestParams.forEach(updateRequestParam => {
+            input = createTextInputForAddNewEventItem(updateRequestParam, updateRequestParam);
+            updateInfoItem.append(input);
+        });
+
+        var cinfirmIpdatediv = document.createElement("div");
+        cinfirmIpdatediv.innerHTML = "Confirm Update";
+        cinfirmIpdatediv.className = "item-update";
+        updateInfoItem.append(cinfirmIpdatediv);
+
+        adminPaneDetails.append(updateInfoItem);
+
+        cinfirmIpdatediv.addEventListener('click', (e) => {
+            var updateRequest = 
+            {
+                "id": itemId
+            };
+            updateRequestParams.forEach(updateRequestParam => {
+                var textInput = document.getElementById(updateRequestParam);
+                updateRequest[textInput.id] = textInput.value;
+            });
+            updateRequest = JSON.stringify(updateRequest);
+
+            $.ajax({
+                url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/${requestRoute}/${itemId}`,
+                method: 'PUT',
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    'Authorization':`bearer ${localStorage.getItem('jwt')}`
+                },
+                data: updateRequest,
+                success: function(data){
+                    navItem.click();
+                    adminPaneDetails.style = 'display: none';
+                },
+                error: function(jqXHR, textStatus, error) {
+                    var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
+                            + jqXHR.responseText.toString();
+                    exceptionHandler(err);
+                }
+            });
+        });
+    });
+
+    deleteDiv.addEventListener('click', (e) => {
+        $.ajax({
+            url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/${requestRoute}/${itemId}`,
+            method: 'DELETE',
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Authorization':`bearer ${localStorage.getItem('jwt')}`
+            },
+            success: function(data){
+                navItem.click();
+            },
+            error: function(jqXHR, textStatus, error) {
+                var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
+                        + jqXHR.responseText.toString();
+                exceptionHandler(err);
+            }
+        });
+    });
 }
