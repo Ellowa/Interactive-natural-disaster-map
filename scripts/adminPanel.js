@@ -343,6 +343,9 @@ function addEventCategories(){
 
                 rootElement.append(newEventItemDiv);
             }
+            var categoryNameInput = createTextInputForAddNewEventItem("categoryName", "new category name");
+            var eventCategoryNavItem = document.getElementById('eventCategoryNavItem');
+            addNewEventItemForm(rootElement, "EventCategory", eventCategoryNavItem, categoryNameInput);
         },
         error: function(jqXHR, textStatus, error) {
             var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
@@ -350,4 +353,53 @@ function addEventCategories(){
             exceptionHandler(err);
         }
     });
+}
+
+function addNewEventItemForm(rootElement, additionRoute, navItem, ...textInputs){
+    var addItemDiv = document.createElement("div");
+    addItemDiv.className = "event-items";
+    
+    textInputs.forEach(textInput => {
+        addItemDiv.append(textInput);
+    });
+
+    var addButtonDiv = document.createElement("div");
+    addButtonDiv.className = "add-new-item-button"
+    addButtonDiv.innerHTML = "Add New";
+    addButtonDiv.addEventListener('click', (e) => {
+        var additionRequest = {};
+        textInputs.forEach(textInput => {
+            additionRequest[textInput.id] = textInput.value;
+        });
+        additionRequest = JSON.stringify(additionRequest);
+
+        $.ajax({
+            url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/${additionRoute}`,
+            method: 'POST',
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Authorization':`bearer ${localStorage.getItem('jwt')}`
+            },
+            data: additionRequest,
+            success: function(data){
+                navItem.click();
+            },
+            error: function(jqXHR, textStatus, error) {
+                var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
+                        + jqXHR.responseText.toString();
+                exceptionHandler(err);
+            }
+        });
+    });
+    addItemDiv.append(addButtonDiv);
+    rootElement.append(addItemDiv);
+}
+
+function createTextInputForAddNewEventItem(id, placeholder){
+    var textInput = document.createElement("input");
+    textInput.className = "event-items-additional-input";
+    textInput.type = "text";
+    textInput.id = id;
+    textInput.placeholder = placeholder;
+    return textInput;
 }
