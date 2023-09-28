@@ -528,6 +528,40 @@ text-transform: capitalize;
     background-color: var(--light-teal);
 }
 
+#adminPaneDetails {
+    display: flex;
+    min-height: 360px;
+    width: 760px;
+    left: calc(50% - 370px);
+    top: 50px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: var(--light-teal-input-zone);
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+
+.details-item{
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    color: #134e58;
+    font-size: 16px;
+    font-family: sans-serif;
+    font-weight: bold;
+    width: 100%;
+    padding-left: 10px;
+}
+.details-item div{
+    padding-bottom: 5px;
+}
+.details-item div:first-child{
+    text-align: center;
+    color: #603879;
+}
+
 .admin-panel-header {
     font-size: 26px;
     line-height: 20px;
@@ -574,11 +608,11 @@ text-transform: capitalize;
 }
 
 .event-short-description:first-child {
-    width: 140px;
+    width: 225px;
 }
 
 .event-short-description:nth-child(3) {
-    max-width: 110px;
+    max-width: 180px;
 }
 
 .event-confirm:hover {
@@ -589,6 +623,12 @@ text-transform: capitalize;
 
 .event-reject:hover {
     color:#ea5d53;
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+
+.event-details:hover {
+    color:#364ed6;
     transition: all 0.5s ease;
     cursor: pointer;
 }
