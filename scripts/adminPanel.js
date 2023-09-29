@@ -76,6 +76,11 @@ function createEventShortDescriptionDiv(root, divText){
 }
 
 function addConfirmRejectAndDetailsShortDescriptionDiv(root, eventId, adminPanelMain){
+    var detailsDiv = document.createElement("div");
+    detailsDiv.className = "event-short-description event-details";
+    detailsDiv.innerHTML = "Details";
+    root.append(detailsDiv);
+
     var confirmDiv = document.createElement("div");
     confirmDiv.className = "event-short-description event-confirm";
     confirmDiv.innerHTML = "Confirm";
@@ -85,11 +90,6 @@ function addConfirmRejectAndDetailsShortDescriptionDiv(root, eventId, adminPanel
     rejectDiv.className = "event-short-description event-reject";
     rejectDiv.innerHTML = "Reject";
     root.append(rejectDiv);
-
-    var detailsDiv = document.createElement("div");
-    detailsDiv.className = "event-short-description event-details";
-    detailsDiv.innerHTML = "Details";
-    root.append(detailsDiv);
 
     var confirmOrRejectData = 
     {
