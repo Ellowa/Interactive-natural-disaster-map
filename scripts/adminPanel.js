@@ -299,6 +299,7 @@ function adminPanelNavClick(){
     eventHazardNavItem.addEventListener('click', (e) =>{
         var currentAdminPage = document.getElementById("eventHazard");
         showAdminPanelPage(currentAdminPage);
+        addEventHazardUnits()
     });
 
     var eventSourceNavItem = document.getElementById("eventSourceNavItem");
@@ -334,20 +335,20 @@ function addEventCategories(){
             'Authorization':`bearer ${localStorage.getItem('jwt')}`
         },
         success: function(data){
+            var eventCategoryNavItem = document.getElementById('eventCategoryNavItem');
             for (const eventCategory of data) {
                 var newEventItemDiv = document.createElement("div");
                 newEventItemDiv.className = "event-items";
 
                 createEventShortDescriptionDiv(newEventItemDiv, eventCategory.id);
                 createEventShortDescriptionDiv(newEventItemDiv, eventCategory.categoryName);
-                var eventCategoryNavItem = document.getElementById('eventCategoryNavItem');
+
                 createUpdateShortDescriptionDiv(newEventItemDiv, eventCategory.id, "EventCategory", eventCategoryNavItem, "categoryName");
                 createDeleteShortDescriptionDiv(newEventItemDiv, eventCategory.id, "EventCategory", eventCategoryNavItem);
 
                 rootElement.append(newEventItemDiv);
             }
             var categoryNameInput = createTextInputForAddNewEventItem("categoryName", "new category name");
-            var eventCategoryNavItem = document.getElementById('eventCategoryNavItem');
             addNewEventItemForm(rootElement, "EventCategory", eventCategoryNavItem, categoryNameInput);
             
         },
@@ -500,5 +501,47 @@ function createDeleteShortDescriptionDiv(root, itemId, requestRoute, navItem){
                 exceptionHandler(err);
             }
         });
+    });
+}
+
+//Функция странички Event Hazard Units, админ панели
+function addEventHazardUnits(){
+    var rootElement = document.getElementById("eventHazard");
+    clearAdminPanMainZone(rootElement);
+
+    $.ajax({
+        url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventHazardUnit',
+        method: 'GET',
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            'Authorization':`bearer ${localStorage.getItem('jwt')}`
+        },
+        success: function(data){
+            var eventHazardUnitNavItem = document.getElementById('eventHazardNavItem');
+            for (const eventHazardUnit of data) {
+                var newEventItemDiv = document.createElement("div");
+                newEventItemDiv.className = "event-items";
+
+                createEventShortDescriptionDiv(newEventItemDiv, eventHazardUnit.id);
+                createEventShortDescriptionDiv(newEventItemDiv, eventHazardUnit.hazardName);
+                createEventShortDescriptionDiv(newEventItemDiv, eventHazardUnit.magnitudeUnitName);
+                createEventShortDescriptionDiv(newEventItemDiv, eventHazardUnit.thresholdValue);
+
+                createUpdateShortDescriptionDiv(newEventItemDiv, eventHazardUnit.id, "EventHazardUnit", eventHazardUnitNavItem, "hazardName", "magnitudeUnitName", "thresholdValue");
+                createDeleteShortDescriptionDiv(newEventItemDiv, eventHazardUnit.id, "EventHazardUnit", eventHazardUnitNavItem);
+
+                rootElement.append(newEventItemDiv);
+            }
+            var eventHazardUnitNameInput = createTextInputForAddNewEventItem("hazardName", "new hazard name");
+            var magnitudeUnitNameInput = createTextInputForAddNewEventItem("magnitudeUnitName", "nmagnitude unit name");
+            var thresholdValueInput = createTextInputForAddNewEventItem("thresholdValue", "new threshold value");
+            addNewEventItemForm(rootElement, "EventHazardUnit", eventHazardUnitNavItem, eventHazardUnitNameInput, magnitudeUnitNameInput, thresholdValueInput);
+            
+        },
+        error: function(jqXHR, textStatus, error) {
+            var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
+                    + jqXHR.responseText.toString();
+            exceptionHandler(err);
+        }
     });
 }
