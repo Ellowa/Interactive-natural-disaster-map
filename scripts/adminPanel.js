@@ -653,8 +653,7 @@ function addMagnitudeUnitDetailsDiv(root, magnitudeUnitId){
         magnitudeUnitDetailsItem.style = 'width: 100%;';
         var div = document.createElement("div");
         div.className = "event-short-description";
-        div.style = 'width: 100%;';
-        div.innerHTML = "Magnitude Unit Name";
+        div.innerHTML = "mUnit";
         magnitudeUnitDetailsItem.append(div);
 
         div = document.createElement("div");

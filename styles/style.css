@@ -517,7 +517,7 @@ text-transform: capitalize;
 /* Стиль зоны admin Panel */
 #adminPanelZone {
     min-height: 460px;
-    width: 860px;
+    width: 880px;
     left: calc(50% - 350px);
     top: 130px;
     flex-direction: column;
@@ -610,7 +610,12 @@ text-transform: capitalize;
 }
 
 .event-short-description:first-child {
-    width: 225px;
+    width: auto;
+    min-width: 25px;
+}
+
+.event-short-description:nth-child(2) {
+    max-width: 165px;
 }
 
 .event-short-description:nth-child(3) {
