@@ -334,14 +334,15 @@ function addEventCategories(){
             'Authorization':`bearer ${localStorage.getItem('jwt')}`
         },
         success: function(data){
-            for (const unconfirmedEvent of data) {
+            for (const eventCategory of data) {
                 var newEventItemDiv = document.createElement("div");
                 newEventItemDiv.className = "event-items";
 
-                createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.id);
-                createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.categoryName);
+                createEventShortDescriptionDiv(newEventItemDiv, eventCategory.id);
+                createEventShortDescriptionDiv(newEventItemDiv, eventCategory.categoryName);
                 var eventCategoryNavItem = document.getElementById('eventCategoryNavItem');
-                createUpdateDeleteShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.id, "EventCategory", eventCategoryNavItem, "categoryName")
+                createUpdateShortDescriptionDiv(newEventItemDiv, eventCategory.id, "EventCategory", eventCategoryNavItem, "categoryName");
+                createDeleteShortDescriptionDiv(newEventItemDiv, eventCategory.id, "EventCategory", eventCategoryNavItem);
 
                 rootElement.append(newEventItemDiv);
             }
@@ -408,16 +409,12 @@ function createTextInputForAddNewEventItem(id, placeholder){
     return textInput;
 }
 
-function createUpdateDeleteShortDescriptionDiv(root, itemId, requestRoute, navItem, ...updateRequestParams){
+//Универсальная функция создания кнопки update item
+function createUpdateShortDescriptionDiv(root, itemId, requestRoute, navItem, ...updateRequestParams){
     var updateDiv = document.createElement("div");
     updateDiv.className = "event-short-description item-update";
     updateDiv.innerHTML = "Update";
     root.append(updateDiv);
-
-    var deleteDiv = document.createElement("div");
-    deleteDiv.className = "event-short-description event-reject";
-    deleteDiv.innerHTML = "Delete";
-    root.append(deleteDiv);
 
     updateDiv.addEventListener('click', (e) => {
         const adminPaneDetails = document.getElementById('adminPaneDetails');
@@ -438,14 +435,15 @@ function createUpdateDeleteShortDescriptionDiv(root, itemId, requestRoute, navIt
             updateInfoItem.append(input);
         });
 
-        var cinfirmIpdatediv = document.createElement("div");
-        cinfirmIpdatediv.innerHTML = "Confirm Update";
-        cinfirmIpdatediv.className = "item-update";
-        updateInfoItem.append(cinfirmIpdatediv);
+        var cinfirmUpdatediv = document.createElement("div");
+        cinfirmUpdatediv.innerHTML = "Confirm Update";
+        cinfirmUpdatediv.className = "item-update";
+        cinfirmUpdatediv.style = "margin-left: 10px;";
+        updateInfoItem.append(cinfirmUpdatediv);
 
         adminPaneDetails.append(updateInfoItem);
 
-        cinfirmIpdatediv.addEventListener('click', (e) => {
+        cinfirmUpdatediv.addEventListener('click', (e) => {
             var updateRequest = 
             {
                 "id": itemId
@@ -476,6 +474,14 @@ function createUpdateDeleteShortDescriptionDiv(root, itemId, requestRoute, navIt
             });
         });
     });
+}
+
+//Универсальная функция создания кнопки delete item
+function createDeleteShortDescriptionDiv(root, itemId, requestRoute, navItem){
+    var deleteDiv = document.createElement("div");
+    deleteDiv.className = "event-short-description event-reject";
+    deleteDiv.innerHTML = "Delete";
+    root.append(deleteDiv);
 
     deleteDiv.addEventListener('click', (e) => {
         $.ajax({
