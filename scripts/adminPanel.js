@@ -306,6 +306,7 @@ function adminPanelNavClick(){
     eventSourceNavItem.addEventListener('click', (e) =>{
         var currentAdminPage = document.getElementById("eventSource");
         showAdminPanelPage(currentAdminPage);
+        addEventSources();
     });
 
     var magnitudeUnitNavItem = document.getElementById("magnitudeUnitNavItem");
@@ -536,6 +537,45 @@ function addEventHazardUnits(){
             var magnitudeUnitNameInput = createTextInputForAddNewEventItem("magnitudeUnitName", "nmagnitude unit name");
             var thresholdValueInput = createTextInputForAddNewEventItem("thresholdValue", "new threshold value");
             addNewEventItemForm(rootElement, "EventHazardUnit", eventHazardUnitNavItem, eventHazardUnitNameInput, magnitudeUnitNameInput, thresholdValueInput);
+            
+        },
+        error: function(jqXHR, textStatus, error) {
+            var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
+                    + jqXHR.responseText.toString();
+            exceptionHandler(err);
+        }
+    });
+}
+
+
+//Функция странички Event Sources, админ панели
+function addEventSources(){
+    var rootElement = document.getElementById("eventSource");
+    clearAdminPanMainZone(rootElement);
+
+    $.ajax({
+        url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventSource',
+        method: 'GET',
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            'Authorization':`bearer ${localStorage.getItem('jwt')}`
+        },
+        success: function(data){
+            var eventSourceNavItem = document.getElementById('eventSourceNavItem');
+            for (const eventSource of data) {
+                var newEventItemDiv = document.createElement("div");
+                newEventItemDiv.className = "event-items";
+
+                createEventShortDescriptionDiv(newEventItemDiv, eventSource.id);
+                createEventShortDescriptionDiv(newEventItemDiv, eventSource.sourceType);
+
+                createUpdateShortDescriptionDiv(newEventItemDiv, eventSource.id, "EventSource", eventSourceNavItem, "sourceType");
+                createDeleteShortDescriptionDiv(newEventItemDiv, eventSource.id, "EventSource", eventSourceNavItem);
+
+                rootElement.append(newEventItemDiv);
+            }
+            var eventSourceNameInput = createTextInputForAddNewEventItem("sourceType", "new source type");
+            addNewEventItemForm(rootElement, "EventSource", eventSourceNavItem, eventSourceNameInput);
             
         },
         error: function(jqXHR, textStatus, error) {
