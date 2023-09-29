@@ -313,6 +313,7 @@ function adminPanelNavClick(){
     magnitudeUnitNavItem.addEventListener('click', (e) =>{
         var currentAdminPage = document.getElementById("magnitudeUnit");
         showAdminPanelPage(currentAdminPage);
+        addMagnitudeUnits();
     });
 }
 
@@ -583,5 +584,123 @@ function addEventSources(){
                     + jqXHR.responseText.toString();
             exceptionHandler(err);
         }
+    });
+}
+
+
+//Функция странички Magnitude Units, админ панели
+function addMagnitudeUnits(){
+    var rootElement = document.getElementById("magnitudeUnit");
+    clearAdminPanMainZone(rootElement);
+
+    $.ajax({
+        url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/MagnitudeUnit',
+        method: 'GET',
+        contentType: "application/json; charset=utf-8",
+        headers: {
+            'Authorization':`bearer ${localStorage.getItem('jwt')}`
+        },
+        success: function(data){
+            var magnitudeUnitNavItem = document.getElementById('magnitudeUnitNavItem');
+            for (const magnitudeUnit of data) {
+                var newEventItemDiv = document.createElement("div");
+                newEventItemDiv.className = "event-items";
+
+                createEventShortDescriptionDiv(newEventItemDiv, magnitudeUnit.id);
+                createEventShortDescriptionDiv(newEventItemDiv, magnitudeUnit.magnitudeUnitName);
+                createEventShortDescriptionDiv(newEventItemDiv, magnitudeUnit.hazardUnitDtos.length);
+
+                addMagnitudeUnitDetailsDiv(newEventItemDiv, magnitudeUnit.id);
+                createUpdateShortDescriptionDiv(newEventItemDiv, magnitudeUnit.id, "MagnitudeUnit", magnitudeUnitNavItem, "magnitudeUnitName");
+                createDeleteShortDescriptionDiv(newEventItemDiv, magnitudeUnit.id, "MagnitudeUnit", magnitudeUnitNavItem);
+
+                rootElement.append(newEventItemDiv);
+            }
+            var magnitudeUnitNameInput = createTextInputForAddNewEventItem("magnitudeUnitName", "new magnitude unit name");
+            addNewEventItemForm(rootElement, "MagnitudeUnit", magnitudeUnitNavItem, magnitudeUnitNameInput);
+            
+        },
+        error: function(jqXHR, textStatus, error) {
+            var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
+                    + jqXHR.responseText.toString();
+            exceptionHandler(err);
+        }
+    });
+}
+
+function addMagnitudeUnitDetailsDiv(root, magnitudeUnitId){
+    var detailsDiv = document.createElement("div");
+    detailsDiv.className = "event-short-description event-details";
+    detailsDiv.innerHTML = "Hazard Details";
+    root.append(detailsDiv);
+
+    detailsDiv.addEventListener('click', (e) => {
+        const adminPaneDetails = document.getElementById('adminPaneDetails');
+        adminPaneDetails.style = 'display: flex;' +
+                                'flex-direction: column;' +
+                                'align-items: flex-start;' +
+                                'justify-content: flex-start;' +
+                                'padding-left: 15px;' +
+                                'padding-right: 15px;' +
+                                'overflow: auto;';
+
+        const closeBtnAdminPaneDetails = document.getElementById('closeBtnAdminPaneDetails');
+        adminPaneDetails.replaceChildren();
+        adminPaneDetails.append(closeBtnAdminPaneDetails);
+
+        var magnitudeUnitDetailsItem = document.createElement("div");
+        magnitudeUnitDetailsItem.className = "event-items";
+        magnitudeUnitDetailsItem.style = 'width: 100%;';
+        var div = document.createElement("div");
+        div.className = "event-short-description";
+        div.style = 'width: 100%;';
+        div.innerHTML = "Magnitude Unit Name";
+        magnitudeUnitDetailsItem.append(div);
+
+        div = document.createElement("div");
+        div.className = "event-short-description";
+        div.innerHTML = "Hazard Id";
+        magnitudeUnitDetailsItem.append(div);
+        
+
+        div = document.createElement("div");
+        div.className = "event-short-description";
+        div.innerHTML = "Hazard Name";
+        magnitudeUnitDetailsItem.append(div);
+
+        div = document.createElement("div");
+        div.className = "event-short-description";
+        div.innerHTML = "Threshold Value";
+        magnitudeUnitDetailsItem.append(div);
+
+        adminPaneDetails.append(magnitudeUnitDetailsItem);
+
+        $.ajax({
+            url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/MagnitudeUnit/${magnitudeUnitId}`,
+            method: 'GET',
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Authorization':`bearer ${localStorage.getItem('jwt')}`
+            },
+            success: function(data){
+                for (const eventHazardUnit of data.hazardUnitDtos) {
+                    var newEventItemDiv = document.createElement("div");
+                    newEventItemDiv.className = "event-items";
+                    newEventItemDiv.style = 'width: 100%;';
+
+                    createEventShortDescriptionDiv(newEventItemDiv, eventHazardUnit.magnitudeUnitName);
+                    createEventShortDescriptionDiv(newEventItemDiv, eventHazardUnit.id);
+                    createEventShortDescriptionDiv(newEventItemDiv, eventHazardUnit.hazardName);
+                    createEventShortDescriptionDiv(newEventItemDiv, eventHazardUnit.thresholdValue);
+
+                    adminPaneDetails.append(newEventItemDiv);
+                }
+            },
+            error: function(jqXHR, textStatus, error) {
+                var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
+                        + jqXHR.responseText.toString();
+                exceptionHandler(err);
+            }
+        });
     });
 }
