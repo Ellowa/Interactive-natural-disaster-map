@@ -1,4 +1,4 @@
-//Check if user alredy logIn
+//Check if user already logIn
 if(localStorage.getItem('login') != null && localStorage.getItem('jwt') != null)
 {
     //Check if token has expired
@@ -50,7 +50,7 @@ map.on('load', () => {
 
     $( document ).ready(function() { // страничка прогружена
         
-        // регестрация(установка) слушателей событий 
+        // регистрация(установка) слушателей событий 
         getCoordinatesByMapButtonClk();
         logOutBtnClk();
         registerBtnClick();

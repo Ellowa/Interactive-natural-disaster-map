@@ -260,7 +260,7 @@ function addConfirmRejectAndDetailsShortDescriptionDiv(root, eventId, adminPanel
 
 // Обработчик событий для кнопок навигации админ панели
 function adminPanelNavClick(){
-    //Подсветка выбранного элеиента навигации
+    //Подсветка выбранного элемента навигации
     var adminPanelNavItems = ($(document.getElementById("adminPanelNav")).find(".nav-item"));
     for(var i = 0; i < adminPanelNavItems.length; i++){
         adminPanelNavItems[i].addEventListener('click', (e) =>{
@@ -438,44 +438,49 @@ function createUpdateShortDescriptionDiv(root, itemId, requestRoute, navItem, ..
             updateInfoItem.append(input);
         });
 
-        var cinfirmUpdatediv = document.createElement("div");
-        cinfirmUpdatediv.innerHTML = "Confirm Update";
-        cinfirmUpdatediv.className = "item-update";
-        cinfirmUpdatediv.style = "margin-left: 10px;";
-        updateInfoItem.append(cinfirmUpdatediv);
+        var confirmUpdateDiv = document.createElement("div");
+        confirmUpdateDiv.innerHTML = 'Confirm Update'
+        confirmUpdateDiv.className = 'item-update'
+        confirmUpdateDiv.style = 'margin-left: 10px;'
+        updateInfoItem.append(confirmUpdateDiv)
 
         adminPaneDetails.append(updateInfoItem);
 
-        cinfirmUpdatediv.addEventListener('click', (e) => {
-            var updateRequest = 
-            {
-                "id": itemId
-            };
+        confirmUpdateDiv.addEventListener('click', e => {
+            var updateRequest = {
+                id: itemId,
+            }
             updateRequestParams.forEach(updateRequestParam => {
-                var textInput = document.getElementById(updateRequestParam);
-                updateRequest[textInput.id] = textInput.value;
-            });
-            updateRequest = JSON.stringify(updateRequest);
+                var textInput = document.getElementById(updateRequestParam)
+                updateRequest[textInput.id] = textInput.value
+            })
+            updateRequest = JSON.stringify(updateRequest)
 
             $.ajax({
                 url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/${requestRoute}/${itemId}`,
                 method: 'PUT',
-                contentType: "application/json; charset=utf-8",
+                contentType: 'application/json; charset=utf-8',
                 headers: {
-                    'Authorization':`bearer ${localStorage.getItem('jwt')}`
+                    Authorization: `bearer ${localStorage.getItem('jwt')}`,
                 },
                 data: updateRequest,
-                success: function(data){
-                    navItem.click();
-                    adminPaneDetails.style = 'display: none';
+                success: function (data) {
+                    navItem.click()
+                    adminPaneDetails.style = 'display: none'
                 },
-                error: function(jqXHR, textStatus, error) {
-                    var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
-                            + jqXHR.responseText.toString();
-                    exceptionHandler(err);
-                }
-            });
-        });
+                error: function (jqXHR, textStatus, error) {
+                    var err =
+                        textStatus +
+                        ' ' +
+                        jqXHR.status +
+                        ', ' +
+                        error +
+                        '\n' +
+                        jqXHR.responseText.toString()
+                    exceptionHandler(err)
+                },
+            })
+        })
     });
 }
 
@@ -535,7 +540,7 @@ function addEventHazardUnits(){
                 rootElement.append(newEventItemDiv);
             }
             var eventHazardUnitNameInput = createTextInputForAddNewEventItem("hazardName", "new hazard name");
-            var magnitudeUnitNameInput = createTextInputForAddNewEventItem("magnitudeUnitName", "nmagnitude unit name");
+            var magnitudeUnitNameInput = createTextInputForAddNewEventItem("magnitudeUnitName", "magnitude unit name");
             var thresholdValueInput = createTextInputForAddNewEventItem("thresholdValue", "new threshold value");
             addNewEventItemForm(rootElement, "EventHazardUnit", eventHazardUnitNavItem, eventHazardUnitNameInput, magnitudeUnitNameInput, thresholdValueInput);
             

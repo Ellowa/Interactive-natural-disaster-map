@@ -1,4 +1,4 @@
-// функция изминения dateSlider параметров в зависимости от текущего списка событий
+// функция изменения dateSlider параметров в зависимости от текущего списка событий
 function setDateFilterRange(){
     // сортируем события по времени их старта
     geojsonAllDataEvents.features.sort(function(a, b) {
@@ -11,7 +11,7 @@ function setDateFilterRange(){
         return 0;
     });
     
-    // отобразим собития от новых к старым 
+    // отобразим события от новых к старым 
     geojsonAllDataEvents.features.reverse();
 
     // найдем разницу в днях между первым и последним событием
@@ -25,14 +25,14 @@ function setDateFilterRange(){
     //document.getElementById('dateSlider').value = daysRange;
 }
 
-// функия формирования фильтра событий в зависимости от id слоя(для которого делаем фильтр)
-function createFilterByLayerId(toDate, layerID, fCollor){
+// функция формирования фильтра событий в зависимости от id слоя(для которого делаем фильтр)
+function createFilterByLayerId(toDate, layerID, fColor){
     var filters = [
-        'all',
-        ['>=', 'date', toDate],
-        ['==', 'categoriesNEW', layerID],
-        ['==', 'dangerLevel', fCollor]
-    ];
+			'all',
+			['>=', 'date', toDate],
+			['==', 'categoriesNEW', layerID],
+			['==', 'dangerLevel', fColor],
+		]
     return filters;
 }
 
@@ -46,7 +46,7 @@ function filterByDate(toDate){
         map.setFilter(allLayersID[layerID], createFilterByLayerId(toDate, categoriesFromLayerID, dangerLevelFromLayerID));
     }
 
-    // Меняеем подпись диапазона дат 
+    // Меняем подпись диапазона дат 
     document.getElementById('selectedDateLabel').textContent = `Date range: ${geojsonAllDataEvents.features[0].properties.date.substring(0,10)} - ${toDate}`;
 }
 

@@ -40,10 +40,10 @@ function registerBtnClick(){
 
     acceptRegButton.addEventListener('click', (e) => {
         const loginRegInput = document.getElementById('loginRegInput');
-        const passworRegInput = document.getElementById('passworRegInput');
+        const passwordRegInput = document.getElementById('passwordRegInput')
         
 
-        var allFields = [loginRegInput, passworRegInput];
+        var allFields = [loginRegInput, passwordRegInput]
         var requiredFieldsIsEmpty = false;
         for (var inputElement of allFields)
         {
@@ -67,12 +67,11 @@ function registerBtnClick(){
             document.getElementById('requiredTextRegister').style = null;
 
             //ПРОЦЕДУРА РЕГИСТРАЦИИ 
-            var user = 
-            {
-                "login": loginRegInput.value,
-                "password": passworRegInput.value,
-                "refreshToken": ""
-            };
+            var user = {
+							login: loginRegInput.value,
+							password: passwordRegInput.value,
+							refreshToken: '',
+						}
             user = JSON.stringify(user);
             $.ajax({
                 url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/User',

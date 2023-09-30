@@ -20,10 +20,10 @@
 }
 
 
-.popupDiscription {
+.popupDescription {
     margin: -5px;
 }
-.popupDiscription p::first-letter {
+.popupDescription p::first-letter {
     color: red;
     font-size: 130%;
 }
@@ -181,7 +181,7 @@ text-transform: capitalize;
     left: 8px;
 } */
 
-/* Особый стиль для полей с координатами кокда они заданы через карту (как будто они всегда в фокусе) */
+/* Особый стиль для полей с координатами когда они заданы через карту (как будто они всегда в фокусе) */
 .coordinatesByMap input + .placeholder {
     top: 21px;
     color: #222;
@@ -856,10 +856,10 @@ text-transform: capitalize;
         height: 35px;
     }
 
-    .popupDiscription{
+    .popupDescription{
         width: 260px;
     }
-    .popupDiscription p{
+    .popupDescription p{
         margin: 0;
         font-size: 11px;
     }

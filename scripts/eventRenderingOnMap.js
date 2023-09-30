@@ -1,4 +1,4 @@
-var allLayersID = []; // нужно для удобного извличения всех слаёв карты
+var allLayersID = []; // нужно для удобного извлечения всех слоёв карты
 //Функция добавления(подгрузки для карты) новой иконки
 function addIconSync(layerID){
     map.loadImage(`images/${layerID}.png`, (error, image) => {
@@ -30,32 +30,32 @@ function addEventListenerToEventFilterSync(layerID, fullLayerID){
 function addPoints(events){
     for (const feature of events.features) {
         var layerID = feature.properties.categoriesNEW;
-        var fCollor = feature.properties.dangerLevel;
+        var fColor = feature.properties.dangerLevel;
 
-        var fullLayerID = layerID + " " + fCollor;
-        // Длбовляем новый слой для каждого типа событий
+        var fullLayerID = layerID + ' ' + fColor
+        // Добавляем новый слой для каждого типа событий
         if (!map.getLayer(fullLayerID)) {
-            // добовляем картинки (метки событий) к карте
+            // добавляем картинки (метки событий) к карте
             addIconSync(layerID);
             allLayersID.push(fullLayerID);
             // добавление нового слоя к карте (с уникальным id и уникальным набором событий)
             map.addLayer({
-                'id': fullLayerID,
-                'type': 'symbol',
-                'source': 'events',
-                'layout': {
-                    'icon-image': `${layerID}ICON`,
-                    'icon-size': 1
-                },
-                'paint': {
-                    'icon-color': getEventIconColorByDangerLevel(fCollor)
-                },
-                'filter': [
-                    'all',
-                    ['==', 'categoriesNEW', layerID],
-                    ['==', 'dangerLevel', fCollor]
-                ]
-            });
+							id: fullLayerID,
+							type: 'symbol',
+							source: 'events',
+							layout: {
+								'icon-image': `${layerID}ICON`,
+								'icon-size': 1,
+							},
+							paint: {
+								'icon-color': getEventIconColorByDangerLevel(fColor),
+							},
+							filter: [
+								'all',
+								['==', 'categoriesNEW', layerID],
+								['==', 'dangerLevel', fColor],
+							],
+						})
             // установка события фильтра событий для этого слоя карты
             addEventListenerToEventFilterSync(layerID, fullLayerID);
             
@@ -65,7 +65,7 @@ function addPoints(events){
     }
 }
 
-// фукция добавления описания для каждого события 
+// функция добавления описания для каждого события 
 function MarkerOnClick(LayerId){
     // обработчик события, когда клик происходит по событию из слоя(для каждого слоя) карты
     map.on('click', LayerId, (e) => {
@@ -73,7 +73,7 @@ function MarkerOnClick(LayerId){
         const coordinates = e.features[0].geometry.coordinates;
         
         // Формируем html описание события
-        let description = `<div class='popupDiscription'><p>Title: ${e.features[0].properties.title}</p>
+        let description = `<div class='popupDescription'><p>Title: ${e.features[0].properties.title}</p>
         <p>Id: ${e.features[0].properties.Newid}</p>
         <p>Categories: ${e.features[0].properties.categoriesTitle}</p>
         <p>Coordinates: ${coordinates}</p>
