@@ -228,44 +228,41 @@ function addUsgsEarthquakeToMap(data){
 // Функция получения и обработки событий от нашего INDM API
 function addIndmEventsToMap(data){
     // Редактирование (подгонка под наш вариант хранения события) полей события
-    for (const feature of data) {
-        var categoryTitle = feature.category.split(/(?=[A-Z])/).join(" ");
-        var dangerLevel = feature.eventHazardUnit.split(/(?=[A-Z])/).join(" ");
+    for (const feature of data.features) {
+			var categoryTitle = feature.properties.category
+				.split(/(?=[A-Z])/)
+				.join(' ');
+			var dangerLevel = feature.properties.eventHazardUnit
+				.split(/(?=[A-Z])/)
+				.join(' ');
 
-        // формируем новое событие
-        var event = {
-            "type": "Feature",
-            "properties": 
-            {
-                "title": feature.title,
-                "Newid": feature.id,
-                "categoriesNEW": feature.category,
-                "categoriesTitle": categoryTitle[0].toUpperCase() + categoryTitle.slice(1),
-                "date": feature.startDate,
-                "closed": feature.endDate,
-                "magnitudeUnit": feature.magnitudeUnit.split(/(?=[A-Z])/).join(" "),
-                "magnitudeValue": feature.magnitudeValue,
-                "dangerLevel": dangerLevel[0].toUpperCase() + dangerLevel.slice(1),
-                "link": feature.link,
-                "source": feature.source,
-                "isClosed": feature.closed
-            },
-            "geometry": {
-            "type": "Point",
-            "coordinates": [ feature.longitude, feature.latitude ]
+            feature.properties.Newid = feature.properties.id;
+            feature.properties.categoriesNEW = feature.properties.category;
+            feature.properties.categoriesTitle = categoryTitle[0].toUpperCase() + categoryTitle.slice(1);
+            feature.properties.date = feature.properties.startDate;
+            feature.properties.closed = feature.properties.endDate;
+            feature.properties.magnitudeUnit = feature.properties.magnitudeUnit
+							.split(/(?=[A-Z])/)
+							.join(' ');
+            feature.properties.dangerLevel = dangerLevel[0].toUpperCase() + dangerLevel.slice(1);
+            feature.properties.isClosed = feature.properties.closed;
+
+			//Todo костыль - правильно надо брать эти данные из БД
+			if (
+				feature.properties.categoriesNEW == 'severeStorms' &&
+				feature.properties.magnitudeUnit == 'kts'
+			)
+				feature.properties.dangerLevel = getSevereStormDangerLevelByKTS(
+					feature.properties.magnitudeValue
+				)
+			if (feature.properties.categoriesNEW == 'earthquakes')
+				feature.properties.dangerLevel = getEarthquakesDangerLevelByMAG(
+					feature.properties.magnitudeValue
+                )
+			//добавляем события к списку всех событий
+			if (!geojsonAllDataEvents.features.includes(feature)) {
+				geojsonAllDataEvents.features.push(feature)
             }
-        };
-
-        //Todo костыль - правильно надо брать эти данные из БД
-        if(event.properties.categoriesNEW == 'severeStorms' && event.properties.magnitudeUnit == 'kts')
-            event.properties.dangerLevel = getSevereStormDangerLevelByKTS(event.properties.magnitudeValue);
-        if(event.properties.categoriesNEW == 'earthquakes')
-            event.properties.dangerLevel = getEarthquakesDangerLevelByMAG(event.properties.magnitudeValue);
-        //добавляем события к списку всех событий
-        if(!geojsonAllDataEvents.features.includes(event))
-        {
-            geojsonAllDataEvents.features.push(event);
-        }
     }
     // обновление источника данных для карты
     map.getSource('events').setData(geojsonAllDataEvents);
