@@ -6,12 +6,15 @@ function logOutBtnClk(){
         const userAccountButton = document.getElementById('userAccountButton');
         const registerButton = document.getElementById('registerButton');
         const logInButton = document.getElementById('logInButton');
+        const divTreeEventCollections = document.getElementById('divTreeEventCollections');
+				
 
         userAccountButton.style = 'display: none';
         logOutButton.style = 'display: none';
 
         registerButton.style = null;
         logInButton.style = null;
+        divTreeEventCollections.style = null;
 
         localStorage.removeItem('login');
         localStorage.removeItem('jwt');
@@ -217,6 +220,9 @@ function logInSuccess(){
         adminPanelOpenButton.style = 'display: none';
         adminPanelZone.style = 'display: none';
     }
+
+    const divTreeEventCollections = document.getElementById('divTreeEventCollections');
+    divTreeEventCollections.style = 'display: block';
 
     getEventsFromIndmAPI();
 }

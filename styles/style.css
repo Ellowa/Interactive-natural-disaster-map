@@ -747,14 +747,15 @@ text-transform: capitalize;
 
 /*стиль коллекций событий*/
 .tree-event-collections {
-    width: 180px;
-    max-width: 200px;
+    width: 170px;
+    max-width: 245px;
+    min-width: 165px;
     max-height: 200px;
     text-align: left;
     font-size: 100%;
     font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
     color: grey;
-    display: flex;
+    display: none;
     position: absolute;
     right: 10px;
     top: 150px;
@@ -765,10 +766,15 @@ text-transform: capitalize;
     margin-bottom: 5px;
     border-radius: 14px;
     padding-left: 10px;
+    transition: width 1s ease;
 }
+
 
 .collapse{
     cursor: pointer;
+}
+.collapse:hover{
+    color:#222;
 }
 
 #tree {
@@ -793,6 +799,14 @@ text-transform: capitalize;
 }
 #tree label {
     font-weight: bold;
+}
+
+.tree-element{
+    width: auto;
+}
+.tree-element:hover{
+    color:#222;
+    cursor: pointer;
 }
 
 
