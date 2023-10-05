@@ -8,46 +8,36 @@ $(allEventCollectionsSpan).click(function () {
 
 	if ($(this).prev(this).text() == '► ') {
 		$(this).prev(this).replaceWith('<span>▼ </span>');
-        divTreeEventCollections.style = 'display: block; width: 100%';
+		divTreeEventCollections.style = 'display: block; width: 100%';
 	} else if ($(this).prev(this).text() == '▼ ') {
 		$(this).prev(this).replaceWith('<span>► </span>');
-        divTreeEventCollections.style = 'display: block; width: 170px';
+		divTreeEventCollections.style = 'display: block; width: 170px';
 	}
 });
 
 // функция формирования фильтра событий по Id в зависимости от id слоя(для которого делаем фильтр)
 function createEventIdFilterByLayerId(eventsIds, layerID, fColor) {
-	var filters = [
-		'all',
-		['==', 'categoriesNEW', layerID],
-		['==', 'dangerLevel', fColor],
-	];
-    var eventIdFilter = ['in', 'Newid'];
-    eventsIds.forEach(eventsId => {
-        eventIdFilter.push(eventsId);
-    });
-    filters.push(eventIdFilter);
+	var filters = ['all', ['==', 'categoriesNEW', layerID], ['==', 'dangerLevel', fColor]];
+	var eventIdFilter = ['in', 'Newid'];
+	eventsIds.forEach(eventsId => {
+		eventIdFilter.push(eventsId);
+	});
+	filters.push(eventIdFilter);
 	return filters;
 }
 
 // функция фильтрации событий по их Id
-function filterEventsById(...eventsIds){
-    // Применяем фильтр ко всем слоям карты
-    for (layerID in allLayersID)
-    {
-        var categoriesFromLayerID = allLayersID[layerID].split(' ')[0];
-        var dangerLevelFromLayerID = allLayersID[layerID].slice(categoriesFromLayerID.length+1);
+function filterEventsById(...eventsIds) {
+	// Применяем фильтр ко всем слоям карты
+	for (layerID in allLayersID) {
+		var categoriesFromLayerID = allLayersID[layerID].split(' ')[0];
+		var dangerLevelFromLayerID = allLayersID[layerID].slice(categoriesFromLayerID.length + 1);
 
-        map.setFilter(
-            allLayersID[layerID],
-            createEventIdFilterByLayerId(
-                ...eventsIds,
-                categoriesFromLayerID,
-                dangerLevelFromLayerID
-            )
-        );
-            
-    }
+		map.setFilter(
+			allLayersID[layerID],
+			createEventIdFilterByLayerId(...eventsIds, categoriesFromLayerID, dangerLevelFromLayerID)
+		);
+	}
 }
 
 // Обработчик события для показа всех событий (отмены выбора коллекций)
@@ -56,9 +46,7 @@ showAllEventsCheckBox.addEventListener('change', function () {
 	if (this.checked) {
 		allLayersID.forEach(layerID => {
 			var categoriesFromLayerID = layerID.split(' ')[0];
-			var dangerLevelFromLayerID = layerID.slice(
-				categoriesFromLayerID.length + 1
-			);
+			var dangerLevelFromLayerID = layerID.slice(categoriesFromLayerID.length + 1);
 			map.setFilter(layerID, [
 				'all',
 				['==', 'categoriesNEW', categoriesFromLayerID],
@@ -66,14 +54,13 @@ showAllEventsCheckBox.addEventListener('change', function () {
 			]);
 		});
 
-        var eventCollectionsMainRoot = document.getElementById('eventCollectionsMainRoot');
-        var eventCollectionsMainRootInputs = $(eventCollectionsMainRoot).find('input');
-        for(var i = 0; i < eventCollectionsMainRootInputs.length; i++){
-            eventCollectionsMainRootInputs[i].checked = false;
-        }
+		var eventCollectionsMainRoot = document.getElementById('eventCollectionsMainRoot');
+		var eventCollectionsMainRootInputs = $(eventCollectionsMainRoot).find('input');
+		for (var i = 0; i < eventCollectionsMainRootInputs.length; i++) {
+			eventCollectionsMainRootInputs[i].checked = false;
+		}
 	}
 });
-
 
 // Обработчик события для показа коллекций пользователя
 var allEventCollections = document.getElementById('allEventCollections');
@@ -144,10 +131,9 @@ allEventCollections.addEventListener('click', function () {
 				});
 			},
 			error: function (jqXHR, textStatus, error) {
-				var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText.toString();
+				var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
 				exceptionHandler(err);
 			},
 		});
 	}
-    
 });
