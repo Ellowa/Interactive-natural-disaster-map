@@ -1,3 +1,5 @@
+var eventCollectionFilter
+
 var allEventCollectionsSpan = document.getElementById('allEventCollections');
 $(allEventCollectionsSpan).next().hide();
 
@@ -16,27 +18,18 @@ $(allEventCollectionsSpan).click(function () {
 });
 
 // функция формирования фильтра событий по Id в зависимости от id слоя(для которого делаем фильтр)
-function createEventIdFilterByLayerId(eventsIds, layerID, fColor) {
-	var filters = ['all', ['==', 'categoriesNEW', layerID], ['==', 'dangerLevel', fColor]];
-	var eventIdFilter = ['in', 'Newid'];
-	eventsIds.forEach(eventsId => {
-		eventIdFilter.push(eventsId);
-	});
-	filters.push(eventIdFilter);
-	return filters;
-}
-
-// функция фильтрации событий по их Id
-function filterEventsById(...eventsIds) {
-	// Применяем фильтр ко всем слоям карты
-	for (layerID in allLayersID) {
-		var categoriesFromLayerID = allLayersID[layerID].split(' ')[0];
-		var dangerLevelFromLayerID = allLayersID[layerID].slice(categoriesFromLayerID.length + 1);
-
-		map.setFilter(
-			allLayersID[layerID],
-			createEventIdFilterByLayerId(...eventsIds, categoriesFromLayerID, dangerLevelFromLayerID)
-		);
+function createEventIdFilter(eventsIds) {
+	if(eventFilters["collectionFilter"] == null){
+		var eventIdFilter = ['in', 'Newid'];
+		eventsIds.forEach(eventsId => {
+			eventIdFilter.push(eventsId);
+		});
+		eventFilters['collectionFilter'] = eventIdFilter;
+	}
+	else{
+		eventsIds.forEach(eventsId => {
+			eventFilters['collectionFilter'].push(eventsId);
+		});
 	}
 }
 
@@ -44,15 +37,8 @@ function filterEventsById(...eventsIds) {
 var showAllEventsCheckBox = document.getElementById('showAllEvents');
 showAllEventsCheckBox.addEventListener('change', function () {
 	if (this.checked) {
-		allLayersID.forEach(layerID => {
-			var categoriesFromLayerID = layerID.split(' ')[0];
-			var dangerLevelFromLayerID = layerID.slice(categoriesFromLayerID.length + 1);
-			map.setFilter(layerID, [
-				'all',
-				['==', 'categoriesNEW', categoriesFromLayerID],
-				['==', 'dangerLevel', dangerLevelFromLayerID],
-			]);
-		});
+		delete eventFilters['collectionFilter'];
+		filterEvents();
 
 		var eventCollectionsMainRoot = document.getElementById('eventCollectionsMainRoot');
 		var eventCollectionsMainRootInputs = $(eventCollectionsMainRoot).find('input');
@@ -88,15 +74,31 @@ allEventCollections.addEventListener('click', function () {
 					eventCollectionInput.type = 'checkbox';
 					//Todo сделать через список фильтров а не 1ин единственный фильтр
 					eventCollectionInput.addEventListener('change', function () {
+						var eventIds = [];
+						eventCollection.eventDtos.forEach(naturalEvent => {
+							eventIds.push(naturalEvent.id);
+						});
+
 						if (this.checked) {
-							var eventIds = [];
-							eventCollection.eventDtos.forEach(naturalEvent => {
-								eventIds.push(naturalEvent.id);
-							});
-							filterEventsById(eventIds);
+							createEventIdFilter(eventIds);
+							filterEvents();
 
 							var showAllEventsInput = document.getElementById('showAllEvents');
 							showAllEventsInput.checked = false;
+						}
+						else{
+							if(eventFilters["collectionFilter"] != null){
+								eventIds.forEach(eventId => {
+									var eventIndexInFilter = eventFilters['collectionFilter'].indexOf(eventId);
+									if (eventIndexInFilter != -1)
+									 	eventFilters['collectionFilter'].splice(eventIndexInFilter, 1);
+								});
+								if (eventFilters['collectionFilter'].length <= 2){
+									delete eventFilters['collectionFilter'];
+								}
+
+								filterEvents();
+							}
 						}
 					});
 
