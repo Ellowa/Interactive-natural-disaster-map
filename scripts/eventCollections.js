@@ -142,6 +142,9 @@ allEventCollections.addEventListener('click', function () {
 							$(this).attr('src', srcDelete);
 						}
 					);
+					deleteImage.addEventListener('click', function () {
+						deleteEventCollection(eventCollection.id, eventCollectionLi);
+					});
 					eventCollectionSpan.append(deleteImage);
 
 					eventCollectionLi.append(eventCollectionSpan);
@@ -150,12 +153,35 @@ allEventCollections.addEventListener('click', function () {
 
 					eventCollection.eventDtos.forEach(naturalEvent => {
 						var eventLi = document.createElement('li');
+						eventLi.style = 'padding: 8px 0';
 						eventLi.className = 'tree-element';
-						eventLi.innerHTML = naturalEvent.title;
+
+						var eventTextDiv = document.createElement('div');
+						eventTextDiv.innerHTML = naturalEvent.title;
+						eventTextDiv.style = 'width: auto; max-width: 120px; overflow: auto';
+						eventLi.append(eventTextDiv);
+
 						eventLi.addEventListener('click', function () {
 							map.flyTo({ center: [naturalEvent.longitude, naturalEvent.latitude], zoom: 9 });
 						});
+						
 
+						var deleteEventImage = document.createElement('img');
+						deleteEventImage.style = `float: right; padding-right: 8px; margin-top: -20px`;
+						var srcDelete = 'images/delete.png';
+						deleteEventImage.src = srcDelete;
+						$(deleteEventImage).hover(
+							function () {
+								$(this).attr('src', 'images/delete.gif');
+							},
+							function () {
+								$(this).attr('src', srcDelete);
+							}
+						);
+						deleteEventImage.addEventListener('click', function () {
+							deleteEventFromCollection(eventCollection.id, naturalEvent.id, eventLi);
+						});
+						eventLi.append(deleteEventImage);
 						eventCollectionUl.append(eventLi);
 					});
 					eventCollectionLi.append(eventCollectionUl);
@@ -188,7 +214,6 @@ function doEditActionListener(eventCollectionTextInput, editImage, eventCollecti
 }
 
 function editEventCollection(eventCollectionTextInput, editImage, eventCollection) {
-	console.log('here');
 	doEditAction = approveEditEventCollection;
 
 	eventCollectionTextInput.readOnly = false;
@@ -221,7 +246,6 @@ function approveEditEventCollection(eventCollectionTextInput, editImage, eventCo
 			Authorization: `bearer ${localStorage.getItem('jwt')}`,
 		},
 		success: function (data) {
-			console.log('hereX2');
 			doEditAction = editEventCollection;
 		
 			eventCollectionTextInput.readOnly = true;
@@ -241,4 +265,46 @@ function approveEditEventCollection(eventCollectionTextInput, editImage, eventCo
 			exceptionHandler(err);
 		},
 	});
+}
+
+function deleteEventCollection(eventCollectionId, eventCollectionLi){
+	var deletedData = {
+		id: eventCollectionId,
+	};
+	deletedData = JSON.stringify(deletedData);
+	deleteRequest(`EventsCollectionInfo/${eventCollectionId}`, deletedData, eventCollectionLi);
+	
+}
+
+function deleteEventFromCollection(eventCollectionId, naturalEventId, eventLi){
+	var deletedData = {
+		collectionId: eventCollectionId,
+		eventId: naturalEventId,
+	};
+	deletedData = JSON.stringify(deletedData);
+	deleteRequest(`EventsCollection`, deletedData, eventLi);
+}
+
+function deleteRequest(uri, deletedData, deletedHtmlElement) {
+	$.ajax({
+		url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/${uri}`,
+		method: 'DELETE',
+		dataType: 'text',
+		contentType: 'application/json; charset=utf-8',
+		data: deletedData,
+		headers: {
+			Authorization: `bearer ${localStorage.getItem('jwt')}`,
+		},
+		success: function (data) {
+			if (deletedHtmlElement != null && deletedHtmlElement != undefined) {
+				deletedHtmlElement.remove();
+			}
+		},
+		error: function (jqXHR, textStatus, error) {
+			var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
+			exceptionHandler(err);
+		},
+	});
+
+	
 }
