@@ -75,13 +75,12 @@ allEventCollections.addEventListener('click', function () {
 					eventCollectionTextInput.classList = 'eventCollection-name';
 					eventCollectionTextInput.type = 'text';
 					eventCollectionTextInput.readOnly = true;
-					eventCollectionTextInput.value = eventCollection.collectionName + ' ';
+					eventCollectionTextInput.value = eventCollection.collectionName;
 					eventCollectionSpan.append(eventCollectionTextInput);
 
 					var eventCollectionInput = document.createElement('input');
 					eventCollectionInput.classList = 'eventCollection-show-input';
 					eventCollectionInput.type = 'checkbox';
-					//Todo сделать через список фильтров а не 1ин единственный фильтр
 					eventCollectionInput.addEventListener('change', function () {
 						var eventIds = [];
 						eventCollection.eventDtos.forEach(naturalEvent => {
@@ -127,7 +126,7 @@ allEventCollections.addEventListener('click', function () {
 					doEditAction = editEventCollection;
 					editImage.addEventListener(
 						'click',
-						function(){doEditActionListener(eventCollectionTextInput, editImage, eventCollection);}
+						function(){doEditActionListener(eventCollectionTextInput, editImage, eventCollection.id);}
 					);
 					eventCollectionSpan.append(editImage);
 
@@ -200,6 +199,8 @@ allEventCollections.addEventListener('click', function () {
 							$(eventCollectionSpan).prev(eventCollectionSpan).replaceWith('<span>► </span>');
 					});
 				});
+
+				addAddEventCollectionButton();
 			},
 			error: function (jqXHR, textStatus, error) {
 				var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
@@ -209,11 +210,11 @@ allEventCollections.addEventListener('click', function () {
 	}
 });
 
-function doEditActionListener(eventCollectionTextInput, editImage, eventCollection) {
-	doEditAction(eventCollectionTextInput, editImage, eventCollection);
+function doEditActionListener(eventCollectionTextInput, editImage, eventCollectionId) {
+	doEditAction(eventCollectionTextInput, editImage, eventCollectionId);
 }
 
-function editEventCollection(eventCollectionTextInput, editImage, eventCollection) {
+function editEventCollection(eventCollectionTextInput, editImage, eventCollectionId) {
 	doEditAction = approveEditEventCollection;
 
 	eventCollectionTextInput.readOnly = false;
@@ -230,14 +231,14 @@ function editEventCollection(eventCollectionTextInput, editImage, eventCollectio
 	);
 }
 
-function approveEditEventCollection(eventCollectionTextInput, editImage, eventCollection){
+function approveEditEventCollection(eventCollectionTextInput, editImage, eventCollectionId){
 	var updatedData = {
-			id: eventCollection.id,
-			collectionName: eventCollectionTextInput.value,
-		};
+		id: eventCollectionId,
+		collectionName: eventCollectionTextInput.value,
+	};
 	updatedData = JSON.stringify(updatedData);
 	$.ajax({
-		url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventsCollectionInfo/${eventCollection.id}`,
+		url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventsCollectionInfo/${eventCollectionId}`,
 		method: 'PUT',
 		dataType: 'text',
 		contentType: 'application/json; charset=utf-8',
@@ -247,7 +248,7 @@ function approveEditEventCollection(eventCollectionTextInput, editImage, eventCo
 		},
 		success: function (data) {
 			doEditAction = editEventCollection;
-		
+
 			eventCollectionTextInput.readOnly = true;
 
 			$(editImage).attr('src', 'images/edit.png');
@@ -272,7 +273,7 @@ function deleteEventCollection(eventCollectionId, eventCollectionLi){
 		id: eventCollectionId,
 	};
 	deletedData = JSON.stringify(deletedData);
-	deleteRequest(`EventsCollectionInfo/${eventCollectionId}`, deletedData, eventCollectionLi);
+	requestDelete(`EventsCollectionInfo/${eventCollectionId}`, deletedData, eventCollectionLi);
 	
 }
 
@@ -282,10 +283,10 @@ function deleteEventFromCollection(eventCollectionId, naturalEventId, eventLi){
 		eventId: naturalEventId,
 	};
 	deletedData = JSON.stringify(deletedData);
-	deleteRequest(`EventsCollection`, deletedData, eventLi);
+	requestDelete(`EventsCollection`, deletedData, eventLi);
 }
 
-function deleteRequest(uri, deletedData, deletedHtmlElement) {
+function requestDelete(uri, deletedData, deletedHtmlElement) {
 	$.ajax({
 		url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/${uri}`,
 		method: 'DELETE',
@@ -305,6 +306,75 @@ function deleteRequest(uri, deletedData, deletedHtmlElement) {
 			exceptionHandler(err);
 		},
 	});
+}
 
-	
+function addAddEventCollectionButton(){
+	var mainUl = document.getElementById('eventCollectionsMainRoot');
+
+	var eventCollectionLi = document.createElement('li');
+
+	var eventCollectionSpan = document.createElement('span');
+	eventCollectionSpan.className = 'collapse';
+
+	var eventCollectionTextInput = document.createElement('input');
+	eventCollectionTextInput.style = 'width: auto; max-width: 165px;';
+	eventCollectionTextInput.classList = 'eventCollection-name';
+	eventCollectionTextInput.type = 'text';
+	eventCollectionTextInput.value = 'New eventCollection Name';
+	eventCollectionSpan.append(eventCollectionTextInput);
+
+	var saveImage = document.createElement('img');
+	saveImage.style = 'margin-bottom: -5px;';
+	var srcSave = 'images/save.png';
+	saveImage.src = srcSave;
+	$(saveImage).hover(
+		function () {
+			$(this).attr('src', 'images/save.gif');
+		},
+		function () {
+			$(this).attr('src', srcSave);
+		}
+	);
+	saveImage.addEventListener('click', function () {
+		addEventCollection(eventCollectionTextInput.value, eventCollectionLi);
+	});
+	eventCollectionSpan.append(saveImage);
+
+	eventCollectionLi.append(eventCollectionSpan);
+
+	mainUl.append(eventCollectionLi);
+}
+
+function addEventCollection(collectionName, addEventCollectionLi) {
+	var mainUl = document.getElementById('eventCollectionsMainRoot');
+
+	var collectionAddedData = {
+		collectionName: collectionName,
+	};
+	collectionAddedData = JSON.stringify(collectionAddedData);
+	var eventCollectionId = requestAdd(`EventsCollectionInfo`, collectionAddedData);
+	if (eventCollectionId != -1) {
+		mainUl.replaceChildren(); //Todo костыль чтобы не создавать новый объект, а заново подгрузить их с API
+	}
+}
+
+function requestAdd(uri, addedData) {
+	$.ajax({
+		url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/${uri}`,
+		method: 'POST',
+		dataType: 'text',
+		contentType: 'application/json; charset=utf-8',
+		data: addedData,
+		headers: {
+			Authorization: `bearer ${localStorage.getItem('jwt')}`,
+		},
+		success: function (data) {
+			return data;
+		},
+		error: function (jqXHR, textStatus, error) {
+			var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
+			exceptionHandler(err);
+			return -1;
+		},
+	});
 }
