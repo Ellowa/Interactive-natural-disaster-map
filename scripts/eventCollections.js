@@ -48,6 +48,8 @@ showAllEventsCheckBox.addEventListener('change', function () {
 	}
 });
 
+var doEditAction;
+
 // Обработчик события для показа коллекций пользователя
 var allEventCollections = document.getElementById('allEventCollections');
 allEventCollections.addEventListener('click', function () {
@@ -68,9 +70,16 @@ allEventCollections.addEventListener('click', function () {
 
 					var eventCollectionSpan = document.createElement('span');
 					eventCollectionSpan.className = 'collapse';
-					eventCollectionSpan.innerHTML = eventCollection.collectionName + ' ';
+					
+					var eventCollectionTextInput = document.createElement('input');
+					eventCollectionTextInput.classList = 'eventCollection-name';
+					eventCollectionTextInput.type = 'text';
+					eventCollectionTextInput.readOnly = true;
+					eventCollectionTextInput.value = eventCollection.collectionName + ' ';
+					eventCollectionSpan.append(eventCollectionTextInput);
 
 					var eventCollectionInput = document.createElement('input');
+					eventCollectionInput.classList = 'eventCollection-show-input';
 					eventCollectionInput.type = 'checkbox';
 					//Todo сделать через список фильтров а не 1ин единственный фильтр
 					eventCollectionInput.addEventListener('change', function () {
@@ -103,6 +112,38 @@ allEventCollections.addEventListener('click', function () {
 					});
 
 					eventCollectionSpan.append(eventCollectionInput);
+
+					var editImage = document.createElement('img');
+					var srcEdit = 'images/edit.png';
+					editImage.src = srcEdit;
+					$(editImage).hover(
+						function () {
+							$(this).attr('src', 'images/edit.gif');
+						},
+						function () {
+							$(this).attr('src', srcEdit);
+						}
+					);
+					doEditAction = editEventCollection;
+					editImage.addEventListener(
+						'click',
+						function(){doEditActionListener(eventCollectionTextInput, editImage, eventCollection);}
+					);
+					eventCollectionSpan.append(editImage);
+
+					var deleteImage = document.createElement('img');
+					var srcDelete = 'images/delete.png';
+					deleteImage.src = srcDelete;
+					$(deleteImage).hover(
+						function () {
+							$(this).attr('src', 'images/delete.gif');
+						},
+						function () {
+							$(this).attr('src', srcDelete);
+						}
+					);
+					eventCollectionSpan.append(deleteImage);
+
 					eventCollectionLi.append(eventCollectionSpan);
 
 					var eventCollectionUl = document.createElement('ul');
@@ -124,11 +165,13 @@ allEventCollections.addEventListener('click', function () {
 
 					$(eventCollectionSpan).before('<span>► </span>');
 
-					$(eventCollectionSpan).click(function () {
-						$(this).next().slideToggle('normal');
+					$(eventCollectionTextInput).click(function () {
+						$(eventCollectionSpan).next().slideToggle('normal');
 
-						if ($(this).prev(this).text() == '► ') $(this).prev(this).replaceWith('<span>▼ </span>');
-						else if ($(this).prev(this).text() == '▼ ') $(this).prev(this).replaceWith('<span>► </span>');
+						if ($(eventCollectionSpan).prev(eventCollectionSpan).text() == '► ')
+							$(eventCollectionSpan).prev(eventCollectionSpan).replaceWith('<span>▼ </span>');
+						else if ($(eventCollectionSpan).prev(eventCollectionSpan).text() == '▼ ')
+							$(eventCollectionSpan).prev(eventCollectionSpan).replaceWith('<span>► </span>');
 					});
 				});
 			},
@@ -139,3 +182,63 @@ allEventCollections.addEventListener('click', function () {
 		});
 	}
 });
+
+function doEditActionListener(eventCollectionTextInput, editImage, eventCollection) {
+	doEditAction(eventCollectionTextInput, editImage, eventCollection);
+}
+
+function editEventCollection(eventCollectionTextInput, editImage, eventCollection) {
+	console.log('here');
+	doEditAction = approveEditEventCollection;
+
+	eventCollectionTextInput.readOnly = false;
+	eventCollectionTextInput.focus();
+
+	$(editImage).attr('src', 'images/save.png');
+	$(editImage).hover(
+		function () {
+			$(editImage).attr('src', 'images/save.gif');
+		},
+		function () {
+			$(editImage).attr('src', 'images/save.png');
+		}
+	);
+}
+
+function approveEditEventCollection(eventCollectionTextInput, editImage, eventCollection){
+	var updatedData = {
+			id: eventCollection.id,
+			collectionName: eventCollectionTextInput.value,
+		};
+	updatedData = JSON.stringify(updatedData);
+	$.ajax({
+		url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventsCollectionInfo/${eventCollection.id}`,
+		method: 'PUT',
+		dataType: 'text',
+		contentType: 'application/json; charset=utf-8',
+		data: updatedData,
+		headers: {
+			Authorization: `bearer ${localStorage.getItem('jwt')}`,
+		},
+		success: function (data) {
+			console.log('hereX2');
+			doEditAction = editEventCollection;
+		
+			eventCollectionTextInput.readOnly = true;
+
+			$(editImage).attr('src', 'images/edit.png');
+			$(editImage).hover(
+				function () {
+					$(editImage).attr('src', 'images/edit.gif');
+				},
+				function () {
+					$(editImage).attr('src', 'images/edit.png');
+				}
+			);
+		},
+		error: function (jqXHR, textStatus, error) {
+			var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
+			exceptionHandler(err);
+		},
+	});
+}

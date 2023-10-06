@@ -777,6 +777,12 @@ text-transform: capitalize;
     color:#222;
 }
 
+#showAllEvents{
+    margin-top: 10px;
+    margin-left: 2px;
+    margin-right: 5px;
+}
+
 #tree {
     display: block;
     margin: 0;
@@ -792,10 +798,9 @@ text-transform: capitalize;
     padding-left: 20px;
     list-style: none;
 }
-#tree input {
-    margin-top: 10px;
-    margin-left: 2px;
-    margin-right: 5px;
+.eventCollection-show-input {
+    width: 15px;
+    height: 20px;
 }
 #tree label {
     font-weight: bold;
@@ -809,6 +814,18 @@ text-transform: capitalize;
     cursor: pointer;
 }
 
+.eventCollection-name{
+    width: 100px;
+    border: none;
+    background-color: white;
+    font-size: 100%;
+    outline:none;
+    color:grey;
+}
+.eventCollection-name:hover{
+    cursor: pointer;
+    color:#222;
+}
 
 /* При разрешении 1280x720 (ноутбук) */
 @media (max-height: 800px) {
