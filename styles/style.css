@@ -745,6 +745,88 @@ text-transform: capitalize;
 }
 
 
+/*стиль коллекций событий*/
+.tree-event-collections {
+    width: 170px;
+    max-width: 245px;
+    min-width: 165px;
+    max-height: 200px;
+    text-align: left;
+    font-size: 100%;
+    font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
+    color: grey;
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 150px;
+    overflow: auto;
+    background-color: #FFF;
+    box-shadow: 0px 1px 5px 0px #C0C0C0;
+    line-height: 1;
+    margin-bottom: 5px;
+    border-radius: 14px;
+    padding-left: 10px;
+    transition: width 1s ease;
+}
+
+
+.collapse{
+    cursor: pointer;
+}
+.collapse:hover{
+    color:#222;
+}
+
+#showAllEvents{
+    margin-top: 10px;
+    margin-left: 2px;
+    margin-right: 5px;
+}
+
+#tree {
+    display: block;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width:100%;
+}
+#tree li {
+    padding: 5px 0;
+    list-style: none;
+}
+#tree ul {
+    padding-left: 20px;
+    list-style: none;
+}
+.eventCollection-show-input {
+    width: 15px;
+    height: 20px;
+}
+#tree label {
+    font-weight: bold;
+}
+
+.tree-element{
+    width: auto;
+}
+.tree-element:hover{
+    color:#222;
+    cursor: pointer;
+}
+
+.eventCollection-name{
+    width: 100px;
+    border: none;
+    background-color: white;
+    font-size: 100%;
+    outline:none;
+    color:grey;
+}
+.eventCollection-name:hover{
+    cursor: pointer;
+    color:#222;
+}
+
 /* При разрешении 1280x720 (ноутбук) */
 @media (max-height: 800px) {
     .logo{
