@@ -318,13 +318,13 @@ function addAddEventCollectionButton(){
 
 	var eventCollectionTextInput = document.createElement('input');
 	eventCollectionTextInput.style = 'width: auto; max-width: 165px;';
-	eventCollectionTextInput.classList = 'eventCollection-name';
+	eventCollectionTextInput.classList = 'eventCollection-name-add';
 	eventCollectionTextInput.type = 'text';
-	eventCollectionTextInput.value = 'New eventCollection Name';
+	eventCollectionTextInput.value = 'Add eventCollection';
 	eventCollectionSpan.append(eventCollectionTextInput);
 
 	var saveImage = document.createElement('img');
-	saveImage.style = 'margin-bottom: -5px;';
+	saveImage.style = 'margin-bottom: -7px; margin-left: 2px;';
 	var srcSave = 'images/save.png';
 	saveImage.src = srcSave;
 	$(saveImage).hover(

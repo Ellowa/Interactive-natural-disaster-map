@@ -827,6 +827,19 @@ text-transform: capitalize;
     color:#222;
 }
 
+.eventCollection-name-add{
+    background-color: white;
+    color:grey;
+    font-weight: bold;
+    border-radius: 5px;
+}
+.eventCollection-name-add:hover{
+    color:#222;
+}
+.eventCollection-name-add:focus{
+    color:#222;
+}
+
 /* При разрешении 1280x720 (ноутбук) */
 @media (max-height: 800px) {
     .logo{
