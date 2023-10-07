@@ -86,8 +86,8 @@ function getAndShowAllEventCollections(){
 				var eventCollectionInput = document.createElement('input');
 				eventCollectionInput.classList = 'eventCollection-show-input';
 				eventCollectionInput.type = 'checkbox';
+				var eventIds = [];
 				eventCollectionInput.addEventListener('change', function () {
-					var eventIds = [];
 					eventCollection.eventDtos.forEach(naturalEvent => {
 						eventIds.push(naturalEvent.id);
 					});
@@ -145,6 +145,18 @@ function getAndShowAllEventCollections(){
 				);
 				deleteImage.addEventListener('click', function () {
 					deleteEventCollection(eventCollection.id, eventCollectionLi);
+
+					if (eventFilters['collectionFilter'] != null) {
+						eventIds.forEach(eventId => {
+							var eventIndexInFilter = eventFilters['collectionFilter'].indexOf(eventId);
+							if (eventIndexInFilter != -1) eventFilters['collectionFilter'].splice(eventIndexInFilter, 1);
+						});
+						if (eventFilters['collectionFilter'].length <= 2) {
+							delete eventFilters['collectionFilter'];
+						}
+
+						filterEvents();
+					}
 				});
 				eventCollectionSpan.append(deleteImage);
 
