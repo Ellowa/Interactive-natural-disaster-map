@@ -54,86 +54,123 @@ var doEditAction;
 var allEventCollections = document.getElementById('allEventCollections');
 allEventCollections.addEventListener('click', function () {
 	if ($(this).prev(this).text() == '▼ ' && $('#eventCollectionsMainRoot').children().length == 0) {
-		$.ajax({
-			url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventsCollectionInfo',
-			method: 'GET',
-			contentType: 'application/json; charset=utf-8',
-			headers: {
-				Authorization: `bearer ${localStorage.getItem('jwt')}`,
-			},
-			success: function (data) {
-				var mainUl = document.getElementById('eventCollectionsMainRoot');
-				mainUl.replaceChildren();
+		getAndShowAllEventCollections();
+	}
+});
 
-				data.forEach(eventCollection => {
-					var eventCollectionLi = document.createElement('li');
+function getAndShowAllEventCollections(){
+	$.ajax({
+		url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventsCollectionInfo',
+		method: 'GET',
+		contentType: 'application/json; charset=utf-8',
+		headers: {
+			Authorization: `bearer ${localStorage.getItem('jwt')}`,
+		},
+		success: function (data) {
+			var mainUl = document.getElementById('eventCollectionsMainRoot');
+			mainUl.replaceChildren();
 
-					var eventCollectionSpan = document.createElement('span');
-					eventCollectionSpan.className = 'collapse';
-					
-					var eventCollectionTextInput = document.createElement('input');
-					eventCollectionTextInput.classList = 'eventCollection-name';
-					eventCollectionTextInput.type = 'text';
-					eventCollectionTextInput.readOnly = true;
-					eventCollectionTextInput.value = eventCollection.collectionName;
-					eventCollectionSpan.append(eventCollectionTextInput);
+			data.forEach(eventCollection => {
+				var eventCollectionLi = document.createElement('li');
 
-					var eventCollectionInput = document.createElement('input');
-					eventCollectionInput.classList = 'eventCollection-show-input';
-					eventCollectionInput.type = 'checkbox';
-					eventCollectionInput.addEventListener('change', function () {
-						var eventIds = [];
-						eventCollection.eventDtos.forEach(naturalEvent => {
-							eventIds.push(naturalEvent.id);
-						});
+				var eventCollectionSpan = document.createElement('span');
+				eventCollectionSpan.className = 'collapse';
 
-						if (this.checked) {
-							createEventIdFilter(eventIds);
-							filterEvents();
+				var eventCollectionTextInput = document.createElement('input');
+				eventCollectionTextInput.classList = 'eventCollection-name';
+				eventCollectionTextInput.type = 'text';
+				eventCollectionTextInput.readOnly = true;
+				eventCollectionTextInput.value = eventCollection.collectionName;
+				eventCollectionSpan.append(eventCollectionTextInput);
 
-							var showAllEventsInput = document.getElementById('showAllEvents');
-							showAllEventsInput.checked = false;
-						}
-						else{
-							if(eventFilters["collectionFilter"] != null){
-								eventIds.forEach(eventId => {
-									var eventIndexInFilter = eventFilters['collectionFilter'].indexOf(eventId);
-									if (eventIndexInFilter != -1)
-									 	eventFilters['collectionFilter'].splice(eventIndexInFilter, 1);
-								});
-								if (eventFilters['collectionFilter'].length <= 2){
-									delete eventFilters['collectionFilter'];
-								}
-
-								filterEvents();
-							}
-						}
+				var eventCollectionInput = document.createElement('input');
+				eventCollectionInput.classList = 'eventCollection-show-input';
+				eventCollectionInput.type = 'checkbox';
+				eventCollectionInput.addEventListener('change', function () {
+					var eventIds = [];
+					eventCollection.eventDtos.forEach(naturalEvent => {
+						eventIds.push(naturalEvent.id);
 					});
 
-					eventCollectionSpan.append(eventCollectionInput);
+					if (this.checked) {
+						createEventIdFilter(eventIds);
+						filterEvents();
 
-					var editImage = document.createElement('img');
-					var srcEdit = 'images/edit.png';
-					editImage.src = srcEdit;
-					$(editImage).hover(
-						function () {
-							$(this).attr('src', 'images/edit.gif');
-						},
-						function () {
-							$(this).attr('src', srcEdit);
+						var showAllEventsInput = document.getElementById('showAllEvents');
+						showAllEventsInput.checked = false;
+					} else {
+						if (eventFilters['collectionFilter'] != null) {
+							eventIds.forEach(eventId => {
+								var eventIndexInFilter = eventFilters['collectionFilter'].indexOf(eventId);
+								if (eventIndexInFilter != -1) eventFilters['collectionFilter'].splice(eventIndexInFilter, 1);
+							});
+							if (eventFilters['collectionFilter'].length <= 2) {
+								delete eventFilters['collectionFilter'];
+							}
+
+							filterEvents();
 						}
-					);
-					doEditAction = editEventCollection;
-					editImage.addEventListener(
-						'click',
-						function(){doEditActionListener(eventCollectionTextInput, editImage, eventCollection.id);}
-					);
-					eventCollectionSpan.append(editImage);
+					}
+				});
 
-					var deleteImage = document.createElement('img');
+				eventCollectionSpan.append(eventCollectionInput);
+
+				var editImage = document.createElement('img');
+				var srcEdit = 'images/edit.png';
+				editImage.src = srcEdit;
+				$(editImage).hover(
+					function () {
+						$(this).attr('src', 'images/edit.gif');
+					},
+					function () {
+						$(this).attr('src', srcEdit);
+					}
+				);
+				doEditAction = editEventCollection;
+				editImage.addEventListener('click', function () {
+					doEditActionListener(eventCollectionTextInput, editImage, eventCollection.id);
+				});
+				eventCollectionSpan.append(editImage);
+
+				var deleteImage = document.createElement('img');
+				var srcDelete = 'images/delete.png';
+				deleteImage.src = srcDelete;
+				$(deleteImage).hover(
+					function () {
+						$(this).attr('src', 'images/delete.gif');
+					},
+					function () {
+						$(this).attr('src', srcDelete);
+					}
+				);
+				deleteImage.addEventListener('click', function () {
+					deleteEventCollection(eventCollection.id, eventCollectionLi);
+				});
+				eventCollectionSpan.append(deleteImage);
+
+				eventCollectionLi.append(eventCollectionSpan);
+
+				var eventCollectionUl = document.createElement('ul');
+
+				eventCollection.eventDtos.forEach(naturalEvent => {
+					var eventLi = document.createElement('li');
+					eventLi.style = 'padding: 8px 0';
+					eventLi.className = 'tree-element';
+
+					var eventTextDiv = document.createElement('div');
+					eventTextDiv.innerHTML = naturalEvent.title;
+					eventTextDiv.style = 'width: auto; max-width: 120px; overflow: auto';
+					eventLi.append(eventTextDiv);
+
+					eventLi.addEventListener('click', function () {
+						map.flyTo({ center: [naturalEvent.longitude, naturalEvent.latitude], zoom: 9 });
+					});
+
+					var deleteEventImage = document.createElement('img');
+					deleteEventImage.style = `float: right; padding-right: 8px; margin-top: -20px`;
 					var srcDelete = 'images/delete.png';
-					deleteImage.src = srcDelete;
-					$(deleteImage).hover(
+					deleteEventImage.src = srcDelete;
+					$(deleteEventImage).hover(
 						function () {
 							$(this).attr('src', 'images/delete.gif');
 						},
@@ -141,74 +178,37 @@ allEventCollections.addEventListener('click', function () {
 							$(this).attr('src', srcDelete);
 						}
 					);
-					deleteImage.addEventListener('click', function () {
-						deleteEventCollection(eventCollection.id, eventCollectionLi);
+					deleteEventImage.addEventListener('click', function () {
+						deleteEventFromCollection(eventCollection.id, naturalEvent.id, eventLi);
 					});
-					eventCollectionSpan.append(deleteImage);
-
-					eventCollectionLi.append(eventCollectionSpan);
-
-					var eventCollectionUl = document.createElement('ul');
-
-					eventCollection.eventDtos.forEach(naturalEvent => {
-						var eventLi = document.createElement('li');
-						eventLi.style = 'padding: 8px 0';
-						eventLi.className = 'tree-element';
-
-						var eventTextDiv = document.createElement('div');
-						eventTextDiv.innerHTML = naturalEvent.title;
-						eventTextDiv.style = 'width: auto; max-width: 120px; overflow: auto';
-						eventLi.append(eventTextDiv);
-
-						eventLi.addEventListener('click', function () {
-							map.flyTo({ center: [naturalEvent.longitude, naturalEvent.latitude], zoom: 9 });
-						});
-						
-
-						var deleteEventImage = document.createElement('img');
-						deleteEventImage.style = `float: right; padding-right: 8px; margin-top: -20px`;
-						var srcDelete = 'images/delete.png';
-						deleteEventImage.src = srcDelete;
-						$(deleteEventImage).hover(
-							function () {
-								$(this).attr('src', 'images/delete.gif');
-							},
-							function () {
-								$(this).attr('src', srcDelete);
-							}
-						);
-						deleteEventImage.addEventListener('click', function () {
-							deleteEventFromCollection(eventCollection.id, naturalEvent.id, eventLi);
-						});
-						eventLi.append(deleteEventImage);
-						eventCollectionUl.append(eventLi);
-					});
-					eventCollectionLi.append(eventCollectionUl);
-					mainUl.append(eventCollectionLi);
-
-					$(eventCollectionSpan).next().hide();
-
-					$(eventCollectionSpan).before('<span>► </span>');
-
-					$(eventCollectionTextInput).click(function () {
-						$(eventCollectionSpan).next().slideToggle('normal');
-
-						if ($(eventCollectionSpan).prev(eventCollectionSpan).text() == '► ')
-							$(eventCollectionSpan).prev(eventCollectionSpan).replaceWith('<span>▼ </span>');
-						else if ($(eventCollectionSpan).prev(eventCollectionSpan).text() == '▼ ')
-							$(eventCollectionSpan).prev(eventCollectionSpan).replaceWith('<span>► </span>');
-					});
+					eventLi.append(deleteEventImage);
+					eventCollectionUl.append(eventLi);
 				});
+				eventCollectionLi.append(eventCollectionUl);
+				mainUl.append(eventCollectionLi);
 
-				addAddEventCollectionButton();
-			},
-			error: function (jqXHR, textStatus, error) {
-				var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-				exceptionHandler(err);
-			},
-		});
-	}
-});
+				$(eventCollectionSpan).next().hide();
+
+				$(eventCollectionSpan).before('<span>► </span>');
+
+				$(eventCollectionTextInput).click(function () {
+					$(eventCollectionSpan).next().slideToggle('normal');
+
+					if ($(eventCollectionSpan).prev(eventCollectionSpan).text() == '► ')
+						$(eventCollectionSpan).prev(eventCollectionSpan).replaceWith('<span>▼ </span>');
+					else if ($(eventCollectionSpan).prev(eventCollectionSpan).text() == '▼ ')
+						$(eventCollectionSpan).prev(eventCollectionSpan).replaceWith('<span>► </span>');
+				});
+			});
+
+			addAddEventCollectionButton();
+		},
+		error: function (jqXHR, textStatus, error) {
+			var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
+			exceptionHandler(err);
+		},
+	});
+}
 
 function doEditActionListener(eventCollectionTextInput, editImage, eventCollectionId) {
 	doEditAction(eventCollectionTextInput, editImage, eventCollectionId);
@@ -336,7 +336,7 @@ function addAddEventCollectionButton(){
 		}
 	);
 	saveImage.addEventListener('click', function () {
-		addEventCollection(eventCollectionTextInput.value, eventCollectionLi);
+		addEventCollection(eventCollectionTextInput.value);
 	});
 	eventCollectionSpan.append(saveImage);
 
@@ -345,20 +345,24 @@ function addAddEventCollectionButton(){
 	mainUl.append(eventCollectionLi);
 }
 
-function addEventCollection(collectionName, addEventCollectionLi) {
-	var mainUl = document.getElementById('eventCollectionsMainRoot');
-
+function addEventCollection(collectionName) {
 	var collectionAddedData = {
 		collectionName: collectionName,
 	};
 	collectionAddedData = JSON.stringify(collectionAddedData);
-	var eventCollectionId = requestAdd(`EventsCollectionInfo`, collectionAddedData);
-	if (eventCollectionId != -1) {
-		mainUl.replaceChildren(); //Todo костыль чтобы не создавать новый объект, а заново подгрузить их с API
-	}
+	requestAdd(`EventsCollectionInfo`, collectionAddedData, updateEventCollectionListElement);
 }
 
-function requestAdd(uri, addedData) {
+function updateEventCollectionListElement(){
+	delete eventFilters['collectionFilter'];
+	filterEvents();
+	var showAllEventsCheckBox = document.getElementById('showAllEvents');
+	showAllEventsCheckBox.checked = true;
+
+	getAndShowAllEventCollections();
+}
+
+function requestAdd(uri, addedData, successCallbackFunction) {
 	$.ajax({
 		url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/${uri}`,
 		method: 'POST',
@@ -369,12 +373,11 @@ function requestAdd(uri, addedData) {
 			Authorization: `bearer ${localStorage.getItem('jwt')}`,
 		},
 		success: function (data) {
-			return data;
+			successCallbackFunction();
 		},
 		error: function (jqXHR, textStatus, error) {
 			var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
 			exceptionHandler(err);
-			return -1;
 		},
 	});
 }
