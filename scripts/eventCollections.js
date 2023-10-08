@@ -60,7 +60,7 @@ allEventCollections.addEventListener('click', function () {
 
 function getAndShowAllEventCollections(){
 	$.ajax({
-		url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventsCollectionInfo',
+		url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventsCollection',
 		method: 'GET',
 		contentType: 'application/json; charset=utf-8',
 		headers: {
@@ -250,7 +250,7 @@ function approveEditEventCollection(eventCollectionTextInput, editImage, eventCo
 	};
 	updatedData = JSON.stringify(updatedData);
 	$.ajax({
-		url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventsCollectionInfo/${eventCollectionId}`,
+		url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventsCollection/${eventCollectionId}`,
 		method: 'PUT',
 		dataType: 'text',
 		contentType: 'application/json; charset=utf-8',
@@ -285,7 +285,7 @@ function deleteEventCollection(eventCollectionId, eventCollectionLi){
 		id: eventCollectionId,
 	};
 	deletedData = JSON.stringify(deletedData);
-	requestDelete(`EventsCollectionInfo/${eventCollectionId}`, deletedData, eventCollectionLi);
+	requestDelete(`EventsCollection/${eventCollectionId}`, deletedData, eventCollectionLi);
 	
 }
 
@@ -295,7 +295,7 @@ function deleteEventFromCollection(eventCollectionId, naturalEventId, eventLi){
 		eventId: naturalEventId,
 	};
 	deletedData = JSON.stringify(deletedData);
-	requestDelete(`EventsCollection`, deletedData, eventLi);
+	requestDelete(`EventsCollection/DeleteEvent`, deletedData, eventLi);
 }
 
 function requestDelete(uri, deletedData, deletedHtmlElement) {
@@ -362,7 +362,7 @@ function addEventCollection(collectionName) {
 		collectionName: collectionName,
 	};
 	collectionAddedData = JSON.stringify(collectionAddedData);
-	requestAdd(`EventsCollectionInfo`, collectionAddedData, updateEventCollectionListElement);
+	requestAdd(`EventsCollection`, collectionAddedData, updateEventCollectionListElement);
 }
 
 function updateEventCollectionListElement(){
