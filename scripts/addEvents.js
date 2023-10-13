@@ -146,12 +146,6 @@ function addEventBtnClick() {
 		} else {
 			document.getElementById('requiredTextAddEvent').style = null;
 
-			for (var inputElement of allFields) {
-				if (inputElement.value == '') {
-					inputElement.value = 'No data';
-				}
-			}
-
 			var eventJSON = {
 				title: titleInput.value,
 				eventCategoryName: categoryInput.value,
@@ -163,8 +157,10 @@ function addEventBtnClick() {
 				latitude: latInput.value,
 				longitude: lngInput.value,
 			};
+			if (closedDateInput.value.length == 0) eventJSON.endDate = null;
+			if (mValueInput.value.length == 0) eventJSON.magnitudeValue = null;
+			if (sourceInput.value.length == 0) eventJSON.link = null;
 			eventJSON = JSON.stringify(eventJSON);
-
 			//ОТПРАВКА СОБЫТИЯ В API
 			$.ajax({
 				url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/NaturalDisasterEvent',
