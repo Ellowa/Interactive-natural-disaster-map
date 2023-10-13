@@ -261,16 +261,6 @@
         <div class="input-event-field">
             <select id="categoryInputCombo" class="combo-box" required>
                 <option selected disabled></option>
-                <option value="volcanoes">Volcanoes</option>
-                <option value="severeStorms">Severe Storms</option>
-                <option value="wildfires">Wildfires</option>
-                <option value="drought">Drought</option>
-                <option value="earthquakes">Earthquakes</option>
-                <option value="floods">Floods</option>
-                <option value="landslides">Landslides</option>
-                <option value="snow">Snow</option>
-                <option value="tempExtremes">Temperature Extremes</option>
-                <option value="other">Other</option>
             </select>
             <label class="placeholder">Select category*</label>
         </div>
@@ -300,25 +290,15 @@
         </div>
 
         <div class="input-event-field">
-            <input id="mUnitInput" type="text" required/>
-            <label class="placeholder">Enter Magnitude unit</label>
+            <select id="mUnitInputCombo" class="combo-box" required>
+                <option selected disabled></option>
+            </select>
+            <label class="placeholder">Select Magnitude unit*</label>
         </div>
 
         <div class="input-event-field">
             <input id="mValueInput" type="text" required/>
             <label class="placeholder">Enter Magnitude value</label>
-        </div>
-
-        <div class="input-event-field">
-            <select id="dangerLevelInputCombo" class="combo-box" required>
-                <option class="veryHighDanger" value="veryHighDanger">Very high danger</option>
-                <option class="highDanger" value="highDanger">High danger</option>
-                <option class="considerableDanger" value="considerableDanger">Considerable danger</option>
-                <option class="moderateDanger" value="moderateDanger">Moderate danger</option>
-                <option class="minorDanger" value="minorDanger">Minor danger</option>
-                <option selected value="noData">No data</option>
-            </select>
-            <label class="placeholder">Select danger level</label>
         </div>
 
         <div class="input-event-field">

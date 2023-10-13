@@ -41,7 +41,67 @@ function addEventBtnClick() {
 			return 0;
 		}
 
-		addEventZone.style = 'display: flex';
+		var mUnitInput = document.getElementById('mUnitInputCombo');
+		mUnitInput.replaceChildren();
+		var mUnitDefaultOption = document.createElement('option');
+		mUnitDefaultOption.selected = true;
+		mUnitDefaultOption.disabled = true;
+		mUnitInput.append(mUnitDefaultOption);
+
+		$.ajax({
+			url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/MagnitudeUnit`,
+			method: 'GET',
+			contentType: 'application/json; charset=utf-8',
+			headers: {
+				Authorization: `bearer ${localStorage.getItem('jwt')}`,
+			},
+			success: function (data) {
+				data.forEach(mUnit => {
+					var mUnitOptionElement = document.createElement('option');
+					mUnitOptionElement.value = mUnit.magnitudeUnitName;
+					mUnitOptionElement.innerHTML = mUnit.magnitudeUnitName;
+					mUnitInput.append(mUnitOptionElement);
+				});
+
+				addEventZone.style = 'display: flex';
+			},
+			error: function (jqXHR, textStatus, error) {
+				exceptionHandler(jqXHR, textStatus, error);
+				addEventZone.style = 'display: none';
+			},
+		});
+
+		var categoryInput = document.getElementById('categoryInputCombo');
+		categoryInput.replaceChildren();
+		var categoryDefaultOption = document.createElement('option');
+		categoryDefaultOption.selected = true;
+		categoryDefaultOption.disabled = true;
+		categoryInput.append(categoryDefaultOption);
+
+		$.ajax({
+			url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventCategory`,
+			method: 'GET',
+			contentType: 'application/json; charset=utf-8',
+			headers: {
+				Authorization: `bearer ${localStorage.getItem('jwt')}`,
+			},
+			success: function (data) {
+				data.forEach(eventCategory => {
+					var eventCategoryOptionElement = document.createElement('option');
+					eventCategoryOptionElement.value = eventCategory.categoryName;
+					eventCategoryOptionElement.innerHTML = eventCategory.categoryName;
+					categoryInput.append(eventCategoryOptionElement);
+				});
+
+				addEventZone.style = 'display: flex';
+			},
+			error: function (jqXHR, textStatus, error) {
+				exceptionHandler(jqXHR, textStatus, error);
+				addEventZone.style = 'display: none';
+			},
+		});
+
+		
 	});
 
 	closeBtn.addEventListener('click', e => {
@@ -55,12 +115,11 @@ function addEventBtnClick() {
 		const latInput = document.getElementById('latInput');
 		const startDateInput = document.getElementById('startDateInput');
 		const closedDateInput = document.getElementById('closedDateInput');
-		const mUnitInput = document.getElementById('mUnitInput');
+		const mUnitInput = document.getElementById('mUnitInputCombo');
 		const mValueInput = document.getElementById('mValueInput');
-		const dangerLevelInputCombo = document.getElementById('dangerLevelInputCombo');
 		const sourceInput = document.getElementById('sourceInput');
 
-		var requiredFields = [titleInput, categoryInput, lngInput, latInput, startDateInput];
+		var requiredFields = [titleInput, categoryInput, lngInput, latInput, startDateInput, mUnitInput];
 		var allFields = [
 			titleInput,
 			categoryInput,
@@ -87,37 +146,6 @@ function addEventBtnClick() {
 		} else {
 			document.getElementById('requiredTextAddEvent').style = null;
 
-			for (var inputElement of allFields) {
-				if (inputElement.value == '') {
-					inputElement.value = 'No data';
-				}
-			}
-			// формируем новое событие
-			var event = {
-				type: 'Feature',
-				properties: {
-					title: titleInput.value,
-					categoriesNEW: categoryInput.value,
-					categoriesTitle: categoryInput.options[categoryInput.selectedIndex].textContent,
-					date: startDateInput.value,
-					closed: closedDateInput.value,
-					magnitudeUnit: mUnitInput.value,
-					magnitudeValue: mValueInput.value,
-					dangerLevel: dangerLevelInputCombo.options[dangerLevelInputCombo.selectedIndex].textContent,
-					link: sourceInput.value,
-				},
-				geometry: {
-					type: 'Point',
-					coordinates: [lngInput.value, latInput.value],
-				},
-			};
-
-			//Определение уровня угрозы события; //Todo переделать на получение из API
-			if (event.properties.categoriesNEW == 'severeStorms' && event.properties.magnitudeUnit == 'kts')
-				event.properties.dangerLevel = getSevereStormDangerLevelByKTS(event.properties.magnitudeValue);
-			if (event.properties.categoriesNEW == 'earthquakes')
-				event.properties.dangerLevel = getEarthquakesDangerLevelByMAG(event.properties.magnitudeValue);
-
 			var eventJSON = {
 				title: titleInput.value,
 				eventCategoryName: categoryInput.value,
@@ -129,8 +157,10 @@ function addEventBtnClick() {
 				latitude: latInput.value,
 				longitude: lngInput.value,
 			};
+			if (closedDateInput.value.length == 0) eventJSON.endDate = null;
+			if (mValueInput.value.length == 0) eventJSON.magnitudeValue = null;
+			if (sourceInput.value.length == 0) eventJSON.link = null;
 			eventJSON = JSON.stringify(eventJSON);
-
 			//ОТПРАВКА СОБЫТИЯ В API
 			$.ajax({
 				url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/NaturalDisasterEvent',
@@ -142,14 +172,21 @@ function addEventBtnClick() {
 					Authorization: `bearer ${localStorage.getItem('jwt')}`,
 				},
 				success: function (data) {
-					event.properties.Newid = data;
-
-					//добавляем события к списку всех событий и отображаем их на карте
-					geojsonAllDataEvents.features.push(event);
-					map.getSource('events').setData(geojsonAllDataEvents);
-					addPoints(geojsonAllDataEvents); // костыль (ибо мы запихиваем не 1 новую точку на карту а перерисовываем все точки), может негативно сказываться на производительности (но нужно если вдруг поменяется информация об уже отрисованной точки)
-					// при добавлении новых событий мы обновляем временной слайдер (фильтр событий по времени)
-					setDateFilterRange();
+					//Получение и добавление нового события на карту
+					$.ajax({
+						url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/NaturalDisasterEvent/${data}`,
+						method: 'GET',
+						contentType: 'application/json; charset=utf-8',
+						headers: {
+							Authorization: `bearer ${localStorage.getItem('jwt')}`,
+						},
+						success: function (data) {
+							addIndmEventsToMap(data);
+						},
+						error: function (jqXHR, textStatus, error) {
+							exceptionHandler(jqXHR, textStatus, error);
+						},
+					});
 
 					for (var inputElement of allFields) {
 						inputElement.value = null;
