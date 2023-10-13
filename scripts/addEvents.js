@@ -71,6 +71,36 @@ function addEventBtnClick() {
 			},
 		});
 
+		var categoryInput = document.getElementById('categoryInputCombo');
+		categoryInput.replaceChildren();
+		var categoryDefaultOption = document.createElement('option');
+		categoryDefaultOption.selected = true;
+		categoryDefaultOption.disabled = true;
+		categoryInput.append(categoryDefaultOption);
+
+		$.ajax({
+			url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventCategory`,
+			method: 'GET',
+			contentType: 'application/json; charset=utf-8',
+			headers: {
+				Authorization: `bearer ${localStorage.getItem('jwt')}`,
+			},
+			success: function (data) {
+				data.forEach(eventCategory => {
+					var eventCategoryOptionElement = document.createElement('option');
+					eventCategoryOptionElement.value = eventCategory.categoryName;
+					eventCategoryOptionElement.innerHTML = eventCategory.categoryName;
+					categoryInput.append(eventCategoryOptionElement);
+				});
+
+				addEventZone.style = 'display: flex';
+			},
+			error: function (jqXHR, textStatus, error) {
+				exceptionHandler(jqXHR, textStatus, error);
+				addEventZone.style = 'display: none';
+			},
+		});
+
 		
 	});
 
