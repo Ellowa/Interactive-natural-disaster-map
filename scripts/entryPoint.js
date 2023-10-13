@@ -93,9 +93,8 @@ function getEventsFromIndmAPI()
             addIndmEventsToMap(data);
         },
         error: function(jqXHR, textStatus, error) {
-            var err = textStatus + " " + jqXHR.status + ", " + error + "\n"
-                    + jqXHR.responseText?.toString();
-            exceptionHandler(err);
+            
+            exceptionHandler(jqXHR, textStatus, error);
         }
     });
 }

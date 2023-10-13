@@ -89,8 +89,7 @@ function registerBtnClick() {
 					logInSuccess();
 				},
 				error: function (jqXHR, textStatus, error) {
-					var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-					exceptionHandler(err);
+					exceptionHandler(jqXHR, textStatus, error);
 				},
 			});
 		}
@@ -163,8 +162,7 @@ function logInBtnClick() {
 					logInSuccess();
 				},
 				error: function (jqXHR, textStatus, error) {
-					var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-					exceptionHandler(err);
+					exceptionHandler(jqXHR, textStatus, error);
 					requiredTextLogin.textContent = 'Wrong login \n or password';
 				},
 			});

@@ -48,8 +48,7 @@ function addUnconfirmedEvents() {
 			}
 		},
 		error: function (jqXHR, textStatus, error) {
-			var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-			exceptionHandler(err);
+			exceptionHandler(jqXHR, textStatus, error);
 		},
 	});
 }
@@ -107,8 +106,7 @@ function addConfirmRejectAndDetailsShortDescriptionDiv(root, eventId, adminPanel
 				adminPanelMain.removeChild(root);
 			},
 			error: function (jqXHR, textStatus, error) {
-				var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-				exceptionHandler(err);
+				exceptionHandler(jqXHR, textStatus, error);
 			},
 		});
 	});
@@ -126,8 +124,7 @@ function addConfirmRejectAndDetailsShortDescriptionDiv(root, eventId, adminPanel
 				adminPanelMain.removeChild(root);
 			},
 			error: function (jqXHR, textStatus, error) {
-				var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-				exceptionHandler(err);
+				exceptionHandler(jqXHR, textStatus, error);
 			},
 		});
 	});
@@ -241,8 +238,7 @@ function addConfirmRejectAndDetailsShortDescriptionDiv(root, eventId, adminPanel
 				userDetailsItem.append(div);
 			},
 			error: function (jqXHR, textStatus, error) {
-				var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-				exceptionHandler(err);
+				exceptionHandler(jqXHR, textStatus, error);
 			},
 		});
 
@@ -352,8 +348,7 @@ function addEventCategories() {
 			addNewEventItemForm(rootElement, 'EventCategory', eventCategoryNavItem, categoryNameInput);
 		},
 		error: function (jqXHR, textStatus, error) {
-			var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-			exceptionHandler(err);
+			exceptionHandler(jqXHR, textStatus, error);
 		},
 	});
 }
@@ -389,8 +384,7 @@ function addNewEventItemForm(rootElement, additionRoute, navItem, ...textInputs)
 				navItem.click();
 			},
 			error: function (jqXHR, textStatus, error) {
-				var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-				exceptionHandler(err);
+				exceptionHandler(jqXHR, textStatus, error);
 			},
 		});
 	});
@@ -464,8 +458,7 @@ function createUpdateShortDescriptionDiv(root, itemId, requestRoute, navItem, ..
 					adminPaneDetails.style = 'display: none';
 				},
 				error: function (jqXHR, textStatus, error) {
-					var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText.toString();
-					exceptionHandler(err);
+					exceptionHandler(jqXHR, textStatus, error);
 				},
 			});
 		});
@@ -491,8 +484,7 @@ function createDeleteShortDescriptionDiv(root, itemId, requestRoute, navItem) {
 				navItem.click();
 			},
 			error: function (jqXHR, textStatus, error) {
-				var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-				exceptionHandler(err);
+				exceptionHandler(jqXHR, textStatus, error);
 			},
 		});
 	});
@@ -547,8 +539,7 @@ function addEventHazardUnits() {
 			);
 		},
 		error: function (jqXHR, textStatus, error) {
-			var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-			exceptionHandler(err);
+			exceptionHandler(jqXHR, textStatus, error);
 		},
 	});
 }
@@ -589,8 +580,7 @@ function addEventSources() {
 			addNewEventItemForm(rootElement, 'EventSource', eventSourceNavItem, eventSourceNameInput);
 		},
 		error: function (jqXHR, textStatus, error) {
-			var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-			exceptionHandler(err);
+			exceptionHandler(jqXHR, textStatus, error);
 		},
 	});
 }
@@ -633,8 +623,7 @@ function addMagnitudeUnits() {
 			addNewEventItemForm(rootElement, 'MagnitudeUnit', magnitudeUnitNavItem, magnitudeUnitNameInput);
 		},
 		error: function (jqXHR, textStatus, error) {
-			var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-			exceptionHandler(err);
+			exceptionHandler(jqXHR, textStatus, error);
 		},
 	});
 }
@@ -707,8 +696,7 @@ function addMagnitudeUnitDetailsDiv(root, magnitudeUnitId) {
 				}
 			},
 			error: function (jqXHR, textStatus, error) {
-				var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-				exceptionHandler(err);
+				exceptionHandler(jqXHR, textStatus, error);
 			},
 		});
 	});

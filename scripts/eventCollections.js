@@ -1,4 +1,4 @@
-var eventCollectionFilter
+var eventCollectionFilter;
 
 var allEventCollectionsSpan = document.getElementById('allEventCollections');
 $(allEventCollectionsSpan).next().hide();
@@ -19,14 +19,13 @@ $(allEventCollectionsSpan).click(function () {
 
 // функция формирования фильтра событий по Id в зависимости от id слоя(для которого делаем фильтр)
 function createEventIdFilter(eventsIds) {
-	if(eventFilters["collectionFilter"] == null){
+	if (eventFilters['collectionFilter'] == null) {
 		var eventIdFilter = ['in', 'Newid'];
 		eventsIds.forEach(eventsId => {
 			eventIdFilter.push(eventsId);
 		});
 		eventFilters['collectionFilter'] = eventIdFilter;
-	}
-	else{
+	} else {
 		eventsIds.forEach(eventsId => {
 			eventFilters['collectionFilter'].push(eventsId);
 		});
@@ -58,7 +57,7 @@ allEventCollections.addEventListener('click', function () {
 	}
 });
 
-function getAndShowAllEventCollections(){
+function getAndShowAllEventCollections() {
 	$.ajax({
 		url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventsCollection',
 		method: 'GET',
@@ -216,8 +215,7 @@ function getAndShowAllEventCollections(){
 			addAddEventCollectionButton();
 		},
 		error: function (jqXHR, textStatus, error) {
-			var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-			exceptionHandler(err);
+			exceptionHandler(jqXHR, textStatus, error);
 		},
 	});
 }
@@ -243,7 +241,7 @@ function editEventCollection(eventCollectionTextInput, editImage, eventCollectio
 	);
 }
 
-function approveEditEventCollection(eventCollectionTextInput, editImage, eventCollectionId){
+function approveEditEventCollection(eventCollectionTextInput, editImage, eventCollectionId) {
 	var updatedData = {
 		id: eventCollectionId,
 		collectionName: eventCollectionTextInput.value,
@@ -274,22 +272,20 @@ function approveEditEventCollection(eventCollectionTextInput, editImage, eventCo
 			);
 		},
 		error: function (jqXHR, textStatus, error) {
-			var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-			exceptionHandler(err);
+			exceptionHandler(jqXHR, textStatus, error);
 		},
 	});
 }
 
-function deleteEventCollection(eventCollectionId, eventCollectionLi){
+function deleteEventCollection(eventCollectionId, eventCollectionLi) {
 	var deletedData = {
 		id: eventCollectionId,
 	};
 	deletedData = JSON.stringify(deletedData);
 	requestDelete(`EventsCollection/${eventCollectionId}`, deletedData, eventCollectionLi);
-	
 }
 
-function deleteEventFromCollection(eventCollectionId, naturalEventId, eventLi){
+function deleteEventFromCollection(eventCollectionId, naturalEventId, eventLi) {
 	var deletedData = {
 		collectionId: eventCollectionId,
 		eventId: naturalEventId,
@@ -314,13 +310,12 @@ function requestDelete(uri, deletedData, deletedHtmlElement) {
 			}
 		},
 		error: function (jqXHR, textStatus, error) {
-			var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-			exceptionHandler(err);
+			exceptionHandler(jqXHR, textStatus, error);
 		},
 	});
 }
 
-function addAddEventCollectionButton(){
+function addAddEventCollectionButton() {
 	var mainUl = document.getElementById('eventCollectionsMainRoot');
 
 	var eventCollectionLi = document.createElement('li');
@@ -365,7 +360,7 @@ function addEventCollection(collectionName) {
 	requestAdd(`EventsCollection`, collectionAddedData, updateEventCollectionListElement);
 }
 
-function updateEventCollectionListElement(){
+function updateEventCollectionListElement() {
 	delete eventFilters['collectionFilter'];
 	filterEvents();
 	var showAllEventsCheckBox = document.getElementById('showAllEvents');
@@ -388,8 +383,7 @@ function requestAdd(uri, addedData, successCallbackFunction) {
 			successCallbackFunction();
 		},
 		error: function (jqXHR, textStatus, error) {
-			var err = textStatus + ' ' + jqXHR.status + ', ' + error + '\n' + jqXHR.responseText?.toString();
-			exceptionHandler(err);
+			exceptionHandler(jqXHR, textStatus, error);
 		},
 	});
 }
