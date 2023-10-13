@@ -41,7 +41,37 @@ function addEventBtnClick() {
 			return 0;
 		}
 
-		addEventZone.style = 'display: flex';
+		var mUnitInput = document.getElementById('mUnitInputCombo');
+		mUnitInput.replaceChildren();
+		var mUnitDefaultOption = document.createElement('option');
+		mUnitDefaultOption.selected = true;
+		mUnitDefaultOption.disabled = true;
+		mUnitInput.append(mUnitDefaultOption);
+
+		$.ajax({
+			url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/MagnitudeUnit`,
+			method: 'GET',
+			contentType: 'application/json; charset=utf-8',
+			headers: {
+				Authorization: `bearer ${localStorage.getItem('jwt')}`,
+			},
+			success: function (data) {
+				data.forEach(mUnit => {
+					var mUnitOptionElement = document.createElement('option');
+					mUnitOptionElement.value = mUnit.magnitudeUnitName;
+					mUnitOptionElement.innerHTML = mUnit.magnitudeUnitName;
+					mUnitInput.append(mUnitOptionElement);
+				});
+
+				addEventZone.style = 'display: flex';
+			},
+			error: function (jqXHR, textStatus, error) {
+				exceptionHandler(jqXHR, textStatus, error);
+				addEventZone.style = 'display: none';
+			},
+		});
+
+		
 	});
 
 	closeBtn.addEventListener('click', e => {
@@ -55,11 +85,11 @@ function addEventBtnClick() {
 		const latInput = document.getElementById('latInput');
 		const startDateInput = document.getElementById('startDateInput');
 		const closedDateInput = document.getElementById('closedDateInput');
-		const mUnitInput = document.getElementById('mUnitInput');
+		const mUnitInput = document.getElementById('mUnitInputCombo');
 		const mValueInput = document.getElementById('mValueInput');
 		const sourceInput = document.getElementById('sourceInput');
 
-		var requiredFields = [titleInput, categoryInput, lngInput, latInput, startDateInput];
+		var requiredFields = [titleInput, categoryInput, lngInput, latInput, startDateInput, mUnitInput];
 		var allFields = [
 			titleInput,
 			categoryInput,
@@ -91,24 +121,6 @@ function addEventBtnClick() {
 					inputElement.value = 'No data';
 				}
 			}
-			// формируем новое событие
-			var event = {
-				type: 'Feature',
-				properties: {
-					title: titleInput.value,
-					categoriesNEW: categoryInput.value,
-					categoriesTitle: categoryInput.options[categoryInput.selectedIndex].textContent,
-					date: startDateInput.value,
-					closed: closedDateInput.value,
-					magnitudeUnit: mUnitInput.value,
-					magnitudeValue: mValueInput.value,
-					link: sourceInput.value,
-				},
-				geometry: {
-					type: 'Point',
-					coordinates: [lngInput.value, latInput.value],
-				},
-			};
 
 			var eventJSON = {
 				title: titleInput.value,
