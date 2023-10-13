@@ -134,14 +134,21 @@ function addEventBtnClick() {
 					Authorization: `bearer ${localStorage.getItem('jwt')}`,
 				},
 				success: function (data) {
-					event.properties.Newid = data;
-
-					//добавляем события к списку всех событий и отображаем их на карте
-					geojsonAllDataEvents.features.push(event);
-					map.getSource('events').setData(geojsonAllDataEvents);
-					addPoints(geojsonAllDataEvents); // костыль (ибо мы запихиваем не 1 новую точку на карту а перерисовываем все точки), может негативно сказываться на производительности (но нужно если вдруг поменяется информация об уже отрисованной точки)
-					// при добавлении новых событий мы обновляем временной слайдер (фильтр событий по времени)
-					setDateFilterRange();
+					//Получение и добавление нового события на карту
+					$.ajax({
+						url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/NaturalDisasterEvent/${data}`,
+						method: 'GET',
+						contentType: 'application/json; charset=utf-8',
+						headers: {
+							Authorization: `bearer ${localStorage.getItem('jwt')}`,
+						},
+						success: function (data) {
+							addIndmEventsToMap(data);
+						},
+						error: function (jqXHR, textStatus, error) {
+							exceptionHandler(jqXHR, textStatus, error);
+						},
+					});
 
 					for (var inputElement of allFields) {
 						inputElement.value = null;
