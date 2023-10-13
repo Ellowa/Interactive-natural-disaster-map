@@ -242,56 +242,62 @@ function editEventCollection(eventCollectionTextInput, editImage, eventCollectio
 }
 
 function approveEditEventCollection(eventCollectionTextInput, editImage, eventCollectionId) {
-	var updatedData = {
-		id: eventCollectionId,
-		collectionName: eventCollectionTextInput.value,
-	};
-	updatedData = JSON.stringify(updatedData);
-	$.ajax({
-		url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventsCollection/${eventCollectionId}`,
-		method: 'PUT',
-		dataType: 'text',
-		contentType: 'application/json; charset=utf-8',
-		data: updatedData,
-		headers: {
-			Authorization: `bearer ${localStorage.getItem('jwt')}`,
-		},
-		success: function (data) {
-			doEditAction = editEventCollection;
+	if (confirm('Are you sure you want to update this ' + `eventsCollection`)) {
+		var updatedData = {
+			id: eventCollectionId,
+			collectionName: eventCollectionTextInput.value,
+		};
+		updatedData = JSON.stringify(updatedData);
+		$.ajax({
+			url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventsCollection/${eventCollectionId}`,
+			method: 'PUT',
+			dataType: 'text',
+			contentType: 'application/json; charset=utf-8',
+			data: updatedData,
+			headers: {
+				Authorization: `bearer ${localStorage.getItem('jwt')}`,
+			},
+			success: function (data) {
+				doEditAction = editEventCollection;
 
-			eventCollectionTextInput.readOnly = true;
+				eventCollectionTextInput.readOnly = true;
 
-			$(editImage).attr('src', 'images/edit.png');
-			$(editImage).hover(
-				function () {
-					$(editImage).attr('src', 'images/edit.gif');
-				},
-				function () {
-					$(editImage).attr('src', 'images/edit.png');
-				}
-			);
-		},
-		error: function (jqXHR, textStatus, error) {
-			exceptionHandler(jqXHR, textStatus, error);
-		},
-	});
+				$(editImage).attr('src', 'images/edit.png');
+				$(editImage).hover(
+					function () {
+						$(editImage).attr('src', 'images/edit.gif');
+					},
+					function () {
+						$(editImage).attr('src', 'images/edit.png');
+					}
+				);
+			},
+			error: function (jqXHR, textStatus, error) {
+				exceptionHandler(jqXHR, textStatus, error);
+			},
+		});
+	}
 }
 
 function deleteEventCollection(eventCollectionId, eventCollectionLi) {
-	var deletedData = {
-		id: eventCollectionId,
-	};
-	deletedData = JSON.stringify(deletedData);
-	requestDelete(`EventsCollection/${eventCollectionId}`, deletedData, eventCollectionLi);
+	if (confirm('Are you sure you want to delete this ' + `eventsCollection`)) {
+		var deletedData = {
+			id: eventCollectionId,
+		};
+		deletedData = JSON.stringify(deletedData);
+		requestDelete(`EventsCollection/${eventCollectionId}`, deletedData, eventCollectionLi);
+	}
 }
 
 function deleteEventFromCollection(eventCollectionId, naturalEventId, eventLi) {
-	var deletedData = {
-		collectionId: eventCollectionId,
-		eventId: naturalEventId,
-	};
-	deletedData = JSON.stringify(deletedData);
-	requestDelete(`EventsCollection/DeleteEvent`, deletedData, eventLi);
+	if (confirm('Are you sure you want to delete this ' + `event(${naturalEventId}) from eventsCollection`)) {
+		var deletedData = {
+			collectionId: eventCollectionId,
+			eventId: naturalEventId,
+		};
+		deletedData = JSON.stringify(deletedData);
+		requestDelete(`EventsCollection/DeleteEvent`, deletedData, eventLi);
+	}
 }
 
 function requestDelete(uri, deletedData, deletedHtmlElement) {

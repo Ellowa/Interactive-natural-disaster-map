@@ -42,7 +42,12 @@ function addUnconfirmedEvents() {
 				createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.eventDto.category);
 				createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.userDto.login);
 				createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.userDto.roleName);
-				addConfirmRejectAndDetailsShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.eventDto.id, rootElement);
+				addConfirmRejectAndDetailsShortDescriptionDiv(
+					newEventItemDiv,
+					unconfirmedEvent.eventDto.id,
+					unconfirmedEvent.eventDto.title,
+					rootElement
+				);
 
 				rootElement.append(newEventItemDiv);
 			}
@@ -72,7 +77,7 @@ function createEventShortDescriptionDiv(root, divText) {
 	root.append(shortDescriptionDiv);
 }
 
-function addConfirmRejectAndDetailsShortDescriptionDiv(root, eventId, adminPanelMain) {
+function addConfirmRejectAndDetailsShortDescriptionDiv(root, eventId, eventName, adminPanelMain) {
 	var detailsDiv = document.createElement('div');
 	detailsDiv.className = 'event-short-description event-details';
 	detailsDiv.innerHTML = 'Details';
@@ -94,39 +99,43 @@ function addConfirmRejectAndDetailsShortDescriptionDiv(root, eventId, adminPanel
 	confirmOrRejectData = JSON.stringify(confirmOrRejectData);
 
 	confirmDiv.addEventListener('click', e => {
-		$.ajax({
-			url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/UnconfirmedEvent/confirm/${eventId}`,
-			method: 'PATCH',
-			contentType: 'application/json; charset=utf-8',
-			headers: {
-				Authorization: `bearer ${localStorage.getItem('jwt')}`,
-			},
-			data: confirmOrRejectData,
-			success: function (data) {
-				adminPanelMain.removeChild(root);
-			},
-			error: function (jqXHR, textStatus, error) {
-				exceptionHandler(jqXHR, textStatus, error);
-			},
-		});
+		if(confirm('Are you sure you want to confirm ' + `Event ${eventName}(${eventId})`)) {
+			$.ajax({
+				url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/UnconfirmedEvent/confirm/${eventId}`,
+				method: 'PATCH',
+				contentType: 'application/json; charset=utf-8',
+				headers: {
+					Authorization: `bearer ${localStorage.getItem('jwt')}`,
+				},
+				data: confirmOrRejectData,
+				success: function (data) {
+					adminPanelMain.removeChild(root);
+				},
+				error: function (jqXHR, textStatus, error) {
+					exceptionHandler(jqXHR, textStatus, error);
+				},
+			});
+		}
 	});
 
 	rejectDiv.addEventListener('click', e => {
-		$.ajax({
-			url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/UnconfirmedEvent/reject/${eventId}`,
-			method: 'PATCH',
-			contentType: 'application/json; charset=utf-8',
-			headers: {
-				Authorization: `bearer ${localStorage.getItem('jwt')}`,
-			},
-			data: confirmOrRejectData,
-			success: function (data) {
-				adminPanelMain.removeChild(root);
-			},
-			error: function (jqXHR, textStatus, error) {
-				exceptionHandler(jqXHR, textStatus, error);
-			},
-		});
+		if(confirm('Are you sure you want to reject ' + `Event ${eventName}(${eventId})`)) {
+			$.ajax({
+				url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/UnconfirmedEvent/reject/${eventId}`,
+				method: 'PATCH',
+				contentType: 'application/json; charset=utf-8',
+				headers: {
+					Authorization: `bearer ${localStorage.getItem('jwt')}`,
+				},
+				data: confirmOrRejectData,
+				success: function (data) {
+					adminPanelMain.removeChild(root);
+				},
+				error: function (jqXHR, textStatus, error) {
+					exceptionHandler(jqXHR, textStatus, error);
+				},
+			});
+		}
 	});
 
 	detailsDiv.addEventListener('click', e => {
@@ -436,31 +445,33 @@ function createUpdateShortDescriptionDiv(root, itemId, requestRoute, navItem, ..
 		adminPaneDetails.append(updateInfoItem);
 
 		confirmUpdateDiv.addEventListener('click', e => {
-			var updateRequest = {
-				id: itemId,
-			};
-			updateRequestParams.forEach(updateRequestParam => {
-				var textInput = document.getElementById(updateRequestParam);
-				updateRequest[textInput.id] = textInput.value;
-			});
-			updateRequest = JSON.stringify(updateRequest);
+			if (confirm('Are you sure you want to update this ' + `${requestRoute} with Id(${itemId})`)) {
+				var updateRequest = {
+					id: itemId,
+				};
+				updateRequestParams.forEach(updateRequestParam => {
+					var textInput = document.getElementById(updateRequestParam);
+					updateRequest[textInput.id] = textInput.value;
+				});
+				updateRequest = JSON.stringify(updateRequest);
 
-			$.ajax({
-				url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/${requestRoute}/${itemId}`,
-				method: 'PUT',
-				contentType: 'application/json; charset=utf-8',
-				headers: {
-					Authorization: `bearer ${localStorage.getItem('jwt')}`,
-				},
-				data: updateRequest,
-				success: function (data) {
-					navItem.click();
-					adminPaneDetails.style = 'display: none';
-				},
-				error: function (jqXHR, textStatus, error) {
-					exceptionHandler(jqXHR, textStatus, error);
-				},
-			});
+				$.ajax({
+					url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/${requestRoute}/${itemId}`,
+					method: 'PUT',
+					contentType: 'application/json; charset=utf-8',
+					headers: {
+						Authorization: `bearer ${localStorage.getItem('jwt')}`,
+					},
+					data: updateRequest,
+					success: function (data) {
+						navItem.click();
+						adminPaneDetails.style = 'display: none';
+					},
+					error: function (jqXHR, textStatus, error) {
+						exceptionHandler(jqXHR, textStatus, error);
+					},
+				});
+			}
 		});
 	});
 }
@@ -473,20 +484,22 @@ function createDeleteShortDescriptionDiv(root, itemId, requestRoute, navItem) {
 	root.append(deleteDiv);
 
 	deleteDiv.addEventListener('click', e => {
-		$.ajax({
-			url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/${requestRoute}/${itemId}`,
-			method: 'DELETE',
-			contentType: 'application/json; charset=utf-8',
-			headers: {
-				Authorization: `bearer ${localStorage.getItem('jwt')}`,
-			},
-			success: function (data) {
-				navItem.click();
-			},
-			error: function (jqXHR, textStatus, error) {
-				exceptionHandler(jqXHR, textStatus, error);
-			},
-		});
+		if (confirm('Are you sure you want to delete this ' + `${requestRoute} with Id(${itemId})`)) {
+			$.ajax({
+				url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/${requestRoute}/${itemId}`,
+				method: 'DELETE',
+				contentType: 'application/json; charset=utf-8',
+				headers: {
+					Authorization: `bearer ${localStorage.getItem('jwt')}`,
+				},
+				success: function (data) {
+					navItem.click();
+				},
+				error: function (jqXHR, textStatus, error) {
+					exceptionHandler(jqXHR, textStatus, error);
+				},
+			});
+		}
 	});
 }
 
