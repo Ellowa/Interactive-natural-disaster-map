@@ -57,7 +57,6 @@ function addEventBtnClick() {
 		const closedDateInput = document.getElementById('closedDateInput');
 		const mUnitInput = document.getElementById('mUnitInput');
 		const mValueInput = document.getElementById('mValueInput');
-		const dangerLevelInputCombo = document.getElementById('dangerLevelInputCombo');
 		const sourceInput = document.getElementById('sourceInput');
 
 		var requiredFields = [titleInput, categoryInput, lngInput, latInput, startDateInput];
@@ -103,7 +102,6 @@ function addEventBtnClick() {
 					closed: closedDateInput.value,
 					magnitudeUnit: mUnitInput.value,
 					magnitudeValue: mValueInput.value,
-					dangerLevel: dangerLevelInputCombo.options[dangerLevelInputCombo.selectedIndex].textContent,
 					link: sourceInput.value,
 				},
 				geometry: {
@@ -111,12 +109,6 @@ function addEventBtnClick() {
 					coordinates: [lngInput.value, latInput.value],
 				},
 			};
-
-			//Определение уровня угрозы события; //Todo переделать на получение из API
-			if (event.properties.categoriesNEW == 'severeStorms' && event.properties.magnitudeUnit == 'kts')
-				event.properties.dangerLevel = getSevereStormDangerLevelByKTS(event.properties.magnitudeValue);
-			if (event.properties.categoriesNEW == 'earthquakes')
-				event.properties.dangerLevel = getEarthquakesDangerLevelByMAG(event.properties.magnitudeValue);
 
 			var eventJSON = {
 				title: titleInput.value,
