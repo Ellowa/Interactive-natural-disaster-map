@@ -787,7 +787,6 @@ body { margin: 0; padding: 0; }
     transition: width 1s ease;
 }
 
-
 .collapse{
     cursor: pointer;
 }
@@ -856,6 +855,36 @@ body { margin: 0; padding: 0; }
 }
 .eventCollection-name-add:focus{
     color:#222;
+}
+
+/*стиль информационной зоны об уровне опасности*/
+#dangerValueInfoZone{
+    height: 45px;
+    width: 500px;
+    left: calc(50% - 250px);
+    top: unset;
+    bottom: 30px;
+    flex-direction: row;
+    padding-right: 15px;
+    background: linear-gradient(90deg, 
+        rgba(34,34,34,1) 8%, 
+        rgba(204,255,102,1) 26%, 
+        rgba(255,255,0,1) 44%, 
+        rgba(255,153,0,1) 64%, 
+        rgba(255,0,0,1) 76%, 
+        rgba(128,0,0,1) 100%);
+    text-align: center;
+    align-items: center;
+    color: black;
+    font-weight: bold;
+    cursor: help;
+}
+
+#dangerValueInfoZone div{
+    width: 100%;
+}
+#dangerValueInfoZone > div:nth-child(2){
+    color: #C0C0C0;
 }
 
 /* При разрешении 1280x720 (ноутбук) */

@@ -63,6 +63,7 @@ map.on('load', () => {
         placeholderClk();
         adminPanelBtnClick();
         adminPanelNavClick();
+        dangerValueInfoZoneBtnClick();
 
         //Получаем список событий от NASA EONET API
         $.getJSON( "https://eonet.gsfc.nasa.gov/api/v3/events/geojson?status=all&category=drought,earthquakes,floods,landslides,severeStorms,snow,tempExtremes,volcanoes,wildfires&days=90")
