@@ -19,14 +19,23 @@ function adminPanelBtnClick() {
 		const adminPaneDetails = document.getElementById('adminPaneDetails');
 		adminPaneDetails.style = 'display: none';
 	});
+
+	var addRejectedCheckBox = document.getElementById('addRejected');
+	addRejectedCheckBox.addEventListener('change', function () {
+		addUnconfirmedEvents();
+	});
 }
 
 function addUnconfirmedEvents() {
 	var rootElement = document.getElementById('confirmRejectEvents');
 	clearAdminPanMainZone(rootElement);
 
+	var addRejectedCheckBox = document.getElementById('addRejected');
+	var url = 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/UnconfirmedEvent';
+	if(addRejectedCheckBox.checked == true)
+		url = 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/UnconfirmedEvent?AddIsChecked=true';
 	$.ajax({
-		url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/UnconfirmedEvent',
+		url: url,
 		method: 'GET',
 		contentType: 'application/json; charset=utf-8',
 		headers: {
@@ -37,7 +46,9 @@ function addUnconfirmedEvents() {
 				var newEventItemDiv = document.createElement('div');
 				newEventItemDiv.className = 'event-items';
 
-				createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.eventDto.id);
+				if (unconfirmedEvent.isChecked) createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.eventDto.id + ' rej');
+				else createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.eventDto.id);
+
 				createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.eventDto.title);
 				createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.eventDto.category);
 				createEventShortDescriptionDiv(newEventItemDiv, unconfirmedEvent.userDto.login);

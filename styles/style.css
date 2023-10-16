@@ -489,6 +489,7 @@ text-transform: capitalize;
 
 .about-header p{
     margin: 0;
+    padding-right: 20px;
 }
 
 .about-main{
@@ -538,7 +539,7 @@ text-transform: capitalize;
     top: 50px;
     padding-left: 15px;
     padding-right: 15px;
-    background-color: var(--light-teal-input-zone);
+    background-color: #377087;
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-around;
@@ -549,7 +550,7 @@ text-transform: capitalize;
     display: flex;
     flex-direction: column;
     padding-top: 10px;
-    color: #134e58;
+    color: #fff;
     font-size: 16px;
     font-family: sans-serif;
     font-weight: bold;
@@ -561,7 +562,7 @@ text-transform: capitalize;
 }
 .details-item div:first-child{
     text-align: center;
-    color: #603879;
+    color: #80cbc4;
 }
 
 .admin-panel-header {
@@ -570,6 +571,11 @@ text-transform: capitalize;
     letter-spacing: 0px;
     margin: 0 0 5px;
     color: #5af6ffc7;
+    display: flex;
+}
+
+.admin-panel-header label{
+    color: #3f6965;
 }
 
 .admin-panel-main {
@@ -620,6 +626,12 @@ text-transform: capitalize;
 
 .event-short-description:nth-child(3) {
     max-width: 170px;
+}
+
+.event-short-description:hover {
+    text-overflow: unset;
+    overflow: unset;
+    color: #222;
 }
 
 .event-confirm:hover {
