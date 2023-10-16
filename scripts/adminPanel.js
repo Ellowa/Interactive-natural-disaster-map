@@ -86,6 +86,7 @@ function createEventShortDescriptionDiv(root, divText) {
 	shortDescriptionDiv.className = 'event-short-description';
 	shortDescriptionDiv.innerHTML = divText;
 	root.append(shortDescriptionDiv);
+	return shortDescriptionDiv;
 }
 
 function addConfirmRejectAndDetailsShortDescriptionDiv(root, eventId, eventName, adminPanelMain) {
@@ -628,7 +629,8 @@ function addMagnitudeUnits() {
 				newEventItemDiv.className = 'event-items';
 
 				createEventShortDescriptionDiv(newEventItemDiv, magnitudeUnit.id);
-				createEventShortDescriptionDiv(newEventItemDiv, magnitudeUnit.magnitudeUnitName);
+				var magnitudeNameDiv = createEventShortDescriptionDiv(newEventItemDiv, magnitudeUnit.magnitudeUnitName);
+				magnitudeNameDiv.title = 'Description: ' + magnitudeUnit.magnitudeUnitDescription;
 				createEventShortDescriptionDiv(newEventItemDiv, magnitudeUnit.hazardUnitDtos.length);
 
 				addMagnitudeUnitDetailsDiv(newEventItemDiv, magnitudeUnit.id);
@@ -637,14 +639,22 @@ function addMagnitudeUnits() {
 					magnitudeUnit.id,
 					'MagnitudeUnit',
 					magnitudeUnitNavItem,
-					'magnitudeUnitName'
+					'magnitudeUnitName',
+					'magnitudeUnitDescription'
 				);
 				createDeleteShortDescriptionDiv(newEventItemDiv, magnitudeUnit.id, 'MagnitudeUnit', magnitudeUnitNavItem);
 
 				rootElement.append(newEventItemDiv);
 			}
 			var magnitudeUnitNameInput = createTextInputForAddNewEventItem('magnitudeUnitName', 'new magnitude unit name');
-			addNewEventItemForm(rootElement, 'MagnitudeUnit', magnitudeUnitNavItem, magnitudeUnitNameInput);
+			var magnitudeUnitDescriptionInput = createTextInputForAddNewEventItem('magnitudeUnitDescription', 'new magnitude unit description');
+			addNewEventItemForm(
+				rootElement,
+				'MagnitudeUnit',
+				magnitudeUnitNavItem,
+				magnitudeUnitNameInput,
+				magnitudeUnitDescriptionInput
+			);
 		},
 		error: function (jqXHR, textStatus, error) {
 			exceptionHandler(jqXHR, textStatus, error);

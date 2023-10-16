@@ -60,7 +60,16 @@ function addEventBtnClick() {
 					var mUnitOptionElement = document.createElement('option');
 					mUnitOptionElement.value = mUnit.magnitudeUnitName;
 					mUnitOptionElement.innerHTML = mUnit.magnitudeUnitName;
+					mUnitOptionElement.title = mUnit.magnitudeUnitDescription;
 					mUnitInput.append(mUnitOptionElement);
+
+					mUnitInput.addEventListener('change', e => {
+						if (mUnitInput.value == mUnit.magnitudeUnitName) {
+							var mValueInput = document.getElementById('mValueInput');
+							mValueInput.title = 'Value(can be empty or 0) for ' + mUnit.magnitudeUnitName + ' - ' + mUnit.magnitudeUnitDescription;
+							mUnitInput.title = mUnit.magnitudeUnitDescription;
+						}
+					});
 				});
 
 				addEventZone.style = 'display: flex';
