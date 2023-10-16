@@ -52,7 +52,7 @@ var doEditAction;
 // Обработчик события для показа коллекций пользователя
 var allEventCollections = document.getElementById('allEventCollections');
 allEventCollections.addEventListener('click', function () {
-	if ($(this).prev(this).text() == '▼ ' && $('#eventCollectionsMainRoot').children().length == 0) {
+	if ($(this).prev(this).text() == '▼ ' && $('#eventCollectionsMainRoot').children().length <= 1) {
 		getAndShowAllEventCollections();
 	}
 });

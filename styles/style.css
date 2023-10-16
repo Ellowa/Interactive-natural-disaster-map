@@ -88,10 +88,9 @@ body { margin: 0; padding: 0; }
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
 }
 
-/* .filter-group input[type='checkbox'] + label {
-background-color: #3386c0;
-text-transform: capitalize;
-} */
+.filter-group > label > img{
+    margin-left: auto;
+}
 
 .filter-group input[type='checkbox'] + label:hover,
 .filter-group input[type='checkbox']:checked + label {
