@@ -306,6 +306,11 @@ body { margin: 0; padding: 0; }
     text-align: left;
     border-left: 1px solid #00796B;
     padding-right: 5px;
+    overflow: hidden;
+    max-width: 80px;
+}
+.login-button input:hover {
+    overflow: auto;
 }
 
 .login-button img {
@@ -333,6 +338,7 @@ body { margin: 0; padding: 0; }
     border: none;
     width: 100%;
     text-align: center;
+    max-width: unset;
 }
 
 
@@ -512,6 +518,7 @@ body { margin: 0; padding: 0; }
     border: none;
     width: 100%;
     text-align: center;
+    max-width: unset;
 }
 
 /* Стиль зоны admin Panel */
