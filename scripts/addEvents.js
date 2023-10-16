@@ -283,6 +283,12 @@ function addIndmEventsToMap(data) {
 			geojsonAllDataEvents.features.push(feature);
 		}
 	}
+	if (map.getSource('events') == undefined) {
+		map.addSource('events', {
+			type: 'geojson',
+			data: geojsonAllDataEvents,
+		});
+	}
 	// обновление источника данных для карты
 	map.getSource('events').setData(geojsonAllDataEvents);
 	// прорисовка событий на карте

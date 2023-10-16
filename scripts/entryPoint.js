@@ -43,10 +43,12 @@ map.addControl(
 // Главная точка входа(прогрузки), происходит при загрузке карты
 map.on('load', () => {
     // добавление источника данных к карте
-    map.addSource('events', {
-        type: 'geojson',
-        data: geojsonAllDataEvents
-    });
+    if (map.getSource('events') == undefined){
+        map.addSource('events', {
+            type: 'geojson',
+            data: geojsonAllDataEvents,
+        });
+    }
 
     $( document ).ready(function() { // страничка прогружена
         
