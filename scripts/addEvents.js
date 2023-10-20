@@ -224,11 +224,6 @@ function addIndmEventsToMap(data) {
 		feature.properties.dangerLevel = dangerLevel[0].toUpperCase() + dangerLevel.slice(1);
 		feature.properties.isClosed = feature.properties.closed;
 
-		//Todo костыль - правильно надо брать эти данные из БД
-		if (feature.properties.category == 'severeStorms' && feature.properties.magnitudeUnit == 'kts')
-			feature.properties.dangerLevel = getSevereStormDangerLevelByKTS(feature.properties.magnitudeValue);
-		if (feature.properties.category == 'earthquakes')
-			feature.properties.dangerLevel = getEarthquakesDangerLevelByMAG(feature.properties.magnitudeValue);
 		//добавляем события к списку всех событий
 		if (!geojsonAllDataEvents.features.includes(feature)) {
 			geojsonAllDataEvents.features.push(feature);
