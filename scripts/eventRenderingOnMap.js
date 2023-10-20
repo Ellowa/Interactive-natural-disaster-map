@@ -29,7 +29,7 @@ function addEventListenerToEventFilterSync(layerID, fullLayerID){
 // функция отрисовки событий на карте 
 function addPoints(events){
     for (const feature of events.features) {
-        var layerID = feature.properties.categoriesNEW;
+        var layerID = feature.properties.category;
         var fColor = feature.properties.dangerLevel;
 
         var fullLayerID = layerID + ' ' + fColor
@@ -52,7 +52,7 @@ function addPoints(events){
 							},
 							filter: [
 								'all',
-								['==', 'categoriesNEW', layerID],
+								['==', 'category', layerID],
 								['==', 'dangerLevel', fColor],
 							],
 						})
@@ -74,13 +74,13 @@ function MarkerOnClick(LayerId){
         
         // Формируем html описание события
         let eventDescription = `<div class='popupDescription'>
-        <p>Id: ${e.features[0].properties.Newid}</p>
+        <p>Id: ${e.features[0].properties.id}</p>
         <p>Title: ${e.features[0].properties.title}</p>
         <p>Confirmed: ${e.features[0].properties.confirmed}</p>
         <p>Categories: ${e.features[0].properties.categoriesTitle}</p>
         <p>Coordinates: ${coordinates}</p>
-        <p>Start date: ${e.features[0].properties.date}</p>
-        <p>Closed/update date: ${e.features[0].properties.closed ?? 'Not closed'}</p>
+        <p>Start date: ${e.features[0].properties.startDate}</p>
+        <p>Closed/Update date: ${e.features[0].properties.endDate ?? 'Not closed'}</p>
         <p>Magnitude unit: ${e.features[0].properties.magnitudeUnit}</p>
         <p>Magnitude value: ${e.features[0].properties.magnitudeValue ?? 'No data'}</p>
         <p>Danger level: ${e.features[0].properties.dangerLevel}</p>`;

@@ -20,7 +20,7 @@ $(allEventCollectionsSpan).click(function () {
 // функция формирования фильтра событий по Id в зависимости от id слоя(для которого делаем фильтр)
 function createEventIdFilter(eventsIds) {
 	if (eventFilters['collectionFilter'] == null) {
-		var eventIdFilter = ['in', 'Newid'];
+		var eventIdFilter = ['in', 'id'];
 		eventsIds.forEach(eventsId => {
 			eventIdFilter.push(eventsId);
 		});

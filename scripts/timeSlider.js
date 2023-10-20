@@ -4,12 +4,12 @@ var eventFilters = [];
 function setDateFilterRange(){
     // сортируем события по времени их старта
     geojsonAllDataEvents.features.sort(function(a, b) {
-        if (a.properties.date > b.properties.date) {
-            return 1;
-        }
-        if (a.properties.date < b.properties.date) {
-            return -1;
-        }
+        if (a.properties.startDate > b.properties.startDate) {
+					return 1;
+				}
+        if (a.properties.startDate < b.properties.startDate) {
+					return -1;
+				}
         return 0;
     });
     
@@ -17,8 +17,8 @@ function setDateFilterRange(){
     geojsonAllDataEvents.features.reverse();
 
     // найдем разницу в днях между первым и последним событием
-    var date1 = new Date(geojsonAllDataEvents.features[0].properties.date);
-    var date2 = new Date(geojsonAllDataEvents.features[geojsonAllDataEvents.features.length -1].properties.date);
+    var date1 = new Date(geojsonAllDataEvents.features[0].properties.startDate);
+    var date2 = new Date(geojsonAllDataEvents.features[geojsonAllDataEvents.features.length - 1].properties.startDate);
 
     var timeDiff = Math.abs(date1.getTime() - date2.getTime());
     var daysRange = Math.ceil(timeDiff / (1000 * 3600 * 24));
@@ -29,14 +29,14 @@ function setDateFilterRange(){
 
 // функция формирования фильтра событий в зависимости от id слоя(для которого делаем фильтр)
 function createDateFilter(toDate){
-    eventFilters['dateFilter'] = ['>=', 'date', toDate];
+    eventFilters['dateFilter'] = ['>=', 'startDate', toDate];
 }
 
 // функция формирования общего фильтра
 function createFilterByLayerId(layerID, fColor){
     var filters = [
 			'all',
-			['==', 'categoriesNEW', layerID],
+			['==', 'category', layerID],
 			['==', 'dangerLevel', fColor],
 		];
 
@@ -64,15 +64,13 @@ function filterEvents(){
 document.getElementById('dateSlider').addEventListener('input', (e) => {
 	var selectedDateRange = e.target.value;
 	var toDate = new Date();
-	toDate.setDate(new Date(geojsonAllDataEvents.features[0].properties.date).getDate() - selectedDateRange - 1);
+	toDate.setDate(new Date(geojsonAllDataEvents.features[0].properties.startDate).getDate() - selectedDateRange - 1);
 	createDateFilter(toDate.toISOString().substring(0, 10));
 	filterEvents();
 
     console.log(toDate.toISOString());
 	// Меняем подпись диапазона дат
-	document.getElementById(
-		'selectedDateLabel'
-	).textContent = `Date range: 
-    ${geojsonAllDataEvents.features[0].properties.date.substring(0, 10)}
+	document.getElementById('selectedDateLabel').textContent = `Date range: 
+    ${geojsonAllDataEvents.features[0].properties.startDate.substring(0, 10)}
      - ${toDate.toISOString().substring(0, 10)}`;
 });

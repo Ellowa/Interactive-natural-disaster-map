@@ -219,19 +219,15 @@ function addIndmEventsToMap(data) {
 		var categoryTitle = feature.properties.category.split(/(?=[A-Z])/).join(' ');
 		var dangerLevel = feature.properties.eventHazardUnit.split(/(?=[A-Z])/).join(' ');
 
-		feature.properties.Newid = feature.properties.id;
-		feature.properties.categoriesNEW = feature.properties.category;
 		feature.properties.categoriesTitle = categoryTitle[0].toUpperCase() + categoryTitle.slice(1);
-		feature.properties.date = feature.properties.startDate;
-		feature.properties.closed = feature.properties.endDate;
 		feature.properties.magnitudeUnit = feature.properties.magnitudeUnit.split(/(?=[A-Z])/).join(' ');
 		feature.properties.dangerLevel = dangerLevel[0].toUpperCase() + dangerLevel.slice(1);
 		feature.properties.isClosed = feature.properties.closed;
 
 		//Todo костыль - правильно надо брать эти данные из БД
-		if (feature.properties.categoriesNEW == 'severeStorms' && feature.properties.magnitudeUnit == 'kts')
+		if (feature.properties.category == 'severeStorms' && feature.properties.magnitudeUnit == 'kts')
 			feature.properties.dangerLevel = getSevereStormDangerLevelByKTS(feature.properties.magnitudeValue);
-		if (feature.properties.categoriesNEW == 'earthquakes')
+		if (feature.properties.category == 'earthquakes')
 			feature.properties.dangerLevel = getEarthquakesDangerLevelByMAG(feature.properties.magnitudeValue);
 		//добавляем события к списку всех событий
 		if (!geojsonAllDataEvents.features.includes(feature)) {
