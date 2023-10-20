@@ -115,6 +115,8 @@ function addEventBtnClick() {
 
 	closeBtn.addEventListener('click', e => {
 		addEventZone.style = 'display: none';
+		$('#updateEventDataButton')[0].style = 'display: none';
+		$('#addEventDataButton')[0].style = 'display: block';
 	});
 
 	addEventDataButton.addEventListener('click', e => {

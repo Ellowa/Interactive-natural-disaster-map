@@ -358,7 +358,7 @@ function addEventCategories() {
 					newEventItemDiv,
 					eventCategory.id,
 					'EventCategory',
-					eventCategoryNavItem,
+					function() {eventCategoryNavItem.click();},
 					'categoryName'
 				);
 				createDeleteShortDescriptionDiv(newEventItemDiv, eventCategory.id, 'EventCategory',  function() {eventCategoryNavItem.click();});
@@ -423,7 +423,7 @@ function createTextInputForAddNewEventItem(id, placeholder) {
 }
 
 //Универсальная функция создания кнопки update item
-function createUpdateShortDescriptionDiv(root, itemId, requestRoute, navItem, ...updateRequestParams) {
+function createUpdateShortDescriptionDiv(root, itemId, requestRoute, actionIfSuccess, ...updateRequestParams) {
 	var updateDiv = document.createElement('div');
 	updateDiv.className = 'event-short-description item-update';
 	updateDiv.innerHTML = 'Update';
@@ -476,7 +476,7 @@ function createUpdateShortDescriptionDiv(root, itemId, requestRoute, navItem, ..
 					},
 					data: updateRequest,
 					success: function (data) {
-						navItem.click();
+						actionIfSuccess();
 						adminPaneDetails.style = 'display: none';
 					},
 					error: function (jqXHR, textStatus, error) {
@@ -542,7 +542,7 @@ function addEventHazardUnits() {
 					newEventItemDiv,
 					eventHazardUnit.id,
 					'EventHazardUnit',
-					eventHazardUnitNavItem,
+					function() {eventHazardUnitNavItem.click();},
 					'hazardName',
 					'magnitudeUnitName',
 					'thresholdValue'
@@ -594,7 +594,7 @@ function addEventSources() {
 					newEventItemDiv,
 					eventSource.id,
 					'EventSource',
-					eventSourceNavItem,
+					function() {eventSourceNavItem.click();},
 					'sourceType'
 				);
 				createDeleteShortDescriptionDiv(newEventItemDiv, eventSource.id, 'EventSource', function() {eventSourceNavItem.click();});
@@ -638,7 +638,7 @@ function addMagnitudeUnits() {
 					newEventItemDiv,
 					magnitudeUnit.id,
 					'MagnitudeUnit',
-					magnitudeUnitNavItem,
+					function() {magnitudeUnitNavItem.click();},
 					'magnitudeUnitName',
 					'magnitudeUnitDescription'
 				);

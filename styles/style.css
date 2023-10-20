@@ -34,6 +34,14 @@
     margin-top: 0;
 }
 
+.popupDescription > .event-short-description {
+    color: #00a8d1;
+    margin-left: 0;
+    display: inline;
+}
+.popupDescription > .event-short-description ~ .event-short-description {
+    margin-left: 10px;
+}
 
 body { margin: 0; padding: 0; }
 #map { position: absolute; top: 0; bottom: 0; width: 100%; }
@@ -548,14 +556,16 @@ body { margin: 0; padding: 0; }
     display: flex;
     min-height: 360px;
     width: 760px;
-    left: calc(50% - 370px);
-    top: 50px;
+    left: calc(50% - 300px);
+    top: 185px;
     padding-left: 15px;
     padding-right: 15px;
     background-color: #377087;
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-around;
+    z-index: 10;
+    overflow: auto;
 }
 
 
