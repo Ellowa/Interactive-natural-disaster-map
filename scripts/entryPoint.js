@@ -65,20 +65,7 @@ map.on('load', () => {
         adminPanelNavClick();
         dangerValueInfoZoneBtnClick();
 
-        //Получаем список событий от NASA EONET API
-        $.getJSON( "https://eonet.gsfc.nasa.gov/api/v3/events/geojson?status=all&category=drought,earthquakes,floods,landslides,severeStorms,snow,tempExtremes,volcanoes,wildfires&days=90")
-        .done(function(data){
-            addNasaEonetEventsToMap(data);
-        });
-        //Получаем список землетрясений от USGS
-        $.getJSON( "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson")
-        .done(function(data){
-            addUsgsEarthquakeToMap(data);
-        });
-        $.getJSON( "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson")
-        .done(function(data){
-            addUsgsEarthquakeToMap(data);
-        });
+        //Получаем список событий от INDM API
         getEventsFromIndmAPI();
     });
 });

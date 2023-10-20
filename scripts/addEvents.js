@@ -212,60 +212,6 @@ function addEventBtnClick() {
 	});
 }
 
-// Функция получения и обработки событий от EONET API
-function addNasaEonetEventsToMap(data) {
-	//останавливаем спинер (колесо загрузки) когда данные подгрузились
-	document.getElementById('nasaLogoSpinner').style = 'animation: none;';
-	document.getElementById('nasaSecondTitle').textContent = 'data for the last 90 days';
-
-	// Редактирование (подгонка под наш вариант хранения события) полей события
-	for (const feature of data.features) {
-		feature.properties.categoriesNEW = feature.properties.categories[0].id;
-		feature.properties.categoriesTitle = feature.properties.categories[0].title;
-		feature.properties.link = feature.properties.sources[0].url;
-		//Определение уровня угрозы события
-		feature.properties.dangerLevel = 'No data';
-		if (feature.properties.categoriesNEW == 'severeStorms' && feature.properties.magnitudeUnit == 'kts')
-			feature.properties.dangerLevel = getSevereStormDangerLevelByKTS(feature.properties.magnitudeValue);
-
-		feature.properties.Newid = feature.properties.id;
-		geojsonAllDataEvents.features.push(feature);
-	}
-
-	// обновление источника данных для карты
-	map.getSource('events').setData(geojsonAllDataEvents);
-	// прорисовка событий на карте
-	addPoints(geojsonAllDataEvents);
-	// при добавлении новых событий мы обновляем временной слайдер (фильтр событий по времени)
-	setDateFilterRange();
-}
-
-// Функция получения и обработки событий(землетрясений) от USGS API
-function addUsgsEarthquakeToMap(data) {
-	// Редактирование (подгонка под наш вариант хранения события) полей события
-	for (const feature of data.features) {
-		feature.properties.categoriesNEW = 'earthquakes';
-		feature.properties.categoriesTitle = 'Earthquakes';
-		feature.properties.link = feature.properties.url;
-		feature.properties.magnitudeUnit = feature.properties.magType;
-		feature.properties.magnitudeValue = feature.properties.mag;
-		feature.properties.date = new Date(feature.properties.time).toISOString();
-		feature.properties.closed = new Date(feature.properties.updated).toISOString();
-		//Определение уровня угрозы события
-		feature.properties.dangerLevel = getEarthquakesDangerLevelByMAG(feature.properties.magnitudeValue);
-
-		feature.properties.Newid = feature.properties.ids;
-		geojsonAllDataEvents.features.push(feature);
-	}
-
-	// обновление источника данных для карты
-	map.getSource('events').setData(geojsonAllDataEvents);
-	// прорисовка событий на карте
-	addPoints(geojsonAllDataEvents);
-	// при добавлении новых событий мы обновляем временной слайдер (фильтр событий по времени)
-	setDateFilterRange();
-}
-
 // Функция получения и обработки событий от нашего INDM API
 function addIndmEventsToMap(data) {
 	// Редактирование (подгонка под наш вариант хранения события) полей события
@@ -304,4 +250,8 @@ function addIndmEventsToMap(data) {
 	addPoints(geojsonAllDataEvents);
 	// при добавлении новых событий мы обновляем временной слайдер (фильтр событий по времени)
 	setDateFilterRange();
+
+	//останавливаем спинер (колесо загрузки) когда данные подгрузились
+	document.getElementById('nasaLogoSpinner').style = 'animation: none;';
+	document.getElementById('nasaSecondTitle').textContent = 'updated every hour';
 }
