@@ -90,7 +90,11 @@ function MarkerOnClick(LayerId){
         else{
             eventDescription += `<p>Source: No data</p></div>`;
         }
+
         new mapboxgl.Popup().setLngLat(coordinates).setHTML(eventDescription).addTo(map);
+
+        // Добавление кнопок управления событием
+        addEventManagementCommand(e.features[0].properties.id);
     });
         
     // Меняем тип курсора при наведение на маркер

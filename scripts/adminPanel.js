@@ -361,7 +361,7 @@ function addEventCategories() {
 					eventCategoryNavItem,
 					'categoryName'
 				);
-				createDeleteShortDescriptionDiv(newEventItemDiv, eventCategory.id, 'EventCategory', eventCategoryNavItem);
+				createDeleteShortDescriptionDiv(newEventItemDiv, eventCategory.id, 'EventCategory',  function() {eventCategoryNavItem.click();});
 
 				rootElement.append(newEventItemDiv);
 			}
@@ -489,7 +489,7 @@ function createUpdateShortDescriptionDiv(root, itemId, requestRoute, navItem, ..
 }
 
 //Универсальная функция создания кнопки delete item
-function createDeleteShortDescriptionDiv(root, itemId, requestRoute, navItem) {
+function createDeleteShortDescriptionDiv(root, itemId, requestRoute, actionIfSuccess) {
 	var deleteDiv = document.createElement('div');
 	deleteDiv.className = 'event-short-description event-reject';
 	deleteDiv.innerHTML = 'Delete';
@@ -505,7 +505,7 @@ function createDeleteShortDescriptionDiv(root, itemId, requestRoute, navItem) {
 					Authorization: `bearer ${localStorage.getItem('jwt')}`,
 				},
 				success: function (data) {
-					navItem.click();
+					actionIfSuccess();
 				},
 				error: function (jqXHR, textStatus, error) {
 					exceptionHandler(jqXHR, textStatus, error);
@@ -547,7 +547,7 @@ function addEventHazardUnits() {
 					'magnitudeUnitName',
 					'thresholdValue'
 				);
-				createDeleteShortDescriptionDiv(newEventItemDiv, eventHazardUnit.id, 'EventHazardUnit', eventHazardUnitNavItem);
+				createDeleteShortDescriptionDiv(newEventItemDiv, eventHazardUnit.id, 'EventHazardUnit', function() {eventHazardUnitNavItem.click();});
 
 				rootElement.append(newEventItemDiv);
 			}
@@ -597,7 +597,7 @@ function addEventSources() {
 					eventSourceNavItem,
 					'sourceType'
 				);
-				createDeleteShortDescriptionDiv(newEventItemDiv, eventSource.id, 'EventSource', eventSourceNavItem);
+				createDeleteShortDescriptionDiv(newEventItemDiv, eventSource.id, 'EventSource', function() {eventSourceNavItem.click();});
 
 				rootElement.append(newEventItemDiv);
 			}
@@ -642,7 +642,7 @@ function addMagnitudeUnits() {
 					'magnitudeUnitName',
 					'magnitudeUnitDescription'
 				);
-				createDeleteShortDescriptionDiv(newEventItemDiv, magnitudeUnit.id, 'MagnitudeUnit', magnitudeUnitNavItem);
+				createDeleteShortDescriptionDiv(newEventItemDiv, magnitudeUnit.id, 'MagnitudeUnit', function() {magnitudeUnitNavItem.click();});
 
 				rootElement.append(newEventItemDiv);
 			}
