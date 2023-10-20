@@ -22,10 +22,16 @@
 
 .popupDescription {
     margin: -5px;
+    font-size: 14px;
+    overflow: auto;
+    margin-right: 5px;
 }
 .popupDescription p::first-letter {
-    color: red;
-    font-size: 130%;
+    font-size: 125%;
+    font-weight: bold;
+}
+.popupDescription p {
+    margin-top: 0;
 }
 
 

@@ -73,28 +73,24 @@ function MarkerOnClick(LayerId){
         const coordinates = e.features[0].geometry.coordinates;
         
         // Формируем html описание события
-        let description = `<div class='popupDescription'><p>Title: ${e.features[0].properties.title}</p>
+        let eventDescription = `<div class='popupDescription'>
         <p>Id: ${e.features[0].properties.Newid}</p>
+        <p>Title: ${e.features[0].properties.title}</p>
+        <p>Confirmed: ${e.features[0].properties.confirmed}</p>
         <p>Categories: ${e.features[0].properties.categoriesTitle}</p>
         <p>Coordinates: ${coordinates}</p>
         <p>Start date: ${e.features[0].properties.date}</p>
         <p>Closed/update date: ${e.features[0].properties.closed ?? 'Not closed'}</p>
-        <p>Magnitude unit: ${e.features[0].properties.magnitudeUnit ?? 'No data'}</p>
+        <p>Magnitude unit: ${e.features[0].properties.magnitudeUnit}</p>
         <p>Magnitude value: ${e.features[0].properties.magnitudeValue ?? 'No data'}</p>
-        <p>Danger level: ${e.features[0].properties.dangerLevel ?? 'No data'}</p>
-        <p>Sources: <a href="${e.features[0].properties.link}">${(e.features[0].properties.link == 'No data') ? 'No data': 'click'}</a></p></div>`;
-
-        // Ensure that if the map is zoomed out such that multiple
-        // copies of the feature are visible, the popup appears
-        // over the copy being pointed to.
-        // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        // coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        // }
-
-        new mapboxgl.Popup()
-        .setLngLat(coordinates)
-        .setHTML(description)
-        .addTo(map);
+        <p>Danger level: ${e.features[0].properties.dangerLevel}</p>`;
+        if(e.features[0].properties.link !=null){
+            eventDescription += `<p>Source: <a href="${e.features[0].properties.link}">${e.features[0].properties.link}</a></p></div>`;
+        }
+        else{
+            eventDescription += `<p>Source: No data</p></div>`;
+        }
+        new mapboxgl.Popup().setLngLat(coordinates).setHTML(eventDescription).addTo(map);
     });
         
     // Меняем тип курсора при наведение на маркер
