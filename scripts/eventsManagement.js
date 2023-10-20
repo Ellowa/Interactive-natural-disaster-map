@@ -1,5 +1,10 @@
 function addEventManagementCommand(eventId) {
-	if (localStorage.getItem('userRole') == 'moderator') {
+    var eventIndex = geojsonAllDataEvents.features.findIndex(event => event.properties.id == eventId);
+
+	if (
+		localStorage.getItem('userRole') == 'moderator' ||
+		!geojsonAllDataEvents.features[eventIndex].properties.confirmed
+	) {
 		addUpdateEventButton(eventId);
 		addDeleteEventButton(eventId);
 	}
