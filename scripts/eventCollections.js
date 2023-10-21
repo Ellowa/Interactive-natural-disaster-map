@@ -85,13 +85,15 @@ function getAndShowAllEventCollections() {
 				var eventCollectionInput = document.createElement('input');
 				eventCollectionInput.classList = 'eventCollection-show-input';
 				eventCollectionInput.type = 'checkbox';
-				var eventIds = [];
 				eventCollectionInput.addEventListener('change', function () {
-					eventCollection.eventDtos.forEach(naturalEvent => {
-						eventIds.push(naturalEvent.id);
+					var eventIds = [];
+					var naturalEventLiElements = $(`#collectionUl-${eventCollection.id}`).children('li');
+					naturalEventLiElements.each(indexNaturalEventLiElement => {
+						eventIds.push(Number(naturalEventLiElements[indexNaturalEventLiElement].id.slice(8)));
 					});
 
 					if (this.checked) {
+						console.log(eventIds);
 						createEventIdFilter(eventIds);
 						filterEvents();
 
@@ -143,6 +145,12 @@ function getAndShowAllEventCollections() {
 					}
 				);
 				deleteImage.addEventListener('click', function () {
+					var eventIds = [];
+					var naturalEventLiElements = $(`#collectionUl-${eventCollection.id}`).children('li');
+					naturalEventLiElements.each(indexNaturalEventLiElement => {
+						eventIds.push(Number(naturalEventLiElements[indexNaturalEventLiElement].id.slice(8)));
+					});
+
 					deleteEventCollection(eventCollection.id, eventCollectionLi);
 
 					if (eventFilters['collectionFilter'] != null) {
@@ -162,11 +170,13 @@ function getAndShowAllEventCollections() {
 				eventCollectionLi.append(eventCollectionSpan);
 
 				var eventCollectionUl = document.createElement('ul');
+				eventCollectionUl.id = 'collectionUl-' + eventCollection.id;
 
 				eventCollection.eventDtos.forEach(naturalEvent => {
 					var eventLi = document.createElement('li');
 					eventLi.style = 'padding: 8px 0';
 					eventLi.className = 'tree-element';
+					eventLi.id = `eventId-${naturalEvent.id}`;
 
 					var eventTextDiv = document.createElement('div');
 					eventTextDiv.innerHTML = naturalEvent.title;

@@ -1,13 +1,16 @@
-function addEventManagementCommand(eventId) {
-    var eventIndex = geojsonAllDataEvents.features.findIndex(event => event.properties.id == eventId);
+function addEventManagementCommand(eventProperties, eventGeometry) {
+    var eventIndex = geojsonAllDataEvents.features.findIndex(event => event.properties.id == eventProperties.id);
 
 	if (
 		localStorage.getItem('userRole') == 'moderator' ||
 		!geojsonAllDataEvents.features[eventIndex].properties.confirmed
 	) {
-		addUpdateEventButton(eventId);
-		addDeleteEventButton(eventId);
+		addUpdateEventButton(eventProperties.id);
+		addDeleteEventButton(eventProperties.id);
 	}
+    if (localStorage.getItem('login') != null) {
+        addEventCollectionButton(eventProperties, eventGeometry);
+    }
 }
 
 function addUpdateEventButton(eventId) {
@@ -160,3 +163,96 @@ function addDeleteEventButton(eventId) {
 	);
 }
 
+function addEventCollectionButton(eventProperties, eventGeometry) {
+	var collectionSelect = document.createElement('select');
+	collectionSelect.classList = 'combo-box';
+	collectionSelect.id = 'collectionSelect-' + eventProperties.id;
+	collectionSelect.required = true;
+
+	$.ajax({
+		url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventsCollection`,
+		method: 'GET',
+		contentType: 'application/json; charset=utf-8',
+		headers: {
+			Authorization: `bearer ${localStorage.getItem('jwt')}`,
+		},
+		success: function (data) {
+			data.forEach(eventsCollection => {
+				var collectionOptionElement = document.createElement('option');
+				collectionOptionElement.value = eventsCollection.id;
+				collectionOptionElement.innerHTML = eventsCollection.collectionName;
+				collectionSelect.append(collectionOptionElement);
+			});
+		},
+		error: function (jqXHR, textStatus, error) {
+			exceptionHandler(jqXHR, textStatus, error);
+		},
+	});
+	$('.popupDescription').append(collectionSelect);
+
+	var eventCollectionDiv = document.createElement('div');
+	eventCollectionDiv.className = 'event-short-description event-add-to-collection';
+	eventCollectionDiv.innerHTML = 'Add to collection';
+	$('.popupDescription').append(eventCollectionDiv);
+
+	eventCollectionDiv.addEventListener('click', e => {
+		var addEventToCollectionRequestJSON = {
+			eventId: eventProperties.id,
+			collectionId: collectionSelect.value,
+		};
+		addEventToCollectionRequestJSON = JSON.stringify(addEventToCollectionRequestJSON);
+
+		$.ajax({
+			url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/EventsCollection/AddEvent`,
+			method: 'POST',
+			dataType: 'text',
+			contentType: 'application/json; charset=utf-8',
+			data: addEventToCollectionRequestJSON,
+			headers: {
+				Authorization: `bearer ${localStorage.getItem('jwt')}`,
+			},
+			success: function (data) {
+                if ($('#allEventCollections').prev(this).text() == '► ') $('#allEventCollections').click();
+
+				var eventCollectionUl = document.getElementById(`collectionUl-${collectionSelect.value}`);
+                if (eventCollectionUl != null)
+                {
+                    var eventLi = document.createElement('li');
+                    eventLi.style = 'padding: 8px 0';
+                    eventLi.className = 'tree-element';
+                    eventLi.id = `eventId-${eventProperties.id}`;
+
+                    var eventTextDiv = document.createElement('div');
+                    eventTextDiv.innerHTML = eventProperties.title;
+                    eventTextDiv.style = 'width: auto; max-width: 120px; overflow: auto';
+                    eventLi.append(eventTextDiv);
+
+                    eventLi.addEventListener('click', function () {
+                        map.flyTo({ center: [eventGeometry.coordinates[0], eventGeometry.coordinates[1]], zoom: 9 });
+                    });
+
+                    var deleteEventImage = document.createElement('img');
+                    deleteEventImage.style = `float: right; padding-right: 8px; margin-top: -20px`;
+                    var srcDelete = 'images/delete.png';
+                    deleteEventImage.src = srcDelete;
+                    $(deleteEventImage).hover(
+                        function () {
+                            $(this).attr('src', 'images/delete.gif');
+                        },
+                        function () {
+                            $(this).attr('src', srcDelete);
+                        }
+                    );
+                    deleteEventImage.addEventListener('click', function () {
+                        deleteEventFromCollection(collectionSelect.value, eventProperties.id, eventLi);
+                    });
+                    eventLi.append(deleteEventImage);
+                    eventCollectionUl.append(eventLi);
+                }
+			},
+			error: function (jqXHR, textStatus, error) {
+				exceptionHandler(jqXHR, textStatus, error);
+			},
+		});
+	});
+}

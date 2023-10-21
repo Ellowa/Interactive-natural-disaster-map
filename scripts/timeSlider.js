@@ -68,7 +68,6 @@ document.getElementById('dateSlider').addEventListener('input', (e) => {
 	createDateFilter(toDate.toISOString().substring(0, 10));
 	filterEvents();
 
-    console.log(toDate.toISOString());
 	// Меняем подпись диапазона дат
 	document.getElementById('selectedDateLabel').textContent = `Date range: 
     ${geojsonAllDataEvents.features[0].properties.startDate.substring(0, 10)}

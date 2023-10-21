@@ -94,7 +94,7 @@ function MarkerOnClick(LayerId){
         new mapboxgl.Popup().setLngLat(coordinates).setHTML(eventDescription).addTo(map);
 
         // Добавление кнопок управления событием
-        addEventManagementCommand(e.features[0].properties.id);
+        addEventManagementCommand(e.features[0].properties, e.features[0].geometry);
     });
         
     // Меняем тип курсора при наведение на маркер

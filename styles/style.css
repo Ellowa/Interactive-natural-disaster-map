@@ -669,6 +669,12 @@ body { margin: 0; padding: 0; }
     cursor: pointer;
 }
 
+.event-add-to-collection:hover {
+    color:#53ea93;
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+
 .event-details:hover {
     color:#364ed6;
     transition: all 0.5s ease;
