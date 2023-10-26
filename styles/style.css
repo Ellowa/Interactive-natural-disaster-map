@@ -446,6 +446,8 @@ body { margin: 0; padding: 0; }
     justify-content: flex-start;
     padding-left: 15px;
     padding-right: 15px;
+    overflow: auto;
+    max-height: 460px;
 }
 
 .about-navigation{
@@ -495,6 +497,11 @@ body { margin: 0; padding: 0; }
     border-right: 0 solid;
 }
 
+.nav-about{
+    width: 20%;
+     border-right: 2px solid var(--light-teal-input-zone);
+}
+
 .about-header{
     height: 15%;
     font-size: 48px;
@@ -504,7 +511,7 @@ body { margin: 0; padding: 0; }
     text-transform: uppercase;
     letter-spacing: -1px;
     color: #fff;
-    margin: 0 0 23px;
+    margin: 0 0 15px;
 }
 
 .about-header p{
