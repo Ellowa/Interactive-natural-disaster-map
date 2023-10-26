@@ -67,7 +67,7 @@ function aboutPanelNavClick() {
 
 	var aboutLinksNavItem = document.getElementById('aboutLinksNavItem');
 	aboutLinksNavItem.addEventListener('click', e => {
-		var currentAboutPage = document.getElementById('eventSource');
+		var currentAboutPage = document.getElementById('aboutLinksPage');
 		showAboutPanelPage(currentAboutPage);
 	});
 }
