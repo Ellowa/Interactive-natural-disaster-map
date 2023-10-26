@@ -57,21 +57,18 @@ function aboutPanelNavClick() {
 	aboutInfoNavItem.addEventListener('click', e => {
 		var currentAboutPage = document.getElementById('aboutInfoPage');
 		showAboutPanelPage(currentAboutPage);
-		addUnconfirmedEvents();
 	});
 
 	var aboutDangerGradationNavItem = document.getElementById('aboutDangerGradationNavItem');
 	aboutDangerGradationNavItem.addEventListener('click', e => {
-		var currentAboutPage = document.getElementById('eventHazard');
+		var currentAboutPage = document.getElementById('dangerGradationPage');
 		showAboutPanelPage(currentAboutPage);
-		addEventHazardUnits();
 	});
 
 	var aboutLinksNavItem = document.getElementById('aboutLinksNavItem');
 	aboutLinksNavItem.addEventListener('click', e => {
 		var currentAboutPage = document.getElementById('eventSource');
 		showAboutPanelPage(currentAboutPage);
-		addEventSources();
 	});
 }
 
