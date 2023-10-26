@@ -55,7 +55,7 @@ function aboutPanelNavClick() {
 	//клик конкретного навигационного элемента
 	var aboutInfoNavItem = document.getElementById('aboutInfoNavItem');
 	aboutInfoNavItem.addEventListener('click', e => {
-		var currentAboutPage = document.getElementById('confirmRejectEvents');
+		var currentAboutPage = document.getElementById('aboutInfoPage');
 		showAboutPanelPage(currentAboutPage);
 		addUnconfirmedEvents();
 	});
