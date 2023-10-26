@@ -446,6 +446,7 @@ body { margin: 0; padding: 0; }
     justify-content: flex-start;
     padding-left: 15px;
     padding-right: 15px;
+    overflow: auto;
 }
 
 .about-navigation{
@@ -493,6 +494,11 @@ body { margin: 0; padding: 0; }
 }
 .nav-item:has(+ .nav-item:hover){
     border-right: 0 solid;
+}
+
+.nav-about{
+    width: 20%;
+     border-right: 2px solid var(--light-teal-input-zone);
 }
 
 .about-header{

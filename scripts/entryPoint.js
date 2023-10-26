@@ -64,6 +64,7 @@ map.on('load', () => {
         adminPanelBtnClick();
         adminPanelNavClick();
         dangerValueInfoZoneBtnClick();
+        aboutPanelNavClick();
 
         //Получаем список событий от INDM API
         getEventsFromIndmAPI();
