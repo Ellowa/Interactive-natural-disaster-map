@@ -9,6 +9,9 @@ if(localStorage.getItem('login') != null && localStorage.getItem('jwt') != null)
         localStorage.removeItem('userRole');
         localStorage.removeItem('userId');
         localStorage.removeItem('jwtExpire');
+
+        if (localStorage.getItem('additionalDate') != null) localStorage.removeItem('additionalDate');
+        if (localStorage.getItem('additionalDateRange') != null) localStorage.removeItem('additionalDateRange');
     }
     else //token has not expired
     {
@@ -53,6 +56,7 @@ map.on('load', () => {
     $( document ).ready(function() { // страничка прогружена
         
         // регистрация(установка) слушателей событий 
+        additionalDateRangeController();
         getCoordinatesByMapButtonClk();
         logOutBtnClk();
         registerBtnClick();
@@ -73,8 +77,11 @@ map.on('load', () => {
 
 function getEventsFromIndmAPI()
 {
+    var getRequestQueryData = '';
+    if (localStorage.getItem('additionalDate') == 'true' && localStorage.getItem('additionalDateRange') != null)
+        getRequestQueryData = '?ExtendedPeriodEndPoint=' + localStorage.getItem('additionalDateRange');
     $.ajax({
-        url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/NaturalDisasterEvent',
+        url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/NaturalDisasterEvent' + getRequestQueryData,
         method: 'GET',
         contentType: "application/json; charset=utf-8",
         headers: {
@@ -125,5 +132,53 @@ function placeholderClk(){
 function addPlaceholderEventListenerSync(placeholder){
     placeholder.addEventListener('click', (e) => {
         placeholder.parentElement.children[0].focus();
+    });
+}
+
+function additionalDateRangeController(){
+    var additionalDateInput = document.getElementById('additionalDateInput');
+    var additionalDate = document.getElementById('additionalDate');
+    dateNow = new Date();
+    dateFiveYearsAgo = new Date();
+    dateFiveYearsAgo.setDate(dateNow.getDate() - 1824);
+    additionalDateInput.min = 
+        `${dateFiveYearsAgo.getFullYear()}-${dateFiveYearsAgo.getMonth() < 10 ? '0' + dateFiveYearsAgo.getMonth() : dateFiveYearsAgo.getMonth()}-${dateFiveYearsAgo.getDate()}`;
+    
+    additionalDateInput.max = `${dateNow.getFullYear()}-${
+			dateNow.getMonth() < 10 ? '0' + dateNow.getMonth() : dateNow.getMonth()
+		}-${dateNow.getDate()}`;
+
+    dateOneYearsAgo = new Date();
+    dateOneYearsAgo.setDate(dateNow.getDate() - 365);
+    additionalDateInput.value = 
+        `${dateOneYearsAgo.getFullYear()}-${dateOneYearsAgo.getMonth() < 10 ? '0' + dateOneYearsAgo.getMonth() : dateOneYearsAgo.getMonth()}-${dateOneYearsAgo.getDate()}`;
+
+    if (localStorage.getItem('additionalDate') == 'true' && localStorage.getItem('additionalDateRange') != null){
+		additionalDate.checked = true;
+        additionalDateInput.value = localStorage.getItem('additionalDateRange');
+    }
+
+    additionalDate.addEventListener('change', function () {
+        if (this.checked) {
+            localStorage.setItem('additionalDate', true);
+            localStorage.setItem('additionalDateRange', additionalDateInput.value);
+            geojsonAllDataEvents.features = [];
+            getEventsFromIndmAPI();
+        }
+        else{
+            if (localStorage.getItem('additionalDate') != null) localStorage.removeItem('additionalDate');
+            if (localStorage.getItem('additionalDateRange') != null) localStorage.removeItem('additionalDateRange');
+            
+            geojsonAllDataEvents.features = [];
+			getEventsFromIndmAPI();
+        }
+	});
+
+    additionalDateInput.addEventListener('change', function () {
+        localStorage.setItem('additionalDateRange', additionalDateInput.value);
+        if (localStorage.getItem('additionalDate') == 'true'){
+            geojsonAllDataEvents.features = [];
+            getEventsFromIndmAPI();
+        }
     });
 }

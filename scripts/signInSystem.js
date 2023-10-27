@@ -21,6 +21,9 @@ function logOutBtnClk() {
 		localStorage.removeItem('userId');
 		localStorage.removeItem('jwtExpire');
 
+		if (localStorage.getItem('additionalDate') != null) localStorage.removeItem('additionalDate');
+		if (localStorage.getItem('additionalDateRange') != null) localStorage.removeItem('additionalDateRange');
+
 		location.reload(); //Todo временный костыль чтобы очистить события прошлого пользователя
 	});
 }
@@ -160,6 +163,7 @@ function logInBtnClick() {
 					}
 					LogInZone.style = 'display: none';
 					logInSuccess();
+					getEventsFromIndmAPI();
 				},
 				error: function (jqXHR, textStatus, error) {
 					exceptionHandler(jqXHR, textStatus, error);
@@ -196,8 +200,6 @@ function logInSuccess() {
 
 	const divTreeEventCollections = document.getElementById('divTreeEventCollections');
 	divTreeEventCollections.style = 'display: block';
-
-	getEventsFromIndmAPI();
 }
 
 function decodeJwt(token) {

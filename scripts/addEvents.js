@@ -227,7 +227,7 @@ function addIndmEventsToMap(data) {
 		feature.properties.isClosed = feature.properties.closed;
 
 		//добавляем события к списку всех событий
-		if (!geojsonAllDataEvents.features.includes(feature)) {
+		if (geojsonAllDataEvents.features.find((el) => el.properties.id == feature.properties.id) == undefined) {
 			geojsonAllDataEvents.features.push(feature);
 		}
 	}

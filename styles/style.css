@@ -120,6 +120,20 @@ body { margin: 0; padding: 0; }
     width: 40px;
 }
 
+#additionalDate + label{
+    background-color: #3a50c9;
+    display: block;
+}
+
+#additionalDate + label:hover,
+#additionalDate:checked + label{
+    background-color: #10aed5;
+}
+
+#additionalDateInput{
+    display: block;
+    margin-left: 20%;
+}
 
 /* Стиль поля ввода нового маркера */
 *, *::before, *::after {
