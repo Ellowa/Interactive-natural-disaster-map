@@ -576,8 +576,8 @@ body { margin: 0; padding: 0; }
 #adminPaneDetails {
     display: flex;
     min-height: 360px;
-    width: 760px;
-    left: calc(50% - 300px);
+    width: 560px;
+    left: calc(50% - 230px);
     top: 185px;
     padding-left: 15px;
     padding-right: 15px;
@@ -775,7 +775,7 @@ body { margin: 0; padding: 0; }
 }
 
 .range-div input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
+  appearance: none;
   pointer-events: all;
   width: 24px;
   height: 24px;
@@ -786,7 +786,7 @@ body { margin: 0; padding: 0; }
 }
 
 .range-div input[type=range]::-moz-range-thumb {
-  -webkit-appearance: none;
+  appearance: none;
   pointer-events: all;
   width: 24px;
   height: 24px;
@@ -986,6 +986,26 @@ body { margin: 0; padding: 0; }
 
 .combo-box{
     margin-left: 8px;
+}
+
+
+#userAccountDetails{
+    display: flex;
+    min-height: 260px;
+    width: 460px;
+    left: calc(50% - 230px);
+    top: 185px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: var(--light-teal);
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-around;
+    z-index: 9;
+    overflow: auto;
+}
+#userInfoDiv div:first-child{
+    color: #00fdf4;
 }
 
 /* При разрешении 1280x720 (ноутбук) */

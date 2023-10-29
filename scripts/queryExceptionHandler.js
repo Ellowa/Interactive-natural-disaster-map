@@ -1,6 +1,5 @@
 function exceptionHandler(jqXHR, textStatus, error) {
     var exceptionMessage = jqXHR.responseText?.toString();
-    console.log(exceptionMessage);
     if (exceptionMessage.includes('"message"'))
 			exceptionMessage = exceptionMessage.slice(
 				exceptionMessage.indexOf('"message"') + 10,

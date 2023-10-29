@@ -445,6 +445,7 @@ function createUpdateShortDescriptionDiv(root, itemId, requestRoute, actionIfSuc
 
 		updateRequestParams.forEach(updateRequestParam => {
 			input = createTextInputForAddNewEventItem(updateRequestParam, updateRequestParam);
+			input.title = "Enter new " + updateRequestParam;
 			updateInfoItem.append(input);
 		});
 
@@ -463,7 +464,7 @@ function createUpdateShortDescriptionDiv(root, itemId, requestRoute, actionIfSuc
 				};
 				updateRequestParams.forEach(updateRequestParam => {
 					var textInput = document.getElementById(updateRequestParam);
-					updateRequest[textInput.id] = textInput.value;
+					updateRequest[textInput.id] = textInput.value == '' ? null : textInput.value;
 				});
 				updateRequest = JSON.stringify(updateRequest);
 
