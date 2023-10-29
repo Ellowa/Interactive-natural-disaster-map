@@ -26,7 +26,6 @@ function setDateFilterRange(){
     var dateSliderFrom = document.getElementById('dateSliderFrom'); 
     var dateSliderTo = document.getElementById('dateSliderTo'); 
     dateSliderTo.max = daysRange;
-    dateSliderTo.min = dateSliderFrom.value;
     if (dateSliderTo.value <= dateSliderFrom.value) dateSliderTo.value = daysRange;
     dateSliderFrom.max = daysRange;
 }
