@@ -983,6 +983,11 @@ body { margin: 0; padding: 0; }
     color: #C0C0C0;
 }
 
+
+.combo-box{
+    margin-left: 8px;
+}
+
 /* При разрешении 1280x720 (ноутбук) */
 @media (max-height: 800px) {
     .logo{
