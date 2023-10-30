@@ -353,6 +353,13 @@ function addEventCategories() {
 
 				createEventShortDescriptionDiv(newEventItemDiv, eventCategory.id);
 				createEventShortDescriptionDiv(newEventItemDiv, eventCategory.categoryName);
+				
+				var magnitudeUnits = '';
+				eventCategory.magnitudeUnitsNames.forEach(magnitudeUnitName => {
+					magnitudeUnits += magnitudeUnitName + ", ";
+				});
+				if (magnitudeUnits.length !=0) magnitudeUnits = magnitudeUnits.slice(0, -2);
+				createEventShortDescriptionDiv(newEventItemDiv, magnitudeUnits);
 
 				createUpdateShortDescriptionDiv(
 					newEventItemDiv,
