@@ -77,7 +77,8 @@ function addEventBtnClick() {
 								},
 								success: function (data) {
 									data.forEach(mUnit => {
-										if (eventCategory.magnitudeUnitsNames.includes(mUnit.magnitudeUnitName)) {
+										if (eventCategory.magnitudeUnitsNames.includes(mUnit.magnitudeUnitName) &&
+										 $(mUnitInput).children().get().find(opt => opt.value == mUnit.magnitudeUnitName) == undefined) {
 											var mUnitOptionElement = document.createElement('option');
 											mUnitOptionElement.value = mUnit.magnitudeUnitName;
 											mUnitOptionElement.innerHTML = mUnit.magnitudeUnitName;
