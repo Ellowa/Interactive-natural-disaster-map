@@ -41,45 +41,6 @@ function addEventBtnClick() {
 			return 0;
 		}
 
-		var mUnitInput = document.getElementById('mUnitInputCombo');
-		mUnitInput.replaceChildren();
-		var mUnitDefaultOption = document.createElement('option');
-		mUnitDefaultOption.selected = true;
-		mUnitDefaultOption.disabled = true;
-		mUnitInput.append(mUnitDefaultOption);
-
-		$.ajax({
-			url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/MagnitudeUnit`,
-			method: 'GET',
-			contentType: 'application/json; charset=utf-8',
-			headers: {
-				Authorization: `bearer ${localStorage.getItem('jwt')}`,
-			},
-			success: function (data) {
-				data.forEach(mUnit => {
-					var mUnitOptionElement = document.createElement('option');
-					mUnitOptionElement.value = mUnit.magnitudeUnitName;
-					mUnitOptionElement.innerHTML = mUnit.magnitudeUnitName;
-					mUnitOptionElement.title = mUnit.magnitudeUnitDescription;
-					mUnitInput.append(mUnitOptionElement);
-
-					mUnitInput.addEventListener('change', e => {
-						if (mUnitInput.value == mUnit.magnitudeUnitName) {
-							var mValueInput = document.getElementById('mValueInput');
-							mValueInput.title = 'Value(can be empty or 0) for ' + mUnit.magnitudeUnitName + ' - ' + mUnit.magnitudeUnitDescription;
-							mUnitInput.title = mUnit.magnitudeUnitDescription;
-						}
-					});
-				});
-
-				addEventZone.style = 'display: flex';
-			},
-			error: function (jqXHR, textStatus, error) {
-				exceptionHandler(jqXHR, textStatus, error);
-				addEventZone.style = 'display: none';
-			},
-		});
-
 		var categoryInput = document.getElementById('categoryInputCombo');
 		categoryInput.replaceChildren();
 		var categoryDefaultOption = document.createElement('option');
@@ -100,9 +61,54 @@ function addEventBtnClick() {
 					eventCategoryOptionElement.value = eventCategory.categoryName;
 					eventCategoryOptionElement.innerHTML = eventCategory.categoryName;
 					categoryInput.append(eventCategoryOptionElement);
-				});
 
-				addEventZone.style = 'display: flex';
+					categoryInput.addEventListener('change', e => {
+						//Add magnitudeUnitInput
+						var mUnitInput = document.getElementById('mUnitInputCombo');
+						mUnitInput.replaceChildren();
+
+						if (categoryInput.value == eventCategory.categoryName) {
+							$.ajax({
+								url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/MagnitudeUnit`,
+								method: 'GET',
+								contentType: 'application/json; charset=utf-8',
+								headers: {
+									Authorization: `bearer ${localStorage.getItem('jwt')}`,
+								},
+								success: function (data) {
+									data.forEach(mUnit => {
+										if (eventCategory.magnitudeUnitsNames.includes(mUnit.magnitudeUnitName)) {
+											var mUnitOptionElement = document.createElement('option');
+											mUnitOptionElement.value = mUnit.magnitudeUnitName;
+											mUnitOptionElement.innerHTML = mUnit.magnitudeUnitName;
+											mUnitOptionElement.title = mUnit.magnitudeUnitDescription;
+											mUnitInput.append(mUnitOptionElement);
+
+											mUnitInput.addEventListener('change', e => {
+												if (mUnitInput.value == mUnit.magnitudeUnitName) {
+													var mValueInput = document.getElementById('mValueInput');
+													mValueInput.title =
+														'Value(can be empty or 0) for ' +
+														mUnit.magnitudeUnitName +
+														' - ' +
+														mUnit.magnitudeUnitDescription;
+													mUnitInput.title = mUnit.magnitudeUnitDescription;
+												}
+											});
+										}
+									});
+
+									addEventZone.style = 'display: flex';
+								},
+								error: function (jqXHR, textStatus, error) {
+									exceptionHandler(jqXHR, textStatus, error);
+									addEventZone.style = 'display: none';
+								},
+							});
+						}
+					});
+					addEventZone.style = 'display: flex';
+				});
 			},
 			error: function (jqXHR, textStatus, error) {
 				exceptionHandler(jqXHR, textStatus, error);
