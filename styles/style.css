@@ -511,6 +511,10 @@ body { margin: 0; padding: 0; }
     border-right: 0 solid;
 }
 
+#magnitudeUnitToEventCategoryNavItem{
+    width: 22%;
+}
+
 .nav-about{
     width: 20%;
      border-right: 2px solid var(--light-teal-input-zone);

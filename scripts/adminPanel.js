@@ -324,6 +324,13 @@ function adminPanelNavClick() {
 		showAdminPanelPage(currentAdminPage);
 		addMagnitudeUnits();
 	});
+
+	var magnitudeUnitToEventCategoryNavItem = document.getElementById('magnitudeUnitToEventCategoryNavItem');
+	magnitudeUnitToEventCategoryNavItem.addEventListener('click', e => {
+		var currentAdminPage = document.getElementById('magnitudeUnitToEventCategory');
+		showAdminPanelPage(currentAdminPage);
+		addMagnitudeUnitsToEventCategories();
+	});
 }
 
 function showAdminPanelPage(page) {
@@ -426,6 +433,7 @@ function createTextInputForAddNewEventItem(id, placeholder) {
 	textInput.type = 'text';
 	textInput.id = id;
 	textInput.placeholder = placeholder;
+	textInput.title = placeholder;
 	return textInput;
 }
 
@@ -741,5 +749,89 @@ function addMagnitudeUnitDetailsDiv(root, magnitudeUnitId) {
 				exceptionHandler(jqXHR, textStatus, error);
 			},
 		});
+	});
+}
+
+function addMagnitudeUnitsToEventCategories() {
+	var rootElement = document.getElementById('magnitudeUnitToEventCategory');
+	clearAdminPanMainZone(rootElement);
+
+	$.ajax({
+		url: 'https://interactivenaturaldisastermapapi.azurewebsites.net/api/MagnitudeUnit',
+		method: 'GET',
+		contentType: 'application/json; charset=utf-8',
+		headers: {
+			Authorization: `bearer ${localStorage.getItem('jwt')}`,
+		},
+		success: function (data) {
+			var magnitudeUnitToEventCategoryNavItem = document.getElementById('magnitudeUnitToEventCategoryNavItem');
+			for (const magnitudeUnit of data) {
+				for (const eventCategory of magnitudeUnit.eventCategoryDtos) {
+					var newEventItemDiv = document.createElement('div');
+					newEventItemDiv.className = 'event-items';
+
+					createEventShortDescriptionDiv(newEventItemDiv, 'X');
+					createEventShortDescriptionDiv(newEventItemDiv, magnitudeUnit.magnitudeUnitName);
+					createEventShortDescriptionDiv(newEventItemDiv, eventCategory.categoryName);
+
+					createDeleteMagnitudeUnitFromEventCategoryShortDescriptionDiv(
+						newEventItemDiv,
+						magnitudeUnit.magnitudeUnitName,
+						eventCategory.categoryName,
+						function () {
+							magnitudeUnitToEventCategoryNavItem.click();
+						}
+					);
+
+					rootElement.append(newEventItemDiv);
+				}
+			}
+			var categoryNameInput = createTextInputForAddNewEventItem('eventCategoryName', 'enter category name');
+			var magnitudeUnitNameInput = createTextInputForAddNewEventItem('magnitudeUnitName', 'enter magnitude unit name');
+			addNewEventItemForm(
+				rootElement,
+				'MagnitudeUnit/AddToCategory',
+				magnitudeUnitToEventCategoryNavItem,
+				categoryNameInput,
+				magnitudeUnitNameInput
+			);
+		},
+		error: function (jqXHR, textStatus, error) {
+			exceptionHandler(jqXHR, textStatus, error);
+		},
+	});
+}
+
+function createDeleteMagnitudeUnitFromEventCategoryShortDescriptionDiv(root, magnitudeUnitName, eventCategoryName, actionIfSuccess) {
+	var deleteDiv = document.createElement('div');
+	deleteDiv.className = 'event-short-description event-reject';
+	deleteDiv.innerHTML = 'Delete';
+	root.append(deleteDiv);
+
+	deleteDiv.addEventListener('click', e => {
+		if (confirm('Are you sure you want to delete this ' + `${magnitudeUnitName} unit from ${eventCategoryName}`)) {
+			var requestBody = {
+				magnitudeUnitName: magnitudeUnitName,
+				eventCategoryName: eventCategoryName,
+			};
+			requestBody = JSON.stringify(requestBody);
+
+			$.ajax({
+				url: `https://interactivenaturaldisastermapapi.azurewebsites.net/api/MagnitudeUnit/DeleteFromCategory`,
+				method: 'DELETE',
+				dataType: 'text',
+				contentType: 'application/json; charset=utf-8',
+				data: requestBody,
+				headers: {
+					Authorization: `bearer ${localStorage.getItem('jwt')}`,
+				},
+				success: function (data) {
+					actionIfSuccess();
+				},
+				error: function (jqXHR, textStatus, error) {
+					exceptionHandler(jqXHR, textStatus, error);
+				},
+			});
+		}
 	});
 }
