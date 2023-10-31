@@ -93,7 +93,6 @@ function getAndShowAllEventCollections() {
 					});
 
 					if (this.checked) {
-						console.log(eventIds);
 						createEventIdFilter(eventIds);
 						filterEvents();
 

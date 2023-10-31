@@ -225,6 +225,13 @@ function addEventBtnClick() {
 function addIndmEventsToMap(data) {
 	// Редактирование (подгонка под наш вариант хранения события) полей события
 	for (const feature of data.features) {
+		if(!availableEventCategories.includes(feature.properties.category)){
+			console.log(
+				`There is no picture for this ${feature.properties.category} category, so it will be changed to other category`
+			);
+			feature.properties.category = 'other';
+		}
+
 		var categoryTitle = feature.properties.category.split(/(?=[A-Z])/).join(' ');
 		var dangerLevel = feature.properties.eventHazardUnit.split(/(?=[A-Z])/).join(' ');
 

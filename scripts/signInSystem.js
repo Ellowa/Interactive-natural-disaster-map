@@ -24,7 +24,17 @@ function logOutBtnClk() {
 		if (localStorage.getItem('additionalDate') != null) localStorage.removeItem('additionalDate');
 		if (localStorage.getItem('additionalDateRange') != null) localStorage.removeItem('additionalDateRange');
 
-		location.reload(); //Todo временный костыль чтобы очистить события прошлого пользователя
+		const adminPanelZone = document.getElementById('adminPanelZone');
+		adminPanelZone.style = 'display: none';
+		const adminPanelOpenButton = document.getElementById('adminPanelOpenButton');
+		adminPanelOpenButton.style = 'display: none';
+
+		delete eventFilters['collectionFilter'];
+		filterEvents();
+
+		// обновляем события на карте
+		geojsonAllDataEvents.features = [];
+		getEventsFromIndmAPI();
 	});
 }
 

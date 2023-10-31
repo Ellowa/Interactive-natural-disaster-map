@@ -88,7 +88,7 @@ function dateSliderEvents(){
 	var toDate = new Date();
     var fromDate = new Date();
 	toDate.setDate(new Date(geojsonAllDataEvents.features[0].properties.startDate).getDate() - selectedDateRange - 1);
-    fromDate.setDate(new Date(geojsonAllDataEvents.features[geojsonAllDataEvents.features.length -1].properties.startDate).getDate() - selectedDateRangeFrom);
+    fromDate.setDate(31 - selectedDateRangeFrom);
 	createDateFilter(toDate.toISOString().substring(0, 10), fromDate.toISOString().substring(0, 10));
 	filterEvents();
 

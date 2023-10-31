@@ -22,7 +22,6 @@ function addEventListenerToEventFilterSync(layerID, fullLayerID){
             'visibility',
             e.target.checked ? 'visible' : 'none'
         );
-        console.log(fullLayerID);
     }); 
 }
 

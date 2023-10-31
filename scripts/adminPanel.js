@@ -12,7 +12,9 @@ function adminPanelBtnClick() {
 
 	closeBtnAdminPanelZone.addEventListener('click', e => {
 		adminPanelZone.style = 'display: none';
-		location.reload(); //Todo временный костыль чтобы добавить новые подтвержденные события на карту
+		// обновляем события на карте
+		geojsonAllDataEvents.features = [];
+		getEventsFromIndmAPI();
 	});
 
 	closeBtnAdminPaneDetails.addEventListener('click', e => {

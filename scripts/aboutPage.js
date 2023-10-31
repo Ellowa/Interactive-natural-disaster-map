@@ -17,14 +17,12 @@ function aboutBtnClick(){
 // Обработчик событий для информационной зоны об опасности
 function dangerValueInfoZoneBtnClick() {
 	const dangerValueInfoZone = document.getElementById('dangerValueInfoZone');
-    // Todo сделать кнопку открытия этой зоны из вкладки about 
-    //      или сделать микро кнопку прямо рядом с местом для этой зоны
-	//const dangerValueInfoZoneButton = document.getElementById('aboutButton');
+	const aboutDangerGradationNavItem = document.getElementById('aboutDangerGradationNavItem');
 	const closeBtnDangerValueInfoZone = document.getElementById('closeBtnDangerValueInfoZone');
 
-	// dangerValueInfoZoneButton.addEventListener('click', e => {
-	// 	dangerValueInfoZone.style = 'display: flex';
-	// });
+	aboutDangerGradationNavItem.addEventListener('click', e => {
+		dangerValueInfoZone.style = 'display: flex';
+	});
 
 	closeBtnDangerValueInfoZone.addEventListener('click', e => {
 		dangerValueInfoZone.style = 'display: none';
