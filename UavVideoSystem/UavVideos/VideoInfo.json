@@ -4,8 +4,8 @@
         "type": "Feature",
         "geometry": {"type": "Point", "coordinates": [30.878, 49.525]},
         "properties": {
-          "src": ".\/UavVideoSystem\/UavVideos\/ForestStatus.mp4",
-          "title": "ForestStatus.mp4",
+          "src": ".\/uavVideoSystem\/uavVideos\/forestStatus.mp4",
+          "title": "forestStatus.mp4",
           "eventId": 43,
           "startDate": "06.05.2023",
           "category": "uavVideo"
@@ -15,8 +15,8 @@
         "type": "Feature",
         "geometry": {"type": "Point", "coordinates": [33.468, 50.2158]},
         "properties": {
-					"src": ".\/UavVideoSystem\/UavVideos\/ForestStatus2.mp4",
-					"title": "ForestStatus2.mp4",
+					"src": ".\/uavVideoSystem\/uavVideos\/forestStatus2.mp4",
+					"title": "forestStatus2.mp4",
 					"eventId": 46,
 					"startDate": "17.09.2023",
 					"category": "uavVideo"
@@ -26,8 +26,8 @@
 				"type": "Feature",
 				"geometry": { "type": "Point", "coordinates": [24.668, 50.319] },
 				"properties": {
-					"src": "./UavVideoSystem/UavVideos/ForestFire.mp4",
-					"title": "ForestFire.mp4",
+					"src": "./uavVideoSystem/uavVideos/forestFire.mp4",
+					"title": "forestFire.mp4",
 					"eventId": 46,
 					"startDate": "23.07.2023",
 					"category": "uavVideo"
