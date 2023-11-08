@@ -38,7 +38,7 @@ function readVideoMetadata() {
 	const videoFile = videoInput.files[0];
 
 	if (videoFile.type.match('video.*')) {
-		fetch('./uavVideos/videoInfo.json')
+		fetch('../uavVideos/videoInfo.json')
 			.then(response => response.json())
 			.then(data => 
 				{
@@ -52,7 +52,7 @@ function readVideoMetadata() {
 }
 
 function addVideoOnMap(){
-	fetch('../uavVideoSystem/uavVideos/videoInfo.json')
+	fetch('../uavVideos/videoInfo.json')
 		.then(response => response.json())
 		.then(videoInfo => {
 			for (const videoFeature of videoInfo.features) {
