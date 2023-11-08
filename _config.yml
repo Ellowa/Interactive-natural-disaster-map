@@ -2,6 +2,6 @@ theme: jekyll-theme-cayman
 
 jekyll:
   include:
-    - UavVideoSystem/UavVideos/
-    - UavVideoSystem/UavVideos/ForestFire.mp4
-    - UavVideoSystem/UavVideos/VideoInfo.json
+    - uavVideoSystem/uavVideos/
+    - uavVideoSystem/uavVideos/forestFire.mp4
+    - uavVideoSystem/uavVideos/videoInfo.json

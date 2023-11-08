@@ -121,6 +121,7 @@ function addVideoIconSync(fullLayerID, videoSrc) {
 		image.width = 147;
 		image.height = 82;
 
+		document.body.append(image);
 		if (!map.hasImage(`${fullLayerID}`)){
 			map.addImage(`${fullLayerID}`, image);
 		} 
