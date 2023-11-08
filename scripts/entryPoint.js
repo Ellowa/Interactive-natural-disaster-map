@@ -54,6 +54,15 @@ map.addControl(
 	})
 );
 
+
+map.on('styleimagemissing', (e) => {
+	const id = e.id;
+
+	if (id.includes('UavVideos')) {
+		addVideoIconSync(id, id);
+	}
+});
+
 // Главная точка входа(прогрузки), происходит при загрузке карты
 map.on('load', () => {
 	// добавление источника данных к карте
@@ -85,6 +94,8 @@ map.on('load', () => {
 
 		//Получаем список событий от INDM API
 		getEventsFromIndmAPI();
+
+		addVideoOnMap();
 	});
 });
 

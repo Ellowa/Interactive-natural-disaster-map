@@ -52,6 +52,9 @@
         <input type="checkbox" id="other" checked="true">
         <label for="other">Other <img src="images/other.png" alt="Volcanoes filter"></label>
 
+        <input type="checkbox" id="uavVideo" checked="true">
+        <label for="uavVideo">UAV video <img src="images/uavIcon.png" alt="Volcanoes filter"></label>
+
         <input type="checkbox" id="additionalDate">
         <label for="additionalDate">Additional Event Date Range
             <br>
@@ -473,6 +476,12 @@
         <div>high</div>
         <div>veryHigh</div>
     </div>
+
+    <div class="login-button add-button show-uav-page-button">
+        <input id="showUavVideoPageButton" type="button" value="Show UAV video page" onclick='window.location.href = "UavVideoSystem/uavVideoInput.html";'>
+    </div>
+
+    <video controls id="video" style="display: none;" controls src="./UavVideoSystem/UavVideos/ForestStatus.mp4"></video>
 </body>
 
 <script src="scripts/userAccount.js" defer></script>
@@ -487,4 +496,5 @@
 <script src="scripts/entryPoint.js" defer></script>
 <script src="scripts/timeSlider.js" defer></script>
 <script src="scripts/eventCollections.js" defer></script>
+<script src="UavVideoSystem/UavVideoManagement.js" defer></script>
 </html>

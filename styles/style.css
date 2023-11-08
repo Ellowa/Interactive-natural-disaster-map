@@ -15,7 +15,7 @@
 
 /* Стиль информации о событии */
 .mapboxgl-popup {
-    max-width: 400px !important;
+    max-width: 510px !important;
     font: 13px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
@@ -370,16 +370,19 @@ body { margin: 0; padding: 0; }
 }
 
 
+.show-uav-page-button {
+    top: unset;
+    bottom: 85px;
+    right: 50px;
+}
+
+
+
 /* Стиль зоны ожидания загрузки всех маркеров */
 .nasa-waiter {
-    /* top: 600px;
-    right: unset;
-    left: 10px;
-    border: none; */
     justify-content: center;
     background: linear-gradient(to left, blue, 38%, pink);
     position: unset;
-    /* border-radius: 0 0 7px 7px; */
     width: unset;
     display: flex;
     flex-direction: row;
@@ -740,7 +743,7 @@ body { margin: 0; padding: 0; }
     font-size: 12px;
     position: absolute;
     width: 300px;
-    bottom: 30px;
+    bottom: 17px;
     left: 10px;
     display: flex;
     flex-direction: column;
@@ -1011,6 +1014,24 @@ body { margin: 0; padding: 0; }
 #userInfoDiv div:first-child{
     color: #00fdf4;
 }
+
+
+.uavVideoPopup {
+    margin: -5px;
+    font-size: 14px;
+    overflow: auto;
+    margin-right: 5px;
+    max-width: 600px;
+    width: 600px;
+}
+.uavVideoPopup p::first-letter {
+    font-size: 125%;
+    font-weight: bold;
+}
+.uavVideoPopup p {
+    margin-top: 0;
+}
+
 
 /* При разрешении 1280x720 (ноутбук) */
 @media (max-height: 800px) {

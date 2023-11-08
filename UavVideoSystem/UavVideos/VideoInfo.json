@@ -1,0 +1,37 @@
+{ "type": "FeatureCollection",
+    "features": [
+      { 
+        "type": "Feature",
+        "geometry": {"type": "Point", "coordinates": [30.878, 49.525]},
+        "properties": {
+          "src": ".\/UavVideoSystem\/UavVideos\/ForestStatus.mp4",
+          "title": "ForestStatus.mp4",
+          "eventId": 43,
+          "startDate": "06.05.2023",
+          "category": "uavVideo"
+        }
+      },
+      { 
+        "type": "Feature",
+        "geometry": {"type": "Point", "coordinates": [33.468, 50.2158]},
+        "properties": {
+					"src": ".\/UavVideoSystem\/UavVideos\/ForestStatus2.mp4",
+					"title": "ForestStatus2.mp4",
+					"eventId": 46,
+					"startDate": "17.09.2023",
+					"category": "uavVideo"
+				}
+      },
+      {
+				"type": "Feature",
+				"geometry": { "type": "Point", "coordinates": [24.668, 50.319] },
+				"properties": {
+					"src": "./UavVideoSystem/UavVideos/ForestFire.mp4",
+					"title": "ForestFire.mp4",
+					"eventId": 46,
+					"startDate": "23.07.2023",
+					"category": "uavVideo"
+				}
+			}
+    ]
+}
