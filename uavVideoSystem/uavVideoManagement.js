@@ -109,8 +109,8 @@ function addVideoIconSync(fullLayerID, videoSrc) {
 		canvas.style = 'max-width: 100px';
 		let ctx = canvas.getContext('2d');
 
-		canvas.width = video.videoWidth;
-		canvas.height = video.videoHeight;
+		canvas.width = 147;
+		canvas.height = 82;
 
 		ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
