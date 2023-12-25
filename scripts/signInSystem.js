@@ -28,6 +28,10 @@ function logOutBtnClk() {
 		adminPanelZone.style = 'display: none';
 		const adminPanelOpenButton = document.getElementById('adminPanelOpenButton');
 		adminPanelOpenButton.style = 'display: none';
+		const showUavVideoPageButton = document.getElementById('showUavVideoPageButton');
+		showUavVideoPageButton.style = 'display: none';
+		const addEventButton = document.getElementById('addEventButton');
+		addEventButton.style = 'display: none';
 
 		delete eventFilters['collectionFilter'];
 		filterEvents();
@@ -210,6 +214,10 @@ function logInSuccess() {
 
 	const divTreeEventCollections = document.getElementById('divTreeEventCollections');
 	divTreeEventCollections.style = 'display: block';
+	const showUavVideoPageButton = document.getElementById('showUavVideoPageButton');
+	showUavVideoPageButton.style = 'display: block';
+	const addEventButton = document.getElementById('addEventButton');
+	addEventButton.style = 'display: block';
 }
 
 function decodeJwt(token) {
