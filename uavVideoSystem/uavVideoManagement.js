@@ -68,7 +68,6 @@ function addVideoOnMap(){
 				let videoElement = addVideoIconSync(fullLayerID, videoFeature.properties.src);
 				
 				// Add new map layer for each video
-				//allLayersID.push(fullLayerID);
 				map.addLayer({
 					id: fullLayerID,
 					type: 'symbol',

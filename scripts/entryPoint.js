@@ -58,7 +58,7 @@ map.addControl(
 map.on('styleimagemissing', (e) => {
 	const id = e.id;
 
-	if (id.includes('UavVideos')) {
+	if (id.includes('uavVideos')) {
 		addVideoIconSync(id, id);
 	}
 });
