@@ -962,6 +962,7 @@ body { margin: 0; padding: 0; }
 
 /*стиль информационной зоны об уровне опасности*/
 #dangerValueInfoZone{
+    display: flex;
     height: 45px;
     width: 500px;
     left: calc(50% - 250px);
@@ -1080,6 +1081,27 @@ body { margin: 0; padding: 0; }
 
 /* При разрешении 380x700 (телефон) */
 @media (max-width: 420px) {
+    #userAccountDetails {
+        max-width: 350px;
+        left: 20px;
+    }
+    #adminPaneDetails {
+        max-width: 370px;
+        left: 15px;
+        max-height: 380px;
+        overflow: auto;
+    }
+    #adminPanelZone {
+        max-width: 380px;
+        left: 10px;
+    }
+    #dangerValueInfoZone {
+        display: none;
+    }
+    #additionalDate + label {
+        display: none;
+    }
+
     .logo{
         width: 125px;
     }
@@ -1112,9 +1134,10 @@ body { margin: 0; padding: 0; }
         width: 200px;
         font-size: 10px;
         font-weight: normal;
+        bottom: 35px;
     }
     .map-overlay .map-overlay-inner{
-        height: 60px;
+        height: 75px;
         margin-bottom: 0;
     }
     .map-overlay h2 {
@@ -1133,12 +1156,13 @@ body { margin: 0; padding: 0; }
 
     .filter-group {
         top: 65px;
+        max-width: 135px;
     }
     #filterGroupCloseButton{
-        top: 55px;
+        top: 60px;
     }
     .nasa-waiter{
-        height: 45px;
+        display: none;
     }
     .aboutButtonZone{
         height: 35px;

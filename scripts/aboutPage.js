@@ -17,12 +17,7 @@ function aboutBtnClick(){
 // Обработчик событий для информационной зоны об опасности
 function dangerValueInfoZoneBtnClick() {
 	const dangerValueInfoZone = document.getElementById('dangerValueInfoZone');
-	const aboutDangerGradationNavItem = document.getElementById('aboutDangerGradationNavItem');
 	const closeBtnDangerValueInfoZone = document.getElementById('closeBtnDangerValueInfoZone');
-
-	aboutDangerGradationNavItem.addEventListener('click', e => {
-		dangerValueInfoZone.style = 'display: flex';
-	});
 
 	closeBtnDangerValueInfoZone.addEventListener('click', e => {
 		dangerValueInfoZone.style = 'display: none';
