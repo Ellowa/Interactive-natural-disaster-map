@@ -75,6 +75,8 @@ map.on('load', () => {
 
 	$(document).ready(function () {
 		// страничка прогружена
+		if(document.documentElement.clientWidth <= 420)
+			toMobileVersion();
 
 		// регистрация(установка) слушателей событий
 		additionalDateRangeController();
@@ -204,4 +206,10 @@ function additionalDateRangeController() {
 			getEventsFromIndmAPI();
 		}
 	});
+}
+
+function toMobileVersion(){
+	var filterGroup = document.querySelector('#filter-group');
+	filterGroup.style = 'display: none';
+	
 }
